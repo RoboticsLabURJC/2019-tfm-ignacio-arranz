@@ -1,17 +1,24 @@
-# LogBook
+---
+title: "Master Thesis - Ignacio Arranz"
+keywords: sample homepage
+tags: [getting_started]
+sidebar: mydoc_sidebar
+permalink: index.html
+summary: Master Thesis about Deep Reinforcement Learning in autonomous cars.
+---
 
-1. [Week 1 - edx course about Deep Reinforcement Learning](#week_1)
+# Previous Work
 
 
+<a name="Introduction"></a>
 
-<a name="week_1"></a>
-
-## Week 1 - edx course about Deep Reinforcement Learning
+## 1. Introduction
 
 In the 1950s, [Richard Bellman](https://en.wikipedia.org/wiki/Richard_E._Bellman) devised an approach to the problem, involving the dynamical system's state and a value function, based on an equation, which today we call the [Bellman equation](https://en.wikipedia.org/wiki/Bellman_equation).
 
-$V(x_0) = \max_{\{a_t\}_{t=0}^\infty}\sum_{t=0}^\infty\beta^tF(x_t, a_t)$
-
+$$
+V(x_0) = \max_{\{a_t\}_{t=0}^\infty}\sum_{t=0}^\infty\beta^tF(x_t, a_t)
+$$
 Bellman also introduced the discrete stochastic version of the problem known as the [*Markov decision process*](https://en.wikipedia.org/wiki/Markov_decision_process).
 
 So how does **Reinforcement Learning** compare to **other types** of learning? We'll divide them into three types:
@@ -33,16 +40,18 @@ Other terms related to reinforcement learning are:
 
 - **Model of the environment**: So in a model of the environment, we basically get the transition probability to the next state and the probability of the reward going to that state. So here's a table that represents a model. It has state-action pairs $S1$ and $A1$. And the first entry is, the next state is $S2$, and the reward is $-1$, and the probability is $0.3$. So this is a stochastic model. Not every time you're in state $1$ action and you take action $1$ will you go to state $2$. If we look at the second line, we have state 1 and action 1, and that takes us, in this case, to state 3 with a reward of 0. And the probability for that is $0.7$. There are two kinds of methods related to models. One is called model-free methods, where you do not have a model, and that's a pure trial-and-error learning experience. When you have a model, it's considered to be a planning kind of learner because you typically don't take actions in the environment. You instead just follow what would happen through the model itself to find out what your next state is and what your reward is. And you can keep doing this over and over again to find out pass and then find the value of pass. And these model-based problems come in two subclasses. One is where you're given the model up-front, and that's pretty rare. And the more active area of research right now is learning the model while you're exploring. 
 
-**Episodic and continuing tasks**: An episodic task, we have those tasks that come to a natural end, and they're typically repeated over and over. And one example would be a *tic-tac-toe* game, where you get a reward at the end. Another example would be the Pac-man game, where you get rewards along the way. An example of a continuing task would be controlling an air conditioner. Typically, you would be sensing and controlling at each time step, but there's no natural endpoint. You just keep going and going.
+- **Episodic and continuing tasks**: An episodic task, we have those tasks that come to a natural end, and they're typically repeated over and over. And one example would be a *tic-tac-toe* game, where you get a reward at the end. Another example would be the Pac-man game, where you get rewards along the way. An example of a continuing task would be controlling an air conditioner. Typically, you would be sensing and controlling at each time step, but there's no natural endpoint. You just keep going and going.
 
 Example with *tic-tac-toe* game:
 
-- **Agent**: "X" player.
-- **Environment**: "O" player, general rules.
-- **State**: $9x$ Square occupant: X, O, blank.
-- **Actions**: $9x$ Place "X" in square.
-- **Rewards**: At end of game: 1 = win, 0 = tie, -1 = loss
-- **Task type**: Episodic (the reward is given at the end.)
+| Term        | Result                                          |
+| ----------- | ----------------------------------------------- |
+| Agent       | *X* player                                      |
+| Environment | *O* player, general rules                       |
+| State       | 9x square occupant: *X*, *O*, blank.            |
+| Actions     | 9x place *X* in square.                         |
+| Reward      | At end of the game: 1 = win, 0 = tie, -1 = loss |
+| Task Type   | Episodic (the reward is given at the end)       |
 
 Approaches to solving RL Problems.
 
@@ -52,3 +61,7 @@ Approaches to solving RL Problems.
 
 
 
+
+
+
+## 2. edx course about Deep Reinforcement Learning

@@ -1,0 +1,13 @@
+<footer>
+    <div class="row">
+        <div class="col-lg-10 footer">
+            &copy;{{ site.time | date: "%Y"  }} {{site.company_name}}. All rights reserved. <br />
+            {% if page.last_updated %}<span>Page last updated:</span> {{page.last_updated}}<br/>{% endif %} Site last generated: {{ site.time | date: "%b %-d, %Y"  }} <br />
+            <p>Template by <a href="https://idratherbewriting.com/documentation-theme-jekyll/" target="_blank">Jekyll Documentation Theme</a></p>
+        </div>
+
+        <div class="col-lg-2" footer>
+            <img width="60px" height="60px" src="{{ "images/logo.png" }}" alt="JdeRobot"/>
+        </div>
+    </div>
+</footer>
