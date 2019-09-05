@@ -2,7 +2,7 @@
 main:
 
   - title: LogBook
-    url: /
+    url: /logbook/
 
   - title: Installation
     url: /install/

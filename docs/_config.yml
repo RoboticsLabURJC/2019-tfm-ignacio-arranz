@@ -313,7 +313,7 @@ defaults:
 
   # _pages
   - scope:
-      path: "_pages"
+      path: ""
       type: pages
     values:
       layout: single
@@ -321,7 +321,7 @@ defaults:
 
   # _portfolio
   - scope:
-      path: "_portfolio"
+      path: ""
       type: portfolio
     values:
       layout: single
@@ -330,7 +330,7 @@ defaults:
 
   # _posts
   - scope:
-      path: "_posts"
+      path: ""
       type: posts
     values:
       layout: single
@@ -339,5 +339,4 @@ defaults:
       comments: true
       share: true
       related: true
-
 

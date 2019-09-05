@@ -1,10 +1,9 @@
 ---
 title: Logbook
-layout: collection
+layout: posts
 permalink: /logbook/
 
-collection: post
-entries_layout: grid
+collection: posts
 
 classes: wide
 
