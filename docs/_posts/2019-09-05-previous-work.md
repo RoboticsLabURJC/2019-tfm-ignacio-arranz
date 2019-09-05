@@ -2,6 +2,14 @@
 title: "Previous Work"
 excerpt: "Reading articles, tutorials and collecting information"
 
+sidebar:
+  nav: "docs"
+
+toc: true
+toc_label: "TOC installation"
+toc_icon: "cog"
+
+
 categories:
 - Previous work
 tags:
@@ -12,14 +20,6 @@ tags:
 
 author: NachoAz
 pinned: false
-
-sidebar:
-  nav: "docs"
-
-
-toc: true
-toc_label: "TOC installation"
-toc_icon: "cog"
 ---
 
 
