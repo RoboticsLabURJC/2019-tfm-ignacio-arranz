@@ -1,516 +1,398 @@
-<!DOCTYPE html>
-<html>
-<head>
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.16.5 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
     <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Master Thesis about Deep Reinforcement Learning in autonomous cars.">
-<meta name="keywords" content="getting_started,  sample homepage">
-<title>Master Thesis - Ignacio Arranz | Jekyll theme for Master Thesis documentation</title>
-<link rel="stylesheet" href="css/syntax.css">
 
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
-<link rel="stylesheet" href="css/modern-business.css">
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="css/customstyles.css">
-<link rel="stylesheet" href="css/boxshadowproperties.css">
-<!-- most color styles are extracted out to here -->
-<link rel="stylesheet" href="css/theme-green.css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script src="js/jquery.navgoco.min.js"></script>
+<!-- begin _includes/seo.html --><title>Page Not Found - Robotics Lab Club</title>
+<meta name="description" content="Programming Robot Intelligence">
 
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<!-- Anchor.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.2.0/anchor.min.js"></script>
-<script src="js/toc.js"></script>
-<script src="js/customscripts.js"></script>
 
-<link rel="shortcut icon" href="images/favicon.ico">
-
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-
-<link rel="alternate" type="application/rss+xml" title="2019-tfm-ignacio-arranz" href="http://localhost:4000/feed.xml">
-
-    <script>
-        $(document).ready(function() {
-            // Initialize navgoco with default options
-            $("#mysidebar").navgoco({
-                caretHtml: '',
-                accordion: true,
-                openClass: 'active', // open
-                save: false, // leave false or nav highlighting doesn't work right
-                cookie: {
-                    name: 'navgoco',
-                    expires: false,
-                    path: '/'
-                },
-                slide: {
-                    duration: 400,
-                    easing: 'swing'
-                }
-            });
-
-            $("#collapseAll").click(function(e) {
-                e.preventDefault();
-                $("#mysidebar").navgoco('toggle', false);
-            });
-
-            $("#expandAll").click(function(e) {
-                e.preventDefault();
-                $("#mysidebar").navgoco('toggle', true);
-            });
-
-        });
-
-    </script>
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-    </script>
-    <script>
-        $(document).ready(function() {
-            $("#tg-sb-link").click(function() {
-                $("#tg-sb-sidebar").toggle();
-                $("#tg-sb-content").toggleClass('col-md-9');
-                $("#tg-sb-content").toggleClass('col-md-12');
-                $("#tg-sb-icon").toggleClass('fa-toggle-on');
-                $("#tg-sb-icon").toggleClass('fa-toggle-off');
-            });
-        });
-    </script>
-    
-
-</head>
-<body>
-<!-- Navigation -->
-<nav class="navbar navbar-inverse navbar-static-top">
-    <div class="container topnavlinks">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="fa fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> RoboticsLab - URJC</span></a>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <!-- toggle sidebar button -->
-                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Nav</a></li>
-                <!-- entries without drop-downs appear here -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Robotics Lab Club">
+<meta property="og:title" content="Robotics Lab Club">
+<meta property="og:url" content="http://localhost:4000/">
 
 
 
 
-                
-                
-                
-                <li><a href="https://github.com/igarag/2019-tfm-ignacio-arranz" target="_blank" rel="noopener">GitHub</a></li>
-                
-                
-                
-                <!-- entries with drop-downs appear here -->
-                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
-                
-                
-                <!--comment out this block if you want to hide search-->
-                <li>
-                    <!--start search-->
-                    <!-- <div id="search-demo-container">
-                        <input type="text" id="search-input" placeholder="search...">
-                        <ul id="results-container"></ul>
-                    </div>
-                    <script src="js/jekyll-search.js" type="text/javascript"></script>
-                    <script type="text/javascript">
-                            SimpleJekyllSearch.init({
-                                searchInput: document.getElementById('search-input'),
-                                resultsContainer: document.getElementById('results-container'),
-                                dataSource: 'search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="Master Thesis - Ignacio Arranz">{title}</a></li>',
-                    noResultsText: 'No results found.',
-                            limit: 10,
-                            fuzzy: true,
-                    })
-                    </script> -->
-                    <!--end search-->
-                </li>
-            </ul>
-        </div>
-        </div>
-        <!-- /.container -->
-</nav>
 
-<!-- Page Content -->
-<div class="container">
-  <div id="main">
-    <!-- Content Row -->
-    <div class="row">
-        
-        
-            <!-- Sidebar Column -->
-            <div class="col-md-3" id="tg-sb-sidebar">
-                
 
-<ul id="mysidebar" class="nav">
-  <li class="sidebarTitle">Index</li>
+
+
+
+
+
+
   
+
   
-  
-      
-  
-  <li>
-      <a title="Overview" href="#">Overview</a>
-      <ul>
-          
-          
-          
-          <li class="active"><a title="Get started" href="index.html">Get started</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Introduction" href="mydoc_introduction.html">Introduction</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Supported features" href="mydoc_supported_features.html">Supported features</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="About the theme author" href="mydoc_about.html">About the theme author</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Support" href="mydoc_support.html">Support</a></li>
-          
-          
-          
-          
-      </ul>
-   </li>
-     
-      
-  
-  <li>
-      <a title="LogBook" href="#">LogBook</a>
-      <ul>
-          
-          
-          
-          <li><a title="Week 1 - edx course" href="mydoc_adding_tooltips.html">Week 1 - edx course</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Week 2 -" href="mydoc_alerts.html">Week 2 -</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Week 3 -" href="mydoc_icons.html">Week 3 -</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Week 4 -" href="mydoc_images.html">Week 4 -</a></li>
-          
-          
-          
-          
-      </ul>
-   </li>
-     
-      
-  
-  <li>
-      <a title="Installation" href="#">Installation</a>
-      <ul>
-          
-          
-          
-          <li><a title="About Ruby, Gems, Bundler, etc." href="mydoc_about_ruby_gems_etc.html">About Ruby, Gems, Bundler, etc.</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Install Jekyll on Mac" href="mydoc_install_jekyll_on_mac.html">Install Jekyll on Mac</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="Install Jekyll on Windows" href="mydoc_install_jekyll_on_windows.html">Install Jekyll on Windows</a></li>
-          
-          
-          
-          
-      </ul>
-   </li>
-     
-      
-  
-  <li>
-      <a title="Release Notes" href="#">Release Notes</a>
-      <ul>
-          
-          
-          
-          <li><a title="6.0 Release notes" href="mydoc_release_notes_60.html">6.0 Release notes</a></li>
-          
-          
-          
-          
-          
-          
-          <li><a title="5.0 Release notes" href="mydoc_release_notes_50.html">5.0 Release notes</a></li>
-          
-          
-          
-          
-      </ul>
-   </li>
-     
-      
-  
-  <li>
-      <a title="References" href="#">References</a>
-      <ul>
-          
-          
-          
-          <li><a title="References site" href="mydoc_adding_tooltips.html">References site</a></li>
-          
-          
-          
-          
-      </ul>
-   </li>
-     
-      
-      
-      <!-- if you aren't using the accordion, uncomment this block:
-         <p class="external">
-             <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
-         </p>
-         -->
-</ul>
 
-<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
-<script>$("li.active").parents('li').toggleClass("active");</script>
 
-            </div>
-            
-        
-
-        <!-- Content Column -->
-        <div class="col-md-9" id="tg-sb-content">
-            <div class="post-header">
-   <h1 class="post-title-main">Master Thesis - Ignacio Arranz</h1>
-</div>
+<link rel="canonical" href="http://localhost:4000/">
 
 
 
-<div class="post-content">
 
-   
-    <div class="summary">Master Thesis about Deep Reinforcement Learning in autonomous cars.</div>
-   
 
-    
-    
-<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "JdeRobot",
+      "url": "http://localhost:4000",
+      "sameAs": null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Robotics Lab Club Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <script>
-$( document ).ready(function() {
-  // Handler for .ready() called.
-
-$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
-
-/* this offset helps account for the space taken up by the floating toolbar. */
-$('#toc').on('click', 'a', function() {
-  var target = $(this.getAttribute('href'))
-    , scroll_target = target.offset().top
-
-  $(window).scrollTop(scroll_target - 10);
-  return false
-})
-  
-});
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
 </script>
 
-<div id="toc"></div>
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+<link rel="icon" type="image/png" href="/assets/images/logo.png" sizes="16x16">
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--home">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
 
     
 
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/peloto.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          Robotics Lab Club
+          <span class="site-subtitle">Programming Robot Intelligence</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://jderobot.github.io" >JdeRobot</a>
+            </li><li class="masthead__menu-item">
+              <a href="https://jderobot.github.io/RoboticsAcademy/" >RoboticsAcademy</a>
+            </li><li class="masthead__menu-item">
+              <a href="https://github.com/RoboticsLabURJC" >Robotics Club</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+
+      
+        <img src="/assets/images/profile.jpg" alt="Nacho Arranz" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Nacho Arranz</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Site for Master Thesis</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Madrid</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="n.arranz.agueda@gmail.com" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+          
+        
+          
+            <li><a href="https://igarag.github.io/online-cv/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i> About Me</a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/i__arranz" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+          
+        
+          
+            <li><a href="https://github.com/igarag/2019-tfm-ignacio-arranz" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <div class="archive">
+    
+      <h1 id="page-title" class="page__title"></h1>
+    
+    <p>Hello, everybody.</p>
+
+<p>I'm Nacho Arranz and this is the place where we will be putting the advances that are made on the work of end of master.</p>
+
+<p>The objective of the work is the learning of the controllers of an autonomous vehicle so that it is able to complete the
+return to a circuit through learning by reinforcement.</p>
+
+<p>The tutors of the project are:</p>
+<ul>
+    <li><a href="https://gsyc.urjc.es/jmplaza/" target="_blank">Jose Maria Cañas.</a></li>
+    <li><a href="https://gestion2.urjc.es/pdi/ver/alberto.martinf" target="_blank">Alberto Martín.</a></li>
+</ul>
+
+
+<h3 class="archive__subtitle">Recent Posts</h3>
+
+
+  
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/previous%20work/previous-work/" rel="permalink">Previous Work
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  7 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Reading articles, tutorials and collecting information
+</p>
+  </article>
+</div>
+
+
+
+
+
+
+  </div>
+</div>
+    </div>
+
     
 
-   <h1 id="previous-work">Previous Work</h1>
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
 
-<p><a name="Introduction"></a></p>
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
 
-<h2 id="1-introduction">1. Introduction</h2>
-
-<p>In the 1950s, <a href="https://en.wikipedia.org/wiki/Richard_E._Bellman">Richard Bellman</a> devised an approach to the problem, involving the dynamical system’s state and a value function, based on an equation, which today we call the <a href="https://en.wikipedia.org/wiki/Bellman_equation">Bellman equation</a>.</p>
-
-<p><script type="math/tex">V(x_0) = \max_{\{a_t\}_{t=0}^\infty}\sum_{t=0}^\infty\beta^tF(x_t, a_t)</script>
-Bellman also introduced the discrete stochastic version of the problem known as the <a href="https://en.wikipedia.org/wiki/Markov_decision_process"><em>Markov decision process</em></a>.</p>
-
-<p>So how does <strong>Reinforcement Learning</strong> compare to <strong>other types</strong> of learning? We’ll divide them into three types:</p>
-
-<ul>
-  <li><strong>Supervised learning</strong>: the goal is to learn to predict the $Y$ label, given the associated $X$ data, in such a way that the learning generalizes to unseen data beyond the training data. For the training data the $Y$ label’s been supplied by an expert. It’s like giving the answer to a student on a test.</li>
-  <li><strong>Unsupervised learning</strong>: attempts to learn the structure hidden in a data set. Towards a predefined type of representation like clustering, anomaly detection or independent representation. Unsupervised learning takes no action and receives no feedback, it just operates on the $X$ data set.</li>
-  <li><strong>Reinforcement Learning</strong> (RL), a agent must learn which action to select at each time stamp. Receiving a reward as feedback, usually sparse in nature. This feedback instead of being the correct answer is a scalar number representing the relative goodness of the sequences of action recently taken usually without a firm’s starting point for the sequence. The agent must learn the sequence that gives the highest total reward through trial and error. Also in reinforcement learning, the next state and reward functions are usually stochastic. The same action and the same state may produce different rewards and different next states for the agent. We consider reinforcement learning to be a third type of machine learning. Even though it may use supervised learning, or unsupervised learning as part of it’s method, it is a distinct type of learning with its own set of challenges and methods.</li>
-</ul>
-
-<p>Other terms related to reinforcement learning are:</p>
-
-<ul>
-  <li>
-    <p><strong>Value functions</strong>: Measures the goodness of a state in the long run as calculated by an agent. Another way to more formally state this, it’s the expected long-term accumulation of reward, starting from state $s$, and following policy $\pi$. So a human analogy, the reward is kind of like an immediate pleasure or pain experienced by a person. But the value function represents a more farsighted judgment to the value of a state. So if we’re looking at the game of <em>tic-tac-toe</em> and we’re the X player and we’re about to make our opening move and we’re evaluating different moves, this would be a move of high value because it has the best chance of winning the game. But this would be a move of low value. Value functions come in two basic flavors. There’s the straight value function, whose notation is V $\pi(s)$, where s is a state. This represents the goodness of that state, following policy pi. And then we have the Q function, which is parameterized also by an action. So Q $\pi(s,a)$, s is the state, a is the action that represents the goodness of that state, first taking action a, and then thereafter, following normal policy $\pi$ .</p>
-  </li>
-  <li>
-    <p><strong>Policy</strong>: is a mapping from a particular state to an action to take in that state. And this can be deterministic, where it’s the same action each time. Or it can be stochastic, where $70\%$ of the time, you take action one, and $30\%$ of the time, you take action two. And its notation is $\pi$.</p>
-  </li>
-  <li>
-    <p><strong>Exploration-exploitation dilemma</strong>: It is one of the great dilemmas of reinforcement learning, when should the agent try and find better actions to <strong>explore</strong> the environment and when should it <strong>exploit</strong> the optimal action (accumulate the highest reward possible) to make progress in learning?. Some algorithms often uses the simple and greedy exploration policy where it chooses a random action. As the best option decreases over time, the agent progresses to exploitation. Let’s say we have these three doors. One on the left we tried opening and received $10. The one in the middle we tried opening and received $5 and the one on the right we haven’t tried yet. What should be our next action?. A greedy policy is one that always chooses the best action in a given state. The dilemma is that any successful policy will need to do a mixture of both of these. Note that this explore-exploit issue is unique to RL, it is not found in supervised or unsupervised learning.</p>
-  </li>
-  <li><strong>Time step</strong>. The time step divides time into discrete steps. And each of these steps determines a cycle in the environment-agent interaction. And we usually denote this time by $t$. The environment is what defines the world that the agent interacts with, and it has a basic loop that it follows. It produces a state and a reward for the agent to sense and process. And then it accepts an action from the agent and cycles back to produce another state again. The agent learns to achieve goals by interacting with the environment. Its basic loop is it senses the state and the reward from the environment, and then selects an action to pass to the environment, and then continues that in a loop. So state represents the situation in the environment that the agent is going to make his actions based on. So an example of a discrete state is a tic-tac-toe collection of squares, where each square is either blank, has an X, or has an O on it. An example of a high-dimensional state might be the pixels in a video image from a game. And an example of continuous states could be three continuous values, temperature, pressure, and flow in an industrial controller.</li>
-  <li>
-    <p><strong>Reward</strong>: Is a scalar value, a floating point number, returned by the environment when the agent selects an action. It represents the goal or a set of goals. It’s determined by the reinforcement learning problem designer himself. And its usual notation is $r_t$ (for the reward at time $t$). An action is what an agent takes on each time step. It can be discrete as of one of a fixed number of actions, like in a video game, you might go left, right, up, or down. Or it might be a continuous action. Let’s say, in a self-driving car, you might be steering the wheel at a certain angle or changing the angle of the gas pedal to feed more or less gas in.</p>
-  </li>
-  <li>
-    <p><strong>Model of the environment</strong>: So in a model of the environment, we basically get the transition probability to the next state and the probability of the reward going to that state. So here’s a table that represents a model. It has state-action pairs $S1$ and $A1$. And the first entry is, the next state is $S2$, and the reward is $-1$, and the probability is $0.3$. So this is a stochastic model. Not every time you’re in state $1$ action and you take action $1$ will you go to state $2$. If we look at the second line, we have state 1 and action 1, and that takes us, in this case, to state 3 with a reward of 0. And the probability for that is $0.7$. There are two kinds of methods related to models. One is called model-free methods, where you do not have a model, and that’s a pure trial-and-error learning experience. When you have a model, it’s considered to be a planning kind of learner because you typically don’t take actions in the environment. You instead just follow what would happen through the model itself to find out what your next state is and what your reward is. And you can keep doing this over and over again to find out pass and then find the value of pass. And these model-based problems come in two subclasses. One is where you’re given the model up-front, and that’s pretty rare. And the more active area of research right now is learning the model while you’re exploring.</p>
-  </li>
-  <li><strong>Episodic and continuing tasks</strong>: An episodic task, we have those tasks that come to a natural end, and they’re typically repeated over and over. And one example would be a <em>tic-tac-toe</em> game, where you get a reward at the end. Another example would be the Pac-man game, where you get rewards along the way. An example of a continuing task would be controlling an air conditioner. Typically, you would be sensing and controlling at each time step, but there’s no natural endpoint. You just keep going and going.</li>
-</ul>
-
-<p>Example with <em>tic-tac-toe</em> game:</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Term</th>
-      <th>Result</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Agent</td>
-      <td><em>X</em> player</td>
-    </tr>
-    <tr>
-      <td>Environment</td>
-      <td><em>O</em> player, general rules</td>
-    </tr>
-    <tr>
-      <td>State</td>
-      <td>9x square occupant: <em>X</em>, <em>O</em>, blank.</td>
-    </tr>
-    <tr>
-      <td>Actions</td>
-      <td>9x place <em>X</em> in square.</td>
-    </tr>
-    <tr>
-      <td>Reward</td>
-      <td>At end of the game: 1 = win, 0 = tie, -1 = loss</td>
-    </tr>
-    <tr>
-      <td>Task Type</td>
-      <td>Episodic (the reward is given at the end)</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>Approaches to solving RL Problems.</p>
-
-<ul>
-  <li><strong>Value function methods</strong>: Estimate value states (or state-action pairs). Policy based on selecting actions that lead to large value states.</li>
-  <li><strong>Direct Policy Search</strong>: Model the policy itself (state :arrow_right: action). Adjust model parameter in direction of greatest policy improvements.</li>
-</ul>
-
-<h2 id="2-edx-course-about-deep-reinforcement-learning">2. edx course about Deep Reinforcement Learning</h2>
-
-
-    <div class="tags">
+    
+      
         
+          <li><a href="https://twitter.com/roboticslaburjc" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
         
+      
         
+          <li><a href="https://github.com/RoboticsLabURJC" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
         
+      
         
+          <li><a href="https://www.youtube.com/channel/UCgmUgpircYAv_QhLQziHJOQ" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i> Youtube</a></li>
         
-        
-    </div>
+      
+    
 
-
-
+    <li><a href="/feed.xml"><!--<i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed--></a></li>
+  </ul>
 </div>
 
-<hr class="shaded"/>
+<div class="page__footer-copyright">&copy; 2019 JdeRobot. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a>, <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a> &amp; modified by <a href="https://github.com/igarag">NachoAz</a>.</div>
 
-<footer>
-    <div class="row">
-        <div class="col-lg-10 footer">
-            &copy;2019 JdeRobot. All rights reserved. <br />
-             Site last generated: Aug 20, 2019 <br />
-            <p>Template by <a href="https://idratherbewriting.com/documentation-theme-jekyll/" target="_blank">Jekyll Documentation Theme</a></p>
-        </div>
-
-        <div class="col-lg-2" footer>
-            <img width="60px" height="60px" src="images/logo.png" alt="JdeRobot"/>
-        </div>
-    </div>
-</footer>
-
-
-        </div>
-    <!-- /.row -->
-</div>
-<!-- /.container -->
-</div>
-<!-- /#main -->
+      </footer>
     </div>
 
-</body>
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+       extensions: ["tex2jax.js"],
+       jax: ["input/TeX", "output/HTML-CSS"],
+       tex2jax: {
+         inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+         displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+         processEscapes: true
+       },
+       "HTML-CSS": { availableFonts: ["TeX"] }
+     });
+  </script>
 
-<!-- the google_analytics_id gets auto inserted from the config file -->
 
 
 
-<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-66296557-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
 
 
+
+
+
+
+  </body>
 </html>

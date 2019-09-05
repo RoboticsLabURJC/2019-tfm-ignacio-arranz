@@ -1,0 +1,29 @@
+# main links
+main:
+  - title: JdeRobot
+    url: https://jderobot.github.io
+
+  - title: RoboticsAcademy
+    url: https://jderobot.github.io/RoboticsAcademy/
+
+  - title: Robotics Club
+    url: https://github.com/RoboticsLabURJC
+
+# left side bar
+docs:
+  - title: JdeRobot
+    url: jderobot.github.io
+
+  - title: RoboticsAcademy
+    url: https://jderobot.github.io/RoboticsAcademy/
+
+  - title: "Activities"
+    children:
+      - title: "GSoC-2019"
+        url: /activities/gsoc/
+      - title: "Robotics courses"
+        url: /activities/robotics_courses/
+      - title: "Talks"
+        url: /activities/talks/
+      - title: "Competition 2018"
+        url: /activities/competitions/
