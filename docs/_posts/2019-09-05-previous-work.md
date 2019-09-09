@@ -23,8 +23,6 @@ pinned: false
 ---
 
 
-# Previous Work
-
 
 ## 1. Introduction
 
