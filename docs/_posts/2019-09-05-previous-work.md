@@ -1,0 +1,80 @@
+---
+title: "Previous Work"
+excerpt: "Reading articles, tutorials and collecting information"
+
+sidebar:
+  nav: "docs"
+
+toc: true
+toc_label: "TOC installation"
+toc_icon: "cog"
+
+
+categories:
+- Previous work
+tags:
+- machine learning
+- reinforcement learning
+- learning reinforcement learning
+- first steps
+
+author: NachoAz
+pinned: false
+---
+
+
+
+## 1. Introduction
+
+In the 1950s, [Richard Bellman](https://en.wikipedia.org/wiki/Richard_E._Bellman) devised an approach to the problem, involving the dynamical system's state and a value function, based on an equation, which today we call the [Bellman equation](https://en.wikipedia.org/wiki/Bellman_equation).
+
+$$
+V(x_0) = \max_{\{a_t\}_{t=0}^\infty}\sum_{t=0}^\infty\beta^tF(x_t, a_t)
+$$
+
+Bellman also introduced the discrete stochastic version of the problem known as the [*Markov decision process*](https://en.wikipedia.org/wiki/Markov_decision_process).
+
+So how does **Reinforcement Learning** compare to **other types** of learning? We'll divide them into three types:
+
+- **Supervised learning**: the goal is to learn to predict the $Y$ label, given the associated $X$ data, in such a way that the learning generalizes to unseen data beyond the training data. For the training data the $Y$ label's been supplied by an expert. It's like giving the answer to a student on a test.
+- **Unsupervised learning**: attempts to learn the structure hidden in a data set. Towards a predefined type of representation like clustering, anomaly detection or independent representation. Unsupervised learning takes no action and receives no feedback, it just operates on the $X$ data set. 
+- **Reinforcement Learning** (RL), a agent must learn which action to select at each time stamp. Receiving a reward as feedback, usually sparse in nature. This feedback instead of being the correct answer is a scalar number representing the relative goodness of the sequences of action recently taken usually without a firm's starting point for the sequence. The agent must learn the sequence that gives the highest total reward through trial and error. Also in reinforcement learning, the next state and reward functions are usually stochastic. The same action and the same state may produce different rewards and different next states for the agent. We consider reinforcement learning to be a third type of machine learning. Even though it may use supervised learning, or unsupervised learning as part of it's method, it is a distinct type of learning with its own set of challenges and methods.
+
+Other terms related to reinforcement learning are:
+
+- **Value functions**: Measures the goodness of a state in the long run as calculated by an agent. Another way to more formally state this, it's the expected long-term accumulation of reward, starting from state $s$, and following policy $\pi$. So a human analogy, the reward is kind of like an immediate pleasure or pain experienced by a person. But the value function represents a more farsighted judgment to the value of a state. So if we're looking at the game of *tic-tac-toe* and we're the X player and we're about to make our opening move and we're evaluating different moves, this would be a move of high value because it has the best chance of winning the game. But this would be a move of low value. Value functions come in two basic flavors. There's the straight value function, whose notation is V $\pi(s)$, where s is a state. This represents the goodness of that state, following policy pi. And then we have the Q function, which is parameterized also by an action. So Q $\pi(s,a)$, s is the state, a is the action that represents the goodness of that state, first taking action a, and then thereafter, following normal policy $\pi$ .
+
+- **Policy**: is a mapping from a particular state to an action to take in that state. And this can be deterministic, where it's the same action each time. Or it can be stochastic, where $70\%$ of the time, you take action one, and $30\%$ of the time, you take action two. And its notation is $\pi$. 
+
+- **Exploration-exploitation dilemma**: It is one of the great dilemmas of reinforcement learning, when should the agent try and find better actions to **explore** the environment and when should it **exploit** the optimal action (accumulate the highest reward possible) to make progress in learning?. Some algorithms often uses the simple and greedy exploration policy where it chooses a random action. As the best option decreases over time, the agent progresses to exploitation. Let's say we have these three doors. One on the left we tried opening and received 10€. The one in the middle we tried opening and received 5€ and the one on the right we haven't tried yet. What should be our next action?. A greedy policy is one that always chooses the best action in a given state. The dilemma is that any successful policy will need to do a mixture of both of these. Note that this explore-exploit issue is unique to RL, it is not found in supervised or unsupervised learning.  
+
+- **Time step**. The time step divides time into discrete steps. And each of these steps determines a cycle in the environment-agent interaction. And we usually denote this time by $t$. The environment is what defines the world that the agent interacts with, and it has a basic loop that it follows. It produces a state and a reward for the agent to sense and process. And then it accepts an action from the agent and cycles back to produce another state again. The agent learns to achieve goals by interacting with the environment. Its basic loop is it senses the state and the reward from the environment, and then selects an action to pass to the environment, and then continues that in a loop. So state represents the situation in the environment that the agent is going to make his actions based on. So an example of a discrete state is a tic-tac-toe collection of squares, where each square is either blank, has an X, or has an O on it. An example of a high-dimensional state might be the pixels in a video image from a game. And an example of continuous states could be three continuous values, temperature, pressure, and flow in an industrial controller.
+- **Reward**: Is a scalar value, a floating point number, returned by the environment when the agent selects an action. It represents the goal or a set of goals. It's determined by the reinforcement learning problem designer himself. And its usual notation is $r_t$ (for the reward at time $t$). An action is what an agent takes on each time step. It can be discrete as of one of a fixed number of actions, like in a video game, you might go left, right, up, or down. Or it might be a continuous action. Let's say, in a self-driving car, you might be steering the wheel at a certain angle or changing the angle of the gas pedal to feed more or less gas in. 
+
+- **Model of the environment**: So in a model of the environment, we basically get the transition probability to the next state and the probability of the reward going to that state. So here's a table that represents a model. It has state-action pairs $S1$ and $A1$. And the first entry is, the next state is $S2$, and the reward is $-1$, and the probability is $0.3$. So this is a stochastic model. Not every time you're in state $1$ action and you take action $1$ will you go to state $2$. If we look at the second line, we have state 1 and action 1, and that takes us, in this case, to state 3 with a reward of 0. And the probability for that is $0.7$. There are two kinds of methods related to models. One is called model-free methods, where you do not have a model, and that's a pure trial-and-error learning experience. When you have a model, it's considered to be a planning kind of learner because you typically don't take actions in the environment. You instead just follow what would happen through the model itself to find out what your next state is and what your reward is. And you can keep doing this over and over again to find out pass and then find the value of pass. And these model-based problems come in two subclasses. One is where you're given the model up-front, and that's pretty rare. And the more active area of research right now is learning the model while you're exploring. 
+
+- **Episodic and continuing tasks**: An episodic task, we have those tasks that come to a natural end, and they're typically repeated over and over. And one example would be a *tic-tac-toe* game, where you get a reward at the end. Another example would be the Pac-man game, where you get rewards along the way. An example of a continuing task would be controlling an air conditioner. Typically, you would be sensing and controlling at each time step, but there's no natural endpoint. You just keep going and going.
+
+Example with *tic-tac-toe* game:
+
+| Term        | Result                                          |
+| ----------- | ----------------------------------------------- |
+| Agent       | *X* player                                      |
+| Environment | *O* player, general rules                       |
+| State       | 9x square occupant: *X*, *O*, blank.            |
+| Actions     | 9x place *X* in square.                         |
+| Reward      | At end of the game: 1 = win, 0 = tie, -1 = loss |
+| Task Type   | Episodic (the reward is given at the end)       |
+
+Approaches to solving RL Problems.
+
+- **Value function methods**: Estimate value states (or state-action pairs). Policy based on selecting actions that lead to large value states.
+- **Direct Policy Search**: Model the policy itself (state :arrow_right: action). Adjust model parameter in direction of greatest policy improvements.
+
+
+
+
+
+
+
+## 2. edx course about Deep Reinforcement Learning
