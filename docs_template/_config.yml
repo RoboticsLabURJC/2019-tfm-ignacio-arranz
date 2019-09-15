@@ -16,7 +16,7 @@ minimal_mistakes_skin    : "air"
 
 # Site Settings
 #locale                   : "en-US"
-title                    : "Robotics Lab Club"
+title                    : "Robotics Lab"
 title_separator          : "-"
 subtitle                 : Programming Robot Intelligence
 name                     : "JdeRobot"
