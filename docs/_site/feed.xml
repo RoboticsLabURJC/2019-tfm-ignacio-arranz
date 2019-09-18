@@ -1,4 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-05T13:07:50+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab Club</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Previous Work</title><link href="http://localhost:4000/previous%20work/previous-work/" rel="alternate" type="text/html" title="Previous Work" /><published>2019-09-05T00:00:00+02:00</published><updated>2019-09-05T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/previous-work</id><content type="html" xml:base="http://localhost:4000/previous%20work/previous-work/">&lt;h2 id=&quot;1-introduction&quot;&gt;1. Introduction&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-18T17:17:17+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 7-8. Reading more documentation and small tutorials.</title><link href="http://localhost:4000/previous%20work/week-7-8/" rel="alternate" type="text/html" title="Week 7-8. Reading more documentation and small tutorials." /><published>2019-09-18T00:00:00+02:00</published><updated>2019-09-18T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-7-8</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-7-8/">&lt;p&gt;In these two weeks, given the amount of information I found, I decided to put into practice some simple tutorial to help me settle all the concepts and be able to relate them.&lt;/p&gt;
+
+&lt;h2 id=&quot;small-tutorial&quot;&gt;Small tutorial&lt;/h2&gt;
+
+&lt;p&gt;The website that helps me is the one provided by &lt;a href=&quot;https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/&quot;&gt;learndatasci&lt;/a&gt; with a guided exercise for the taxi game.&lt;/p&gt;
+
+&lt;p&gt;To see if all the steps were correct, I have been replicating each step with the concepts in a Jupyter booklet that I have published in &lt;a href=&quot;https://github.com/igarag/machine_learning/blob/master/reinforcement-learning-projects/taxi/DRL_test.ipynb&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This short tutorial explains how to make your first Reinforcement Learning algorithm using Q-Learning for a taxi (represented by a yellow cursor) to pick up and deliver passengers from specific locations. The goal is for it to do so through the shortest route by correctly picking up passengers at their stop and delivering them to the stop.&lt;/p&gt;
+
+&lt;p&gt;This algorithm has two tables, $Q_{table}$ and within it $Q_{values}$. The latter will be updated to remember the most beneficial action in the previous stage. The better $Q_{values}$ will have better opportunities to have better rewards. The $Q_{values}$ (arbitrarily initialized) will be updated using the following equation:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q_{(state, action)} \Leftarrow (1 - \alpha) Q_{(s,a)} + \alpha (reward +\gamma \max_{\alpha}Q_{(next/state,all/actions)})&lt;/script&gt;
+
+&lt;p&gt;where:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;$\alpha$ is the learning rate ($0&amp;lt; \alpha \leq 1$)&lt;/li&gt;
+  &lt;li&gt;$\gamma$: Discount factor ($o &amp;lt; \gamma \leq 1$). Determine how important we want to be in future rewards. A high value (about 1) considers long term rewards and about 0 makes the agent consider the immediate recommendation, i.e. greedy.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The learned value is a combination of the rewards for taking the current value in the current state and the discounted maximum rewards of the next state we will be in once we take the current action.&lt;/p&gt;
+
+&lt;p&gt;To prevent the algorithm from learning a “fixed path” (overfitting) an Epsilon parameter ($\epsilon$) is introduced. It combines two states: the exploration and exploitation dilemma.&lt;/p&gt;
+
+&lt;p&gt;A low epsilon will occur in episodes with more penalties. This will be the case when the algorithm is exploring, since the parameter $\epsilon$ does not influence the agent. The result is as follows:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/tutorial_q_learning.gif&quot; alt=&quot;&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;With this tutorial I understood how the $\epsilon$ parameter works in this field. The algorithm would act in certain cases just like humans. If something has gone well for me, why try different combinations? With this parameter the algorithm is being forced to explore other paths or to exploit the best path.&lt;/p&gt;
+
+&lt;p&gt;For more information visit the original article or the Jupyter booklet mentioned above.&lt;/p&gt;
+
+&lt;h2 id=&quot;items-read&quot;&gt;Items read.&lt;/h2&gt;
+
+&lt;p&gt;After this, I try to read other papers related to other types of Booster Learning. These papers are as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://karpathy.github.io/2016/05/31/rl/&quot;&gt;Pong from pixels&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/tensorflow/deep-reinforcement-learning-playing-cartpole-through-asynchronous-advantage-actor-critic-a3c-7eab2eea5296&quot;&gt;Playing CartPole through Asynchronous Advantage Actor Critic (A3C)&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://hackernoon.com/google-xs-deep-reinforcement-learning-in-robotics-using-vision-7a78e87ab171&quot;&gt;Google X’s Deep Reinforcement Learning in Robotics using Vision&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorial" /><category term="previous work" /><category term="weeks 7-8" /><summary type="html">Apply what you have learned to a small tutorial</summary></entry><entry><title type="html">Week 6. Summary of definitions and concepts.</title><link href="http://localhost:4000/previous%20work/week-6/" rel="alternate" type="text/html" title="Week 6. Summary of definitions and concepts." /><published>2019-09-06T00:00:00+02:00</published><updated>2019-09-06T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-6</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-6/">&lt;p&gt;With the aim of compiling all the information and structuring it, I have been gathering from all sources the information necessary to understand and for other people, reading this blog, to understand what has been read.&lt;/p&gt;
+
+&lt;p&gt;In a summarized way, they are explained in these points.&lt;/p&gt;
+
+&lt;h2 id=&quot;1-introduction&quot;&gt;1. Introduction&lt;/h2&gt;
 
 &lt;p&gt;In the 1950s, &lt;a href=&quot;https://en.wikipedia.org/wiki/Richard_E._Bellman&quot;&gt;Richard Bellman&lt;/a&gt; devised an approach to the problem, involving the dynamical system’s state and a value function, based on an equation, which today we call the &lt;a href=&quot;https://en.wikipedia.org/wiki/Bellman_equation&quot;&gt;Bellman equation&lt;/a&gt;.&lt;/p&gt;
 
@@ -78,6 +122,36 @@
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;Value function methods&lt;/strong&gt;: Estimate value states (or state-action pairs). Policy based on selecting actions that lead to large value states.&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;Direct Policy Search&lt;/strong&gt;: Model the policy itself (state &lt;img class=&quot;emoji&quot; title=&quot;:arrow_right:&quot; alt=&quot;:arrow_right:&quot; src=&quot;https://assets.github.com/images/icons/emoji/unicode/27a1.png&quot; height=&quot;20&quot; width=&quot;20&quot; align=&quot;absmiddle&quot; /&gt; action). Adjust model parameter in direction of greatest policy improvements.&lt;/li&gt;
-&lt;/ul&gt;
+&lt;/ul&gt;</content><author><name>NachoAz</name></author><category term="deep reinforcement learning" /><category term="information" /><category term="theory." /><summary type="html">Definitions of agents, environments, states, actions, rewards, ...</summary></entry><entry><title type="html">Week 1-5. Previous Work. Soaking me in knowledge.</title><link href="http://localhost:4000/previous%20work/week-1-5/" rel="alternate" type="text/html" title="Week 1-5. Previous Work. Soaking me in knowledge." /><published>2019-08-30T00:00:00+02:00</published><updated>2019-08-30T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-1-5</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-1-5/">&lt;h2 id=&quot;reading-documentation-state-of-the-art&quot;&gt;Reading Documentation. State of the Art.&lt;/h2&gt;
 
-&lt;h2 id=&quot;2-edx-course-about-deep-reinforcement-learning&quot;&gt;2. edx course about Deep Reinforcement Learning&lt;/h2&gt;</content><author><name>NachoAz</name></author><category term="machine learning" /><category term="reinforcement learning" /><category term="learning reinforcement learning" /><category term="first steps" /><summary type="html">Reading articles, tutorials and collecting information</summary></entry></feed>
+&lt;p&gt;These first weeks we use them to acquire knowledge about everything related to Reinforcement Learning.&lt;/p&gt;
+
+&lt;p&gt;The tutors gave me a lot of information to land in this branch of machine learning so I ordered this information to gain knowledge little by little.&lt;/p&gt;
+
+&lt;p&gt;The resources used these weeks have been:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.edx.org/es/course/reinforcement-learning-explained-3&quot;&gt;edx course on Reinforcement Learning&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;Reading of two papers:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf&quot;&gt;Human-level control through deep reinforcement learning&lt;/a&gt;.&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://arxiv.org/pdf/1710.02298.pdf&quot;&gt;Rainbow: Combining Improvements in Deep Reinforcement Learning&lt;/a&gt;.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;As this information, without prior knowledge, was very extensive and overwhelming, I found on the &lt;a href=&quot;https://spinningup.openai.com/en/latest/spinningup/rl_intro.html&quot;&gt;OpenAi page&lt;/a&gt; information about the definitions and actors that come into play in each Reinforced Learning algorithm.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="previous work" /><category term="weeks 1-6" /><summary type="html">Reading articles, tutorials and collecting information</summary></entry><entry><title type="html">Week 0. Hello World</title><link href="http://localhost:4000/previous%20work/week-0/" rel="alternate" type="text/html" title="Week 0. Hello World" /><published>2019-07-30T00:00:00+02:00</published><updated>2019-07-30T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-0</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-0/">&lt;p&gt;Hello, blog reader!.&lt;/p&gt;
+
+&lt;p&gt;I’m Nacho Arranz, student of the Master in &lt;a href=&quot;https://mastervisionartificial.es&quot;&gt;Artificial Vision at Universidad Rey Juan Carlos&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I’m preparing for this new adventure where we will face a problem that I haven’t studied before. This will be a challenge that will grow progressively.&lt;/p&gt;
+
+&lt;p&gt;With the post that are published every week we will be telling you the advances, problems and solutions about the project and I hope it will be nice to read it and follow it.&lt;/p&gt;
+
+&lt;p&gt;Nothing would make me prouder than these post and the tutorials that are presented to help someone understand and learn Reinforcement Learning.&lt;/p&gt;
+
+&lt;p&gt;The adventure begins!.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/the_adventure_begins.gif&quot; alt=&quot;&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nacho.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="week 0" /><summary type="html">Introduce to myself</summary></entry></feed>
