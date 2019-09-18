@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-18T17:17:17+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 7-8. Reading more documentation and small tutorials.</title><link href="http://localhost:4000/previous%20work/week-7-8/" rel="alternate" type="text/html" title="Week 7-8. Reading more documentation and small tutorials." /><published>2019-09-18T00:00:00+02:00</published><updated>2019-09-18T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-7-8</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-7-8/">&lt;p&gt;In these two weeks, given the amount of information I found, I decided to put into practice some simple tutorial to help me settle all the concepts and be able to relate them.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-18T17:23:50+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 7-8. Reading more documentation and small tutorials.</title><link href="http://localhost:4000/previous%20work/week-7-8/" rel="alternate" type="text/html" title="Week 7-8. Reading more documentation and small tutorials." /><published>2019-09-18T00:00:00+02:00</published><updated>2019-09-18T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-7-8</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-7-8/">&lt;p&gt;In these two weeks, given the amount of information I found, I decided to put into practice some simple tutorial to help me settle all the concepts and be able to relate them.&lt;/p&gt;
 
 &lt;h2 id=&quot;small-tutorial&quot;&gt;Small tutorial&lt;/h2&gt;
 
@@ -28,11 +28,11 @@
 
 &lt;p&gt;With this tutorial I understood how the $\epsilon$ parameter works in this field. The algorithm would act in certain cases just like humans. If something has gone well for me, why try different combinations? With this parameter the algorithm is being forced to explore other paths or to exploit the best path.&lt;/p&gt;
 
-&lt;p&gt;For more information visit the original article or the Jupyter booklet mentioned above.&lt;/p&gt;
+&lt;p&gt;For more information visit the original article or the Jupyter notebook mentioned above.&lt;/p&gt;
 
 &lt;h2 id=&quot;items-read&quot;&gt;Items read.&lt;/h2&gt;
 
-&lt;p&gt;After this, I try to read other papers related to other types of Booster Learning. These papers are as follows:&lt;/p&gt;
+&lt;p&gt;After this, I try to read other papers related to other types of Reinforcement Learning. These papers are as follows:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;http://karpathy.github.io/2016/05/31/rl/&quot;&gt;Pong from pixels&lt;/a&gt;.&lt;/li&gt;
