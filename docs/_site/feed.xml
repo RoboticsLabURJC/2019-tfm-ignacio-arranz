@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-18T17:39:53+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 7-8. Reading more documentation and small tutorials.</title><link href="http://localhost:4000/previous%20work/week-7-8/" rel="alternate" type="text/html" title="Week 7-8. Reading more documentation and small tutorials." /><published>2019-09-18T00:00:00+02:00</published><updated>2019-09-18T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-7-8</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-7-8/">&lt;p&gt;In these two weeks, given the amount of information I found, I decided to put into practice some simple tutorial to help me settle all the concepts and be able to relate them.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-23T17:19:05+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 7-8. Reading more documentation and small tutorials.</title><link href="http://localhost:4000/previous%20work/week-7-8/" rel="alternate" type="text/html" title="Week 7-8. Reading more documentation and small tutorials." /><published>2019-09-18T00:00:00+02:00</published><updated>2019-09-18T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-7-8</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-7-8/">&lt;p&gt;In these two weeks, given the amount of information I found, I decided to put into practice some simple tutorial to help me settle all the concepts and be able to relate them.&lt;/p&gt;
 
 &lt;h2 id=&quot;small-tutorial&quot;&gt;Small tutorial&lt;/h2&gt;
 
@@ -10,11 +10,12 @@
 
 &lt;p&gt;This algorithm has two tables, $Q_{table}$ and within it $Q_{values}$. The latter will be updated to remember the most beneficial action in the previous stage. The better $Q_{values}$ will have better opportunities to have better rewards. The $Q_{values}$ (arbitrarily initialized) will be updated using the following equation:&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q_{(state, action)} \Leftarrow (1 - \alpha) Q_{(s,a)} + \alpha (reward +\gamma \max_{\alpha}Q_{(next/state,all/actions)})&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q^{\prime}_{(state, action)} = (1 - \alpha) Q_{(s_t,a_t)} + \alpha [r(s_t, a_t) +\gamma \max_{\alpha}Q_{(s_{t+1},a_{t+1})}]&lt;/script&gt;
 
 &lt;p&gt;where:&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;$\alpha$ is the learning rate ($0&amp;lt; \alpha \leq 1$)&lt;/li&gt;
+  &lt;li&gt;$r$: is the reward.&lt;/li&gt;
+  &lt;li&gt;$\alpha$: is the learning rate ($0&amp;lt; \alpha \leq 1$)&lt;/li&gt;
   &lt;li&gt;$\gamma$: Discount factor ($o &amp;lt; \gamma \leq 1$). Determine how important we want to be in future rewards. A high value (about 1) considers long term rewards and about 0 makes the agent consider the immediate recommendation, i.e. greedy.&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -24,7 +25,7 @@
 
 &lt;p&gt;A low epsilon will occur in episodes with more penalties. This will be the case when the algorithm is exploring, since the parameter $\epsilon$ does not influence the agent. The result is as follows:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/posts/tutorial-q-learning.gif&quot; alt=&quot;QLearning&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/tutorial-q-learning.gif&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;With this tutorial I understood how the $\epsilon$ parameter works in this field. The algorithm would act in certain cases just like humans. If something has gone well for me, why try different combinations? With this parameter the algorithm is being forced to explore other paths or to exploit the best path.&lt;/p&gt;
 
@@ -34,11 +35,22 @@
 
 &lt;p&gt;After this, I try to read other papers related to other types of Reinforcement Learning. These papers are as follows:&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://karpathy.github.io/2016/05/31/rl/&quot;&gt;Pong from pixels&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://medium.com/tensorflow/deep-reinforcement-learning-playing-cartpole-through-asynchronous-advantage-actor-critic-a3c-7eab2eea5296&quot;&gt;Playing CartPole through Asynchronous Advantage Actor Critic (A3C)&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://hackernoon.com/google-xs-deep-reinforcement-learning-in-robotics-using-vision-7a78e87ab171&quot;&gt;Google X’s Deep Reinforcement Learning in Robotics using Vision&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorial" /><category term="previous work" /><category term="weeks 7-8" /><summary type="html">Apply what you have learned to a small tutorial</summary></entry><entry><title type="html">Week 6. Summary of definitions and concepts.</title><link href="http://localhost:4000/previous%20work/week-6/" rel="alternate" type="text/html" title="Week 6. Summary of definitions and concepts." /><published>2019-09-06T00:00:00+02:00</published><updated>2019-09-06T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-6</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-6/">&lt;p&gt;With the aim of compiling all the information and structuring it, I have been gathering from all sources the information necessary to understand and for other people, reading this blog, to understand what has been read.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;http://karpathy.github.io/2016/05/31/rl/&quot;&gt;&lt;strong&gt;Pong from pixels&lt;/strong&gt;&lt;/a&gt;. The tutorial has been followed and analyzed in this &lt;a href=&quot;https://github.com/igarag/machine_learning/blob/master/reinforcement-learning-projects/pong/QLearning/pong_notebook.ipynb&quot;&gt;Jupyter notebook&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/tensorflow/deep-reinforcement-learning-playing-cartpole-through-asynchronous-advantage-actor-critic-a3c-7eab2eea5296&quot;&gt;&lt;strong&gt;Playing CartPole through Asynchronous Advantage Actor Critic (A3C)&lt;/strong&gt;&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://hackernoon.com/google-xs-deep-reinforcement-learning-in-robotics-using-vision-7a78e87ab171&quot;&gt;&lt;strong&gt;Google X’s Deep Reinforcement Learning in Robotics using Vision&lt;/strong&gt;&lt;/a&gt;. Presents the &lt;a href=&quot;https://arxiv.org/abs/1806.10293&quot;&gt;Qt-Opt algorithm&lt;/a&gt; is designed by combining two methods:&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;
+        &lt;p&gt;&lt;strong&gt;Large-scale Distributed Optimization&lt;/strong&gt;. Using multiple robots to train model faster, making it a large-scale distributed system.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;&lt;strong&gt;Deep Q-learning algorithm&lt;/strong&gt;. RL technique used to learn a policy, which tells an agent which action to take under which circumstances.&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorial" /><category term="previous work" /><category term="weeks 7-8" /><summary type="html">Apply what you have learned to a small tutorial</summary></entry><entry><title type="html">Week 6. Summary of definitions and concepts.</title><link href="http://localhost:4000/previous%20work/week-6/" rel="alternate" type="text/html" title="Week 6. Summary of definitions and concepts." /><published>2019-09-06T00:00:00+02:00</published><updated>2019-09-06T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-6</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-6/">&lt;p&gt;With the aim of compiling all the information and structuring it, I have been gathering from all sources the information necessary to understand and for other people, reading this blog, to understand what has been read.&lt;/p&gt;
 
 &lt;p&gt;In a summarized way, they are explained in these points.&lt;/p&gt;
 
@@ -152,6 +164,9 @@
 
 &lt;p&gt;The adventure begins!.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/posts/the-adventure-begins.gif&quot; alt=&quot;The Adventure Begins&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+&lt;figure&gt;
+	&lt;a href=&quot;&quot;&gt;&lt;img src=&quot;/assets/images/posts/the-adventure-begins.gif&quot; /&gt;&lt;/a&gt;
+	&lt;!-- &lt;figcaption&gt;.&lt;/figcaption&gt; --&gt;
+&lt;/figure&gt;
 
 &lt;p&gt;Nacho.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="week 0" /><summary type="html">Introduce to myself</summary></entry></feed>
