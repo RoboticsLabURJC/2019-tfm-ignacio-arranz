@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-29T18:57:47+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 9. Landing on the working infrastructure</title><link href="http://localhost:4000/examples/landing/week-9/" rel="alternate" type="text/html" title="Week 9. Landing on the working infrastructure" /><published>2019-09-23T00:00:00+02:00</published><updated>2019-09-23T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-9</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-9/">&lt;p&gt;This week we are going to install the necessary libraries to have the TensorFlow library installed as well as some examples from &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-29T22:23:26+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 9. Landing on the working infrastructure</title><link href="http://localhost:4000/examples/landing/week-9/" rel="alternate" type="text/html" title="Week 9. Landing on the working infrastructure" /><published>2019-09-23T00:00:00+02:00</published><updated>2019-09-23T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-9</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-9/">&lt;p&gt;This week we are going to install the necessary libraries to have the TensorFlow library installed as well as some examples from &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
 
-&lt;h2 id=&quot;to-do&quot;&gt;To Do:&lt;/h2&gt;
+&lt;h1 id=&quot;to-do&quot;&gt;To Do&lt;/h1&gt;
 
 &lt;p&gt;The tasks proposed for this week are&lt;/p&gt;
 
@@ -10,7 +10,7 @@
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Install environment to replicate examples of &lt;a href=&quot;https://github.com/RoboticsLabURJC/2017-tfm-vanessa-fernandez&quot;&gt;Vanessa Fernandez’s&lt;/a&gt; end-of-master job.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
+&lt;h1 id=&quot;progress&quot;&gt;Progress&lt;/h1&gt;
 
 &lt;p&gt;Some of the robotics libraries that will be used during the development of this work are:&lt;/p&gt;
 &lt;ul&gt;
@@ -21,7 +21,7 @@
 
 &lt;p&gt;With these tools we will have a part of the infrastructure where the learning algorithms will be trained later by “Reinforcement Learning”.&lt;/p&gt;
 
-&lt;h3 id=&quot;install-docker-images&quot;&gt;Install Docker images.&lt;/h3&gt;
+&lt;h2 id=&quot;install-docker-images&quot;&gt;Install Docker images.&lt;/h2&gt;
 
 &lt;p&gt;To install the docker you need the Dockerfile files from &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin/tree/master/dockers&quot;&gt;this repository&lt;/a&gt; with the command:&lt;/p&gt;
 
@@ -33,27 +33,41 @@
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; ros_melodic_gazebo &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;replicate-examples-from-the-repository&quot;&gt;Replicate examples from the repository&lt;/h3&gt;
+&lt;h2 id=&quot;replicate-examples-from-the-repository&quot;&gt;Replicate examples from the repository&lt;/h2&gt;
 
 &lt;p&gt;As a first objective I wanted to launch a test world of Gazebo inside the container as well as the GzWeb client to be able to visualize it in the web browser (outside the container).&lt;/p&gt;
 
-&lt;p&gt;To do this, start the container and execute the following instructions:&lt;/p&gt;
+&lt;p&gt;To do this:&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;roscore
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Start the container:&lt;/p&gt;
 
-&lt;p&gt;We clone and run a test world of the repository:&lt;/p&gt;
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-ti&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 11311:11311 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 11345:11345 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 8080:8080 &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 7681:7681 ros_melodic_gazebo bash
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Run the following instructions inside the container:&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/RoboticsLabURJC/2019-phd-alberto-martin
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;roscore &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;We clone and run a test world of the repository:&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/RoboticsLabURJC/2019-phd-alberto-martin
 &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;2019-phd-alberto-martin/gym-pyxis/gym_pyxis/envs/gazebo/assets/launch
 roslaunch turtlebot3_followline.launch
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;In another terminal (for simplicity) we run the Gazebo (web) client inside the container:&lt;/p&gt;
 
-&lt;p&gt;In another terminal (for simplicity) we run the Gazebo (web) client:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;gzweb
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;gzweb
 npm start
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;The result is that the world can be seen in the browser as in the images:&lt;/p&gt;
 
@@ -77,14 +91,14 @@ npm start
   
 &lt;/figure&gt;
 
-&lt;h3 id=&quot;working&quot;&gt;Working&lt;/h3&gt;
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;I’m working on replicating the Vanessa Martinez’s end-of-master work environment.&lt;/li&gt;
   &lt;li&gt;Reading &lt;a href=&quot;https://medium.com/tensorflow/deep-reinforcement-learning-playing-cartpole-through-asynchronous-advantage-actor-critic-a3c-7eab2eea5296&quot;&gt;Advantage Actor Critic (A3C) article&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;learned&quot;&gt;Learned&lt;/h3&gt;
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
 &lt;p&gt;First approach to the environment where the work will be developed.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 9" /><summary type="html">Doing some examples and installing infrastructure.</summary></entry><entry><title type="html">Week 7-8. Reading more documentation and small tutorials.</title><link href="http://localhost:4000/previous%20work/week-7-8/" rel="alternate" type="text/html" title="Week 7-8. Reading more documentation and small tutorials." /><published>2019-09-18T00:00:00+02:00</published><updated>2019-09-18T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-7-8</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-7-8/">&lt;p&gt;In these two weeks, given the amount of information I found, I decided to put into practice some simple tutorial to help me settle all the concepts and be able to relate them.&lt;/p&gt;
 
