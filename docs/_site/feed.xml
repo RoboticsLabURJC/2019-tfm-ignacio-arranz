@@ -1,4 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-09-29T22:23:26+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 9. Landing on the working infrastructure</title><link href="http://localhost:4000/examples/landing/week-9/" rel="alternate" type="text/html" title="Week 9. Landing on the working infrastructure" /><published>2019-09-23T00:00:00+02:00</published><updated>2019-09-23T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-9</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-9/">&lt;p&gt;This week we are going to install the necessary libraries to have the TensorFlow library installed as well as some examples from &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-10-13T20:46:44+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 10-11. Running different exercises from repo</title><link href="http://localhost:4000/examples/landing/week-10-11/" rel="alternate" type="text/html" title="Week 10-11. Running different exercises from repo" /><published>2019-10-12T00:00:00+02:00</published><updated>2019-10-12T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-10-11</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-10-11/">&lt;p&gt;These weeks have been for the study and understanding of the different methods and agents that exist in Alberto Martín’s repository. This brings us closer to the real environments where the work will be developed.&lt;/p&gt;
+
+&lt;h1 id=&quot;to-do&quot;&gt;To Do&lt;/h1&gt;
+
+&lt;p&gt;The tasks proposed for this week are&lt;/p&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Perform different exercises from the “puppis” section. &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin/tree/master/puppis&quot;&gt;repository&lt;/a&gt;.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;(OnGoing)Install environment to replicate examples of &lt;a href=&quot;https://github.com/RoboticsLabURJC/2017-tfm-vanessa-fernandez&quot;&gt;Vanessa Fernandez’s&lt;/a&gt; end-of-master job.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;progress&quot;&gt;Progress&lt;/h1&gt;
+
+&lt;p&gt;In this period different exercises of the Gym environment have been executed where the different learning methods are tested before different agents.&lt;/p&gt;
+
+&lt;p&gt;The tested methods have been:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cross_entropy&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;dqn&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;dynamic_programming&lt;/code&gt; (with policy and value iteration).&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;monte_carlo&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;temporal_difference&lt;/code&gt; (with and without policy). With QLearning and Sarsa algorithms.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For the execution of the methods in the ‘CartPole’ scenario you have to launch the instruction from the previous directory to ‘&lt;code class=&quot;highlighter-rouge&quot;&gt;puppis&lt;/code&gt;’:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;For the SARSA method:
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; agents.gym.cartpole.sarsa_agent 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;For the QLearning method:&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; agents.gym.cartpole.q_learning_agent
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These commands put to execute the training of the environment ‘CartPole’ where it can be seen that when a threshold of inclination is exceeded the exercise is restarted and the learned values are updated to apply it on the next epoch (if it improves with respect to the previous one).&lt;/p&gt;
+
+&lt;p&gt;The solution to the cross_entropy method can be seen in the gif:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/logbook/week1011/cartpole_solution.gif&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
+
+&lt;p&gt;I’m currently reviewing the gym ‘pong’ environment training to get a performance where the agent learns to play the video game.&lt;/p&gt;
+
+&lt;p&gt;In addition, I am in communication with Vanessa Fernández to replicate the environment of her end-of-master work.&lt;/p&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
+
+&lt;p&gt;At the python programming level, I have learned to launch programs with modules in parallel using the &lt;code class=&quot;highlighter-rouge&quot;&gt;-m&lt;/code&gt; argument. With this it is possible to have the infrastructure separated in a logical way to apply different agents to different methods.&lt;/p&gt;
+
+&lt;p&gt;As for the exercises in the repository, there is a clear difference in the times of training and final solution. The &lt;code class=&quot;highlighter-rouge&quot;&gt;cross_entropy&lt;/code&gt; method has been the fastest to solve in training with very good results in execution.&lt;/p&gt;
+
+&lt;p&gt;Methods such as QLearning are less effective at a time when there is no clear separation of all environmental states.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 10-11" /><summary type="html">Running different methods and agents for the resolution of DRL problems.</summary></entry><entry><title type="html">Week 9. Landing on the working infrastructure</title><link href="http://localhost:4000/examples/landing/week-9/" rel="alternate" type="text/html" title="Week 9. Landing on the working infrastructure" /><published>2019-09-23T00:00:00+02:00</published><updated>2019-09-23T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-9</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-9/">&lt;p&gt;This week we are going to install the necessary libraries to have the TensorFlow library installed as well as some examples from &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h1 id=&quot;to-do&quot;&gt;To Do&lt;/h1&gt;
 
@@ -127,7 +185,25 @@ npm start
 
 &lt;p&gt;A low epsilon will occur in episodes with more penalties. This will be the case when the algorithm is exploring, since the parameter $\epsilon$ does not influence the agent. The result is as follows:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/logbook/tutorial-q-learning.gif&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+&lt;figure class=&quot;half &quot;&gt;
+  
+    
+      &lt;a href=&quot;/assets/images/logbook/week78/tutorial-q-learning.gif&quot; title=&quot;Without QLearning&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week78/tutorial-q-learning.gif&quot; alt=&quot;Without QLearning&quot; /&gt;
+      &lt;/a&gt;
+    
+  
+    
+      &lt;a href=&quot;/assets/images/logbook/week78/tutorial-q-learning_solution.gif&quot; title=&quot;Solution using QLearning.&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week78/tutorial-q-learning_solution.gif&quot; alt=&quot;Solution using QLearning.&quot; /&gt;
+      &lt;/a&gt;
+    
+  
+  
+    &lt;figcaption&gt;Taxi solution. Left with NO QLearning. Right with QLearning algorithm.
+&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
 
 &lt;p&gt;With this tutorial I understood how the $\epsilon$ parameter works in this field. The algorithm would act in certain cases just like humans. If something has gone well for me, why try different combinations? With this parameter the algorithm is being forced to explore other paths or to exploit the best path.&lt;/p&gt;
 
