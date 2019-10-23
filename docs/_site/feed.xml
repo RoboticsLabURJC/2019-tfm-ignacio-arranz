@@ -1,18 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-10-16T22:36:18+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 12. Installing nvidia-docker and undestanding DRL algorithms.</title><link href="http://localhost:4000/examples/landing/week-12/" rel="alternate" type="text/html" title="Week 12. Installing nvidia-docker and undestanding DRL algorithms." /><published>2019-10-16T00:00:00+02:00</published><updated>2019-10-16T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-12</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-12/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-10-23T22:44:11+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 12. Installing nvidia-docker and undestanding DRL algorithms.</title><link href="http://localhost:4000/examples/landing/week-12/" rel="alternate" type="text/html" title="Week 12. Installing nvidia-docker and undestanding DRL algorithms." /><published>2019-10-16T00:00:00+02:00</published><updated>2019-10-16T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-12</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-12/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;p&gt;The tasks proposed for this week are&lt;/p&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Do different exercises and study Deep Reinforcement Learning algorithms.&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Replicating Vanessa Fernandez’s master’s dissertation. Trying to pack everything in a single Docker container.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Do different exercises and study Deep Reinforcement Learning algorithms.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Replicating Vanessa Fernandez’s master’s dissertation. Trying to pack everything in a single Docker container.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
+&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
+
+&lt;p&gt;I have tried to replicate Vanessa Martinez’s end-of-master work inside a Docker container to try to isolate all the components and have them located in a few files.&lt;/p&gt;
+
+&lt;p&gt;For this process it is necessary to uninstall &lt;code class=&quot;highlighter-rouge&quot;&gt;docker.io&lt;/code&gt; (it is the one that is installed by default in a normal docker installation) and install &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-engine&lt;/code&gt; where plugins can be installed to enrich the program. &lt;em&gt;Important&lt;/em&gt;: Is required to have &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-engine &amp;gt;= 19.02&lt;/code&gt;. It’s recommended to uninstall previous versions of Docker by following &lt;a href=&quot;https://docs.docker.com/install/linux/docker-ce/ubuntu/&quot;&gt;these instructions&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Among the necessary plugins is &lt;code class=&quot;highlighter-rouge&quot;&gt;nvidia-docker&lt;/code&gt;, which cloning the official image has the necessary libraries to obtain the resources of the graphics card. &lt;code class=&quot;highlighter-rouge&quot;&gt;nvidia-docker&lt;/code&gt; image can be downloaded in &lt;a href=&quot;https://github.com/NVIDIA/nvidia-docker&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The other point of the week was to study some of the classic algorithms to strengthen the knowledge acquired in previous weeks and see the applications in specific algorithms.&lt;/p&gt;
+
+&lt;p&gt;The two methods studied this week are two classic time-difference algorithms:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Docker-engine &amp;gt; 19.02. It’s recommended to uninstall previous versions of Docker by following &lt;a href=&quot;https://docs.docker.com/install/linux/docker-ce/ubuntu/&quot;&gt;these instructions&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;nvidia-docker. Instructions in &lt;a href=&quot;https://github.com/NVIDIA/nvidia-docker&quot;&gt;this repository&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 12" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week.</summary></entry><entry><title type="html">Week 10-11. Running different exercises from repo</title><link href="http://localhost:4000/examples/landing/week-10-11/" rel="alternate" type="text/html" title="Week 10-11. Running different exercises from repo" /><published>2019-10-12T00:00:00+02:00</published><updated>2019-10-12T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-10-11</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-10-11/">&lt;p&gt;These weeks have been for the study and understanding of the different methods and agents that exist in Alberto Martín’s repository. This brings us closer to the real environments where the work will be developed.&lt;/p&gt;
+  &lt;li&gt;QLearning&lt;/li&gt;
+  &lt;li&gt;SARSA&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The main difference between the two methods is that they differ in policy monitoring. The first one does not follow a policy and the main objective is to seek the value that maximizes the Q function regardless of how it has achieved it. The second of them follows a policy and maximising its value is linked to the way it learns.&lt;/p&gt;
+
+&lt;p&gt;I will add more information in the coming days.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://towardsdatascience.com/reinforcement-learning-temporal-difference-sarsa-q-learning-expected-sarsa-on-python-9fecfda7467e&quot;&gt;Reinforcement learning: Temporal-Difference, SARSA, Q-Learning &amp;amp; Expected SARSA in python&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://subscription.packtpub.com/book/big_data_and_business_intelligence/9781789345803/1/ch01lvl1sec13/sarsa-versus-q-learning-on-policy-or-off&quot;&gt;SARSA versus Q-learning – on-policy or off?&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://towardsdatascience.com/td-in-reinforcement-learning-the-easy-way-f92ecfa9f3ce&quot;&gt;TD in Reinforcement Learning, the Easy Way&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://lipn.univ-paris13.fr/~gerard/docs/publications/rodrigues-ger-rou-ilp08-submit.pdf&quot;&gt;On and Off-Policy Relational Reinforcement Learning&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
+
+&lt;p&gt;Given the size that the Docker image can have after installing all the dependencies as well as the fact that the exercise presented by Vanessa Fernandez requires a graphic interface, we will try a mixed configuration where everything that depends on the graphic card will be grouped inside the Docker container.&lt;/p&gt;
+
+&lt;p&gt;The Ubuntu I work with is version 18.04 with the KDE desktop interface. To prevent collisions between libraries in the operating system and OpenCV I will try to compile and install the library with the Qt flag instead of the default GTK flag.&lt;/p&gt;
+
+&lt;p&gt;In the process of learning and familiarisation with the reinforcement learning algorithms, the following will continue to be studied within the classical algorithms:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cross entropy&lt;/li&gt;
+  &lt;li&gt;Dynamic programming.&lt;/li&gt;
+  &lt;li&gt;Monte Carlo.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
+
+&lt;p&gt;This week I have focused mainly on getting to know more deeply the differences between various methods of LR. In particular, everything related to Q-Learning and SARSA. Their differences between politics, advantages and disadvantages, usefulness, etc. Knowing in a deeper way classical RL algorithms like the ones mentioned above, helps to understand the way in which DRL algorithms are taken further. I am currently studying different classical algorithms such as Action-critic (A3C).&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 12" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week.</summary></entry><entry><title type="html">Week 10-11. Running different exercises from repo</title><link href="http://localhost:4000/examples/landing/week-10-11/" rel="alternate" type="text/html" title="Week 10-11. Running different exercises from repo" /><published>2019-10-12T00:00:00+02:00</published><updated>2019-10-12T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-10-11</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-10-11/">&lt;p&gt;These weeks have been for the study and understanding of the different methods and agents that exist in Alberto Martín’s repository. This brings us closer to the real environments where the work will be developed.&lt;/p&gt;
 
 &lt;h1 id=&quot;to-do&quot;&gt;To Do&lt;/h1&gt;
 
@@ -78,11 +119,11 @@
 
 &lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
-&lt;p&gt;At the python programming level, I have learned to launch programs with modules in parallel using the &lt;code class=&quot;highlighter-rouge&quot;&gt;-m&lt;/code&gt; argument. With this it is possible to have the infrastructure separated in a logical way to apply different agents to different methods.&lt;/p&gt;
+&lt;p&gt;At the Python programming level, I have learned to launch programs with modules in parallel using the &lt;code class=&quot;highlighter-rouge&quot;&gt;-m&lt;/code&gt; argument. With this it is possible to have the infrastructure separated in a logical way to apply different agents to different methods.&lt;/p&gt;
 
 &lt;p&gt;As for the exercises in the repository, there is a clear difference in the times of training and final solution. The &lt;code class=&quot;highlighter-rouge&quot;&gt;cross_entropy&lt;/code&gt; method has been the fastest to solve in training with very good results in execution.&lt;/p&gt;
 
-&lt;p&gt;Methods such as QLearning are less effective at a time when there is no clear separation of all environmental states.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 10-11" /><summary type="html">Running different methods and agents for the resolution of DRL problems.</summary></entry><entry><title type="html">Week 9. Landing on the working infrastructure</title><link href="http://localhost:4000/examples/landing/week-9/" rel="alternate" type="text/html" title="Week 9. Landing on the working infrastructure" /><published>2019-09-23T00:00:00+02:00</published><updated>2019-09-23T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-9</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-9/">&lt;p&gt;This week we are going to install the necessary libraries to have the TensorFlow library installed as well as some examples from &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Methods such as Q-Learning are less effective at a time when there is no clear separation of all environmental states.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 10-11" /><summary type="html">Running different methods and agents for the resolution of DRL problems.</summary></entry><entry><title type="html">Week 9. Landing on the working infrastructure</title><link href="http://localhost:4000/examples/landing/week-9/" rel="alternate" type="text/html" title="Week 9. Landing on the working infrastructure" /><published>2019-09-23T00:00:00+02:00</published><updated>2019-09-23T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-9</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-9/">&lt;p&gt;This week we are going to install the necessary libraries to have the TensorFlow library installed as well as some examples from &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h1 id=&quot;to-do&quot;&gt;To Do&lt;/h1&gt;
 
