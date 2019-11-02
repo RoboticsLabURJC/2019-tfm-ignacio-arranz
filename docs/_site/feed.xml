@@ -1,4 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-10-23T22:44:11+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 12. Installing nvidia-docker and undestanding DRL algorithms.</title><link href="http://localhost:4000/examples/landing/week-12/" rel="alternate" type="text/html" title="Week 12. Installing nvidia-docker and undestanding DRL algorithms." /><published>2019-10-16T00:00:00+02:00</published><updated>2019-10-16T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-12</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-12/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-11-02T13:03:28+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II).</title><link href="http://localhost:4000/examples/landing/week-13/" rel="alternate" type="text/html" title="Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II)." /><published>2019-10-21T00:00:00+02:00</published><updated>2019-10-21T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-13</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-13/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Studying new classical algorithms.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Installing OpenCV using Qt (instead of GTK).&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
+
+&lt;h3 id=&quot;studying-new-classical-algorithms&quot;&gt;Studying new classical algorithms.&lt;/h3&gt;
+&lt;p&gt;During the week I have selected two classic Reinforcement Learning algorithms in which to focus the study and deepen the operation. These have been: Dynamic Programming and Monte Carlo.&lt;/p&gt;
+
+&lt;p&gt;To understand how they work, I had as a reference book: “&lt;a href=&quot;https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf&quot;&gt;Reinforcement Learning:
+An Introduction&lt;/a&gt;” by Richard S. Sutton and Andrew G. Barto.&lt;/p&gt;
+
+&lt;p&gt;In addition, I have been supporting the reading with other articles:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://towardsdatascience.com/reinforcement-learning-demystified-solving-mdps-with-dynamic-programming-b52c8093c919&quot;&gt;Reinforcement Learning Demystified: Solving MDPs with Dynamic Programming&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/deep-math-machine-learning-ai/ch-12-1-model-free-reinforcement-learning-algorithms-monte-carlo-sarsa-q-learning-65267cb8d1b4&quot;&gt;Model Free Reinforcement learning algorithms (Monte Carlo, SARSA, Q-learning)&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/@zsalloum/monte-carlo-in-reinforcement-learning-the-easy-way-564c53010511&quot;&gt;Monte Carlo in Reinforcement Learning, the Easy Way&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;installing-opencv-using-qt-instead-of-gtk&quot;&gt;Installing OpenCV using Qt (instead of GTK).&lt;/h3&gt;
+
+&lt;p&gt;I have tried &lt;a href=&quot;https://www.learnopencv.com/install-opencv-4-on-ubuntu-18-04/&quot;&gt;compile OpenCV&lt;/a&gt; on the computer using &lt;em&gt;flag&lt;/em&gt; to create using PyQT instead of GTK since in the Ubuntu version I use (Kubuntu: Ubuntu + KDE Plasma) sometimes has problems to raise a window.&lt;/p&gt;
+
+&lt;p&gt;In the process of trying to compile it I found the following error:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Makefile:162: recipe for target 'all' failed 
+make: *** [all] Error 2 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We are still working to find a way to compile the program.&lt;/p&gt;
+
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
+
+&lt;p&gt;I will continue to try to replicate Vanessa’s master’s dissertation to try to close that road.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, continue studying classic Reinforcement Learning methods and try the first Deep Reinforcement Learning algorithm in Alberto’s repository, puppis directory. It would be to solve the game of Pong using the DQN algorithm.&lt;/p&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
+
+&lt;p&gt;Knowing the different classical methods gives an idea of ćomo work before different problems to find the best option. Although this week I have known better these algorithms, I think that to continue studying them is the way to settle and assimilate all the concepts.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="weeks 13" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week (continuing)</summary></entry><entry><title type="html">Week 12. Installing nvidia-docker and undestanding DRL algorithms.</title><link href="http://localhost:4000/examples/landing/week-12/" rel="alternate" type="text/html" title="Week 12. Installing nvidia-docker and undestanding DRL algorithms." /><published>2019-10-16T00:00:00+02:00</published><updated>2019-10-16T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-12</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-12/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;p&gt;The tasks proposed for this week are&lt;/p&gt;
 
@@ -53,7 +97,9 @@
 
 &lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
-&lt;p&gt;This week I have focused mainly on getting to know more deeply the differences between various methods of LR. In particular, everything related to Q-Learning and SARSA. Their differences between politics, advantages and disadvantages, usefulness, etc. Knowing in a deeper way classical RL algorithms like the ones mentioned above, helps to understand the way in which DRL algorithms are taken further. I am currently studying different classical algorithms such as Action-critic (A3C).&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 12" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week.</summary></entry><entry><title type="html">Week 10-11. Running different exercises from repo</title><link href="http://localhost:4000/examples/landing/week-10-11/" rel="alternate" type="text/html" title="Week 10-11. Running different exercises from repo" /><published>2019-10-12T00:00:00+02:00</published><updated>2019-10-12T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-10-11</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-10-11/">&lt;p&gt;These weeks have been for the study and understanding of the different methods and agents that exist in Alberto Martín’s repository. This brings us closer to the real environments where the work will be developed.&lt;/p&gt;
+&lt;p&gt;This week I have focused mainly on getting to know more deeply the differences between various methods of LR. In particular, everything related to Q-Learning and SARSA. Their differences between politics, advantages and disadvantages, usefulness, etc. Knowing in a deeper way classical RL algorithms like the ones mentioned above, helps to understand the way in which DRL algorithms are taken further. I am currently studying different classical algorithms such as Dynamic Programming or Monte Carlo.&lt;/p&gt;
+
+&lt;p&gt;Continue …&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="weeks 12" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week.</summary></entry><entry><title type="html">Week 10-11. Running different exercises from repo</title><link href="http://localhost:4000/examples/landing/week-10-11/" rel="alternate" type="text/html" title="Week 10-11. Running different exercises from repo" /><published>2019-10-12T00:00:00+02:00</published><updated>2019-10-12T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-10-11</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-10-11/">&lt;p&gt;These weeks have been for the study and understanding of the different methods and agents that exist in Alberto Martín’s repository. This brings us closer to the real environments where the work will be developed.&lt;/p&gt;
 
 &lt;h1 id=&quot;to-do&quot;&gt;To Do&lt;/h1&gt;
 
