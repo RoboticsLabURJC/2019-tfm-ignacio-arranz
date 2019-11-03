@@ -1,14 +1,158 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-11-02T13:03:28+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II).</title><link href="http://localhost:4000/examples/landing/week-13/" rel="alternate" type="text/html" title="Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II)." /><published>2019-10-21T00:00:00+02:00</published><updated>2019-10-21T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-13</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-13/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-11-03T22:34:40+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 14. Organization and first algorithm using Deep Learning. DQN.</title><link href="http://localhost:4000/examples/landing/week-14/" rel="alternate" type="text/html" title="Week 14. Organization and first algorithm using Deep Learning. DQN." /><published>2019-11-02T00:00:00+01:00</published><updated>2019-11-02T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-14</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-14/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Organize the information of the classical methods.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Try to run some example of OpenAI gym.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-continuing-with-the-replicate-of-vanessas-masters-degree-thesis&quot;&gt;1. Continuing with the replicate of Vanessa’s master’s degree thesis.&lt;/h3&gt;
+
+&lt;p&gt;Below is a summary of the steps that have been taken from the first iteration to the present day in replicating Vanessa Fernandez’s master’s dissertation.&lt;/p&gt;
+
+&lt;p&gt;For the replication of Vanessa’s master’s dissertation the packages have been installed:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;jderobot
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;jderobot-gazebo-assets
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The repository has been cloned:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://github.com/RoboticsLabURJC/2017-tfm-vanessa-fernandez.git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We navigate to the directory where the main program is located:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;2017-tfm-vanessa-fernandez/Follow Line/dl-driver
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Using two terminals, we launch on one the ROS command that executes the world of Gazebo with:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;roslaunch /opt/jderobot/share/jderobot/launch/f1.launch 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and in another terminal the algorithm is executed:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python driver.py driver.yml 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;At this point I have encountered the following &lt;strong&gt;problems&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;In the installation of the file &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; the &lt;strong&gt;PyQt5&lt;/strong&gt; library &lt;strong&gt;is not found&lt;/strong&gt;. The installation is trying to be done from inside a Python virtual environment, &lt;strong&gt;it seems that this library is only accessible if you try to install it on the main machine&lt;/strong&gt;. This is a point that should be improved, so the environment of the user’s machine is not affected. &lt;strong&gt;Using Python 3&lt;/strong&gt; seems to solve the problem.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The code is in &lt;strong&gt;Python 2&lt;/strong&gt;, which &lt;strong&gt;will not be maintained&lt;/strong&gt; after 2020. It would be a good idea to try to translate the code to Python 3.5+. With this improvement you would be within a current code execution.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Set the &lt;strong&gt;versions of the libraries&lt;/strong&gt; used in &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt;. Currently the file &lt;code class=&quot;highlighter-rouge&quot;&gt;requiremens.txt&lt;/code&gt; has not fixed any version of the libraries. At the time the end-of-master job was done, the stable TensorFlow version was 1.14. Currently it is version 2.0 so there are some changes that would have to be made to the original code to make it work again. Maybe it would be a good idea to &lt;strong&gt;set&lt;/strong&gt; it to &lt;strong&gt;the&lt;/strong&gt; latest &lt;strong&gt;stable version&lt;/strong&gt;: 1.14.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I am currently in contact with Vanessa to solve these small bugs and get some functional models to run the network.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-organize-the-information-of-the-classical-methods&quot;&gt;2. Organize the information of the classical methods.&lt;/h3&gt;
+
+&lt;p&gt;So far the following classical methods have been studied:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;QLearning.&lt;/li&gt;
+  &lt;li&gt;SARSA.&lt;/li&gt;
+  &lt;li&gt;Dynamic Programming (Policy and Value iteration).&lt;/li&gt;
+  &lt;li&gt;Monte Carlo.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The division between the way they face the result can be seen in the following table.&lt;/p&gt;
+
+&lt;style type=&quot;text/css&quot;&gt;
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.tg .tg-lboi{border-color:inherit;text-align:left;vertical-align:middle}
+.tg .tg-9wq8{border-color:inherit;text-align:center;vertical-align:middle}
+&lt;/style&gt;
+
+&lt;table class=&quot;tg&quot;&gt;
+  &lt;tr&gt;
+    &lt;th class=&quot;tg-9wq8&quot; rowspan=&quot;4&quot;&gt;Model-free methods&lt;/th&gt;
+    &lt;th class=&quot;tg-lboi&quot; rowspan=&quot;2&quot;&gt;Value-based methods&lt;/th&gt;
+    &lt;th class=&quot;tg-lboi&quot; rowspan=&quot;2&quot;&gt;Temporal Difference (TD)&lt;/th&gt;
+    &lt;th class=&quot;tg-lboi&quot;&gt;Q-Learning&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-9wq8&quot;&gt;SARSA&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-lboi&quot; rowspan=&quot;2&quot;&gt;Policy-based methods&lt;br /&gt;&lt;/td&gt;
+    &lt;td class=&quot;tg-9wq8&quot; colspan=&quot;2&quot;&gt;Policy Iteration&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-9wq8&quot; colspan=&quot;2&quot;&gt;Value Iteration&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td class=&quot;tg-9wq8&quot;&gt;Model-based methods&lt;/td&gt;
+    &lt;td class=&quot;tg-9wq8&quot;&gt;-&lt;/td&gt;
+    &lt;td class=&quot;tg-9wq8&quot;&gt;-&lt;/td&gt;
+    &lt;td class=&quot;tg-9wq8&quot;&gt;-&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Soon I will include more information on each of the algorithms.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-run-an-example-of-dqn-algorithms&quot;&gt;3. Run an example of DQN algorithms.&lt;/h3&gt;
+
+&lt;p&gt;The example exercise that I have chosen to train and execute a DQN algorithm is the example of Alberto Martin’s repository with the PONG game. The goal is, once this one works, to try to replicate the same code with the Space Invaders game (I really like that game :-) ).&lt;/p&gt;
+
+&lt;p&gt;Although the original code was configured using TensorFlow 2.0, this version was in alpha phase. Installing directly the &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; libraries does not execute the algorithm correctly. Creating a virtual environment and installing the libraries, the result of the training returns the following error:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;contrib&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summary&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_file_writer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logdir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'runs'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flush_millis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filename_suffix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;-dqn-pong&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;AttributeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'tensorflow'&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;has&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;no&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attribute&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'contrib'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As I said before, since the version with which this exercise was configured was in alpha, the command that gives the error is not in the set of instructions. According to &lt;a href=&quot;https://stackoverflow.com/questions/55870127/module-tensorflow-has-no-attribute-contrib&quot;&gt;this thread of StackOverflow&lt;/a&gt; it is recommended to execute the script that gives the official documentation.&lt;/p&gt;
+
+&lt;p&gt;This process has been done and created a parallel folder with the same files but with the translated commands.&lt;/p&gt;
+
+&lt;p&gt;Running the file &lt;code class=&quot;highlighter-rouge&quot;&gt;dqn_pong.py&lt;/code&gt; again we have the following error whe the algoritm is training (in the step 11):&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; 
+&lt;span class=&quot;mi&quot;&gt;435&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;done&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;games&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reward&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;20.625&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eps&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.93&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;762.74&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;8253&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;done&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;games&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reward&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;20.667&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eps&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.92&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;732.73&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;9106&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;done&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;games&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reward&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;20.700&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eps&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.91&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;708.14&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;9967&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;done&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;games&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reward&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;20.727&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eps&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.90&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;732.39&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Traceback&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;most&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;recent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;File&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;dqn_pong.py&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;172&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;module&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;tgt_net&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_weights&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;net&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_weights&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;File&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/path/to/virtualenvironment/lib/python3.6/site-packages/tensorflow_core/python/keras/engine/base_layer.py&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1327&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set_weights&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;weights&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'...'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;ValueError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;You&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;called&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`set_weights(weights)`&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;layer&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;dqn_1&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;weight&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;but&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;layer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;was&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expecting&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weights&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Provided&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weights&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([[[[&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;4.71510142e-02&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;  &lt;span class=&quot;mf&quot;&gt;3.64676267e-02&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;4.32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
+
+&lt;p&gt;I am currently working in parallel on the three previous points:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Organizing the documentation of what has been learned from the classical algorithms as well as deepening the operation.&lt;/li&gt;
+  &lt;li&gt;Finalizing the errors and improving the code structure of Vanessa’s end-of-master work.&lt;/li&gt;
+  &lt;li&gt;Solving the bugs in the execution of the given Pong in the repository (folder &lt;code class=&quot;highlighter-rouge&quot;&gt;puppis&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 14" /><category term="dqn" /><summary type="html">Execution of the Pong game from the code provided in Alberto's repository.</summary></entry><entry><title type="html">Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II).</title><link href="http://localhost:4000/examples/landing/week-13/" rel="alternate" type="text/html" title="Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II)." /><published>2019-10-21T00:00:00+02:00</published><updated>2019-10-21T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-13</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-13/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Studying new classical algorithms.&lt;/li&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Installing OpenCV using Qt (instead of GTK).&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
 
 &lt;h3 id=&quot;studying-new-classical-algorithms&quot;&gt;Studying new classical algorithms.&lt;/h3&gt;
+
 &lt;p&gt;During the week I have selected two classic Reinforcement Learning algorithms in which to focus the study and deepen the operation. These have been: Dynamic Programming and Monte Carlo.&lt;/p&gt;
 
 &lt;p&gt;To understand how they work, I had as a reference book: “&lt;a href=&quot;https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf&quot;&gt;Reinforcement Learning:
@@ -42,7 +186,7 @@ make: *** [all] Error 2
 
 &lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
-&lt;p&gt;Knowing the different classical methods gives an idea of ćomo work before different problems to find the best option. Although this week I have known better these algorithms, I think that to continue studying them is the way to settle and assimilate all the concepts.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="weeks 13" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week (continuing)</summary></entry><entry><title type="html">Week 12. Installing nvidia-docker and undestanding DRL algorithms.</title><link href="http://localhost:4000/examples/landing/week-12/" rel="alternate" type="text/html" title="Week 12. Installing nvidia-docker and undestanding DRL algorithms." /><published>2019-10-16T00:00:00+02:00</published><updated>2019-10-16T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-12</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-12/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+&lt;p&gt;Knowing the different classical methods gives an idea of ćomo work before different problems to find the best option. Although this week I have known better these algorithms, I think that to continue studying them is the way to settle and assimilate all the concepts.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 13" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week (continuing).</summary></entry><entry><title type="html">Week 12. Installing nvidia-docker and undestanding DRL algorithms.</title><link href="http://localhost:4000/examples/landing/week-12/" rel="alternate" type="text/html" title="Week 12. Installing nvidia-docker and undestanding DRL algorithms." /><published>2019-10-16T00:00:00+02:00</published><updated>2019-10-16T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-12</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-12/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;p&gt;The tasks proposed for this week are&lt;/p&gt;
 
