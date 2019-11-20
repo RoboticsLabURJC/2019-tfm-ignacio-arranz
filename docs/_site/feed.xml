@@ -1,4 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-11-03T22:44:25+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 14. Organization and first algorithm using Deep Learning. DQN.</title><link href="http://localhost:4000/examples/landing/week-14/" rel="alternate" type="text/html" title="Week 14. Organization and first algorithm using Deep Learning. DQN." /><published>2019-11-02T00:00:00+01:00</published><updated>2019-11-02T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-14</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-14/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-11-20T22:57:58+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 15-16. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-15-16/" rel="alternate" type="text/html" title="Week 15-16. Continue with DQN algorithm. Problems with graphic card." /><published>2019-11-17T00:00:00+01:00</published><updated>2019-11-17T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-15-16</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-15-16/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis using Python 3.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Execute and undestanding Pong example from &lt;code class=&quot;highlighter-rouge&quot;&gt;puppis&lt;/code&gt; repository.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-continuing-with-the-replicate-of-vanessas-masters-degree-thesis-with-python3&quot;&gt;1. Continuing with the replicate of Vanessa’s master’s degree thesis with Python3.&lt;/h3&gt;
+
+&lt;p&gt;During the process of replicating Vanessa Fernandez’s master’s dissertation, the following points are highlighted:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Migrating all the code to Python 2 means moving from ROS1 to ROS2. Initially that change is very big to do it in this point of the development of the work so it is set as a future point.&lt;/li&gt;
+  &lt;li&gt;In this replication attempt, access to the graphics card was blocked and Gazebo reported an error. I had to reinstall the drivers. Apparently everything is back to normal.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;2-execute-and-undestanding-pong-example-from-puppis-repository&quot;&gt;2. Execute and undestanding Pong example from &lt;code class=&quot;highlighter-rouge&quot;&gt;puppis&lt;/code&gt; repository.&lt;/h3&gt;
+
+&lt;p&gt;Reading the DQN chapter &lt;a href=&quot;https://books.google.es/books?id=xKdhDwAAQBAJ&amp;amp;lpg=PA141&amp;amp;dq=class%20ExperienceBuffer%3A%20%20%20%20%20def%20__init__(self%2C%20capacity)%3A%20%20%20%20%20%20%20%20%20self.buffer%20%3D%20collections.deque(maxlen%3Dcapacity)%20%20%20%20%20%20def%20__len__(self)%3A%20%20%20%20%20%20%20%20%20return%20len(self.buffer)&amp;amp;hl=es&amp;amp;pg=PA155#v=onepage&amp;amp;q&amp;amp;f=true&quot;&gt;Maxim Lapan - Deep Reinforcement Learning - Hands On&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The file &lt;code class=&quot;highlighter-rouge&quot;&gt;wrappers.py&lt;/code&gt; contains coverage for different situations, such as requiring the player to press START after each repetition.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;dqn_model.py&lt;/code&gt; file contains the network configuration. The model has 3 convolutional layers and 2 fully-connected. All layers are connected by the ReLU activation function.&lt;/p&gt;
+
+&lt;p&gt;Important note from the book:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If transition in the batch is from the lat step in the episode, then out value of the action doesn’t have a discounted reward of the next state, as there is no next state to gather reward from. This main look minor, but this is very important in practice: without this, training will not converge.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
+
+&lt;p&gt;I am currently reading about the DQN algorithm in the previously mentioned book. The goal is to fix the bug in the code in the training of the game of Pong.&lt;/p&gt;
+
+&lt;p&gt;At the same time I’m in contact with Vanessa to create a deployment guide for her algorithm.&lt;/p&gt;
+
+&lt;p&gt;In JdeRobot’s web site a &lt;a href=&quot;https://jderobot.github.io/projects/deep_learning/neural_behavior/&quot;&gt;section&lt;/a&gt; has been created where all the information about &lt;a href=&quot;https://jderobot.github.io/projects/deep_learning/&quot;&gt;DeepLearning projects&lt;/a&gt; that have to do with autonomous driving will be posted.&lt;/p&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
+
+&lt;p&gt;Developing the DQN algorithm I realized that I needed to stop trying to solve the problem that occurs in the training to build the same path we take in the study of classical algorithms: &lt;strong&gt;read and study more&lt;/strong&gt;. After that little process, the code was much better understood and made more sense :-)&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 15-16" /><category term="dqn" /><summary type="html">Solving problems with the graphic card and reading more information about the DQN algorithm.</summary></entry><entry><title type="html">Week 14. Organization and first algorithm using Deep Learning: DQN.</title><link href="http://localhost:4000/examples/landing/week-14/" rel="alternate" type="text/html" title="Week 14. Organization and first algorithm using Deep Learning: DQN." /><published>2019-11-02T00:00:00+01:00</published><updated>2019-11-02T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-14</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-14/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis.&lt;/li&gt;
