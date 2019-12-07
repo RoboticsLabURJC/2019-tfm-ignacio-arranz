@@ -1,0 +1,113 @@
+TensorFlow 2.0 Upgrade Script
+-----------------------------
+Converted 6 files
+Detected 10 issues that require attention
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+File: dqn/dqn_pong.py
+--------------------------------------------------------------------------------
+dqn/dqn_pong.py:112:13: WARNING: tf.contrib.summary.create_file_writer requires manual check. tf.contrib.summary.create_file_writer() has been ported to the new tf.compat.v2.summary.create_file_writer(), which no longer re-uses existing event files for the same logdir; instead it always opens a new writer/file. The python writer objects must be re-used explicitly if the reusing behavior is desired.
+dqn/dqn_pong.py:153:16: WARNING: Summary API writing function tf.contrib.summary.scalar now requires a 'step' argument; inserting default of tf.compat.v1.train.get_or_create_global_step().
+dqn/dqn_pong.py:153:16: WARNING: tf.contrib.summary.scalar requires manual check. tf.contrib.summary.* functions have been migrated best-effort to tf.compat.v2.summary.* equivalents where possible, but the resulting code is not guaranteed to work, so please check carefully. For more information about the new summary API, see the Effective TF 2.0 migration document or check the updated TensorBoard tutorials.
+dqn/dqn_pong.py:154:16: WARNING: Summary API writing function tf.contrib.summary.scalar now requires a 'step' argument; inserting default of tf.compat.v1.train.get_or_create_global_step().
+dqn/dqn_pong.py:154:16: WARNING: tf.contrib.summary.scalar requires manual check. tf.contrib.summary.* functions have been migrated best-effort to tf.compat.v2.summary.* equivalents where possible, but the resulting code is not guaranteed to work, so please check carefully. For more information about the new summary API, see the Effective TF 2.0 migration document or check the updated TensorBoard tutorials.
+dqn/dqn_pong.py:155:16: WARNING: Summary API writing function tf.contrib.summary.scalar now requires a 'step' argument; inserting default of tf.compat.v1.train.get_or_create_global_step().
+dqn/dqn_pong.py:155:16: WARNING: tf.contrib.summary.scalar requires manual check. tf.contrib.summary.* functions have been migrated best-effort to tf.compat.v2.summary.* equivalents where possible, but the resulting code is not guaranteed to work, so please check carefully. For more information about the new summary API, see the Effective TF 2.0 migration document or check the updated TensorBoard tutorials.
+dqn/dqn_pong.py:156:16: WARNING: Summary API writing function tf.contrib.summary.scalar now requires a 'step' argument; inserting default of tf.compat.v1.train.get_or_create_global_step().
+dqn/dqn_pong.py:156:16: WARNING: tf.contrib.summary.scalar requires manual check. tf.contrib.summary.* functions have been migrated best-effort to tf.compat.v2.summary.* equivalents where possible, but the resulting code is not guaranteed to work, so please check carefully. For more information about the new summary API, see the Effective TF 2.0 migration document or check the updated TensorBoard tutorials.
+dqn/dqn_pong.py:159:16: WARNING: *.save requires manual check. (This warning is only applicable if the code saves a tf.Keras model) Keras model.save now saves to the Tensorflow SavedModel format by default, instead of HDF5. To continue saving to HDF5, add the argument save_format='h5' to the save() function.
+================================================================================
+Detailed log follows:
+
+================================================================================
+================================================================================
+Input tree: 'dqn/'
+================================================================================
+--------------------------------------------------------------------------------
+Processing file 'dqn/dqn_pong.py'
+ outputting to 'dqn_tf2/dqn_pong.py'
+--------------------------------------------------------------------------------
+
+64:22: INFO: Added keywords to args of function 'tf.convert_to_tensor'
+66:20: INFO: Added keywords to args of function 'tf.argmax'
+86:15: INFO: Added keywords to args of function 'tf.convert_to_tensor'
+87:20: INFO: Added keywords to args of function 'tf.convert_to_tensor'
+88:16: INFO: Added keywords to args of function 'tf.convert_to_tensor'
+89:16: INFO: Added keywords to args of function 'tf.convert_to_tensor'
+91:37: INFO: Renamed 'tf.batch_gather' to 'tf.compat.v1.batch_gather'
+92:24: INFO: Added keywords to args of function 'tf.reduce_max'
+94:24: INFO: Renamed 'tf.where' to 'tf.compat.v1.where'
+97:11: INFO: tf.losses.mean_squared_error requires manual check. tf.losses have been replaced with object oriented versions in TF 2.0 and after. The loss function calls have been converted to compat.v1 for backward compatibility. Please update these calls to the TF 2.0 versions.
+97:11: INFO: Renamed 'tf.losses.mean_squared_error' to 'tf.compat.v1.losses.mean_squared_error'
+112:13: WARNING: tf.contrib.summary.create_file_writer requires manual check. tf.contrib.summary.create_file_writer() has been ported to the new tf.compat.v2.summary.create_file_writer(), which no longer re-uses existing event files for the same logdir; instead it always opens a new writer/file. The python writer objects must be re-used explicitly if the reusing behavior is desired.
+112:13: INFO: Renamed 'tf.contrib.summary.create_file_writer' to 'tf.compat.v2.summary.create_file_writer'
+128:16: INFO: Renamed 'tf.train.AdamOptimizer' to 'tf.compat.v1.train.AdamOptimizer'
+135:46: INFO: Renamed 'tf.train.get_or_create_global_step' to 'tf.compat.v1.train.get_or_create_global_step'
+152:38: INFO: Adding `True` argument to tf.contrib.summary.always_record_summaries in anticipation of it being renamed to tf.compat.v2.summary.record_if()
+152:38: INFO: Renamed 'tf.contrib.summary.always_record_summaries' to 'tf.compat.v2.summary.record_if'
+153:16: INFO: Added keywords to args of function 'tf.contrib.summary.scalar'
+153:16: INFO: Renamed keyword argument for tf.contrib.summary.scalar from tensor to data
+153:16: WARNING: Summary API writing function tf.contrib.summary.scalar now requires a 'step' argument; inserting default of tf.compat.v1.train.get_or_create_global_step().
+153:16: WARNING: tf.contrib.summary.scalar requires manual check. tf.contrib.summary.* functions have been migrated best-effort to tf.compat.v2.summary.* equivalents where possible, but the resulting code is not guaranteed to work, so please check carefully. For more information about the new summary API, see the Effective TF 2.0 migration document or check the updated TensorBoard tutorials.
+153:16: INFO: Renamed 'tf.contrib.summary.scalar' to 'tf.compat.v2.summary.scalar'
+154:16: INFO: Added keywords to args of function 'tf.contrib.summary.scalar'
+154:16: INFO: Renamed keyword argument for tf.contrib.summary.scalar from tensor to data
+154:16: WARNING: Summary API writing function tf.contrib.summary.scalar now requires a 'step' argument; inserting default of tf.compat.v1.train.get_or_create_global_step().
+154:16: WARNING: tf.contrib.summary.scalar requires manual check. tf.contrib.summary.* functions have been migrated best-effort to tf.compat.v2.summary.* equivalents where possible, but the resulting code is not guaranteed to work, so please check carefully. For more information about the new summary API, see the Effective TF 2.0 migration document or check the updated TensorBoard tutorials.
+154:16: INFO: Renamed 'tf.contrib.summary.scalar' to 'tf.compat.v2.summary.scalar'
+155:16: INFO: Added keywords to args of function 'tf.contrib.summary.scalar'
+155:16: INFO: Renamed keyword argument for tf.contrib.summary.scalar from tensor to data
+155:16: WARNING: Summary API writing function tf.contrib.summary.scalar now requires a 'step' argument; inserting default of tf.compat.v1.train.get_or_create_global_step().
+155:16: WARNING: tf.contrib.summary.scalar requires manual check. tf.contrib.summary.* functions have been migrated best-effort to tf.compat.v2.summary.* equivalents where possible, but the resulting code is not guaranteed to work, so please check carefully. For more information about the new summary API, see the Effective TF 2.0 migration document or check the updated TensorBoard tutorials.
+155:16: INFO: Renamed 'tf.contrib.summary.scalar' to 'tf.compat.v2.summary.scalar'
+156:16: INFO: Added keywords to args of function 'tf.contrib.summary.scalar'
+156:16: INFO: Renamed keyword argument for tf.contrib.summary.scalar from tensor to data
+156:16: WARNING: Summary API writing function tf.contrib.summary.scalar now requires a 'step' argument; inserting default of tf.compat.v1.train.get_or_create_global_step().
+156:16: WARNING: tf.contrib.summary.scalar requires manual check. tf.contrib.summary.* functions have been migrated best-effort to tf.compat.v2.summary.* equivalents where possible, but the resulting code is not guaranteed to work, so please check carefully. For more information about the new summary API, see the Effective TF 2.0 migration document or check the updated TensorBoard tutorials.
+156:16: INFO: Renamed 'tf.contrib.summary.scalar' to 'tf.compat.v2.summary.scalar'
+159:16: WARNING: *.save requires manual check. (This warning is only applicable if the code saves a tf.Keras model) Keras model.save now saves to the Tensorflow SavedModel format by default, instead of HDF5. To continue saving to HDF5, add the argument save_format='h5' to the save() function.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'dqn/dqn_play.py'
+ outputting to 'dqn_tf2/dqn_play.py'
+--------------------------------------------------------------------------------
+
+34:16: INFO: Renamed 'tf.train.AdamOptimizer' to 'tf.compat.v1.train.AdamOptimizer'
+37:46: INFO: Renamed 'tf.train.get_or_create_global_step' to 'tf.compat.v1.train.get_or_create_global_step'
+51:18: INFO: Added keywords to args of function 'tf.convert_to_tensor'
+53:16: INFO: Added keywords to args of function 'tf.argmax'
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'dqn/__init__.py'
+ outputting to 'dqn_tf2/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'dqn/utils/dqn_model.py'
+ outputting to 'dqn_tf2/utils/dqn_model.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'dqn/utils/wrappers.py'
+ outputting to 'dqn_tf2/utils/wrappers.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+Processing file 'dqn/utils/__init__.py'
+ outputting to 'dqn_tf2/utils/__init__.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+

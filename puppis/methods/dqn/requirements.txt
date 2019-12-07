@@ -1,0 +1,5 @@
+gym
+tensorflow
+tensorboard
+opencv-python
+atari-py==0.1.1
