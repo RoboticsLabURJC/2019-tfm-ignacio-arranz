@@ -1,4 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-11-25T22:07:22+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 15-16. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-15-16/" rel="alternate" type="text/html" title="Week 15-16. Continue with DQN algorithm. Problems with graphic card." /><published>2019-11-17T00:00:00+01:00</published><updated>2019-11-17T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-15-16</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-15-16/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-12-17T22:36:55+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 17-18. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-17-18/" rel="alternate" type="text/html" title="Week 17-18. Continue with DQN algorithm. Problems with graphic card." /><published>2019-12-09T00:00:00+01:00</published><updated>2019-12-09T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-17-18</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-17-18/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Pong game using DQN algorithm.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Train Vanessa’s models.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Take a look at the pilot. Get ideas to implement the based on reinforcement training.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-pong-game-using-dqn-algorithm&quot;&gt;1. Pong game using DQN algorithm.&lt;/h3&gt;
+
+&lt;h3 id=&quot;2-train-vanessas-models&quot;&gt;2. Train Vanessa’s models.&lt;/h3&gt;
+
+&lt;h3 id=&quot;3-take-a-look-at-the-pilot-get-ideas-to-implement-the-based-on-reinforcement-training&quot;&gt;3. Take a look at the pilot. Get ideas to implement the based on reinforcement training.&lt;/h3&gt;
+
+&lt;!-- 
+
+
+
+&lt;figure class=&quot; &quot;&gt;
+  
+    
+      &lt;a href=
+        
+          &quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot;
+        
+        
+      &gt;
+        &lt;img src=
+          
+            &quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot;
+          
+          alt=&quot;Vanessa's master's dissertation diagram.&quot;&gt;
+      &lt;/a&gt;
+    
+  
+  
+    &lt;figcaption&gt;Workflow of Vanessa’s master’s dissertation.
+&lt;/figcaption&gt;
+  
+&lt;/figure&gt; --&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot; alt=&quot;&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 17-18" /><category term="dqn" /><summary type="html">Finishing the DQN algorithm for the game of pong. Exploring the pilot code to implement the equivalent in learning by reinforcement.</summary></entry><entry><title type="html">Week 15-16. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-15-16/" rel="alternate" type="text/html" title="Week 15-16. Continue with DQN algorithm. Problems with graphic card." /><published>2019-11-17T00:00:00+01:00</published><updated>2019-11-17T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-15-16</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-15-16/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis using Python 3.&lt;/li&gt;
@@ -220,11 +266,13 @@ make: *** [all] Error 2
 
 &lt;p&gt;We are still working to find a way to compile the program.&lt;/p&gt;
 
+&lt;p&gt;[UPDATE] - Finally, i’m working with Ubuntu Operating System. The problem was solved.&lt;/p&gt;
+
 &lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
 
 &lt;p&gt;I will continue to try to replicate Vanessa’s master’s dissertation to try to close that road.&lt;/p&gt;
 
-&lt;p&gt;On the other hand, continue studying classic Reinforcement Learning methods and try the first Deep Reinforcement Learning algorithm in Alberto’s repository, puppis directory. It would be to solve the game of Pong using the DQN algorithm.&lt;/p&gt;
+&lt;p&gt;On the other hand, continue studying classic Reinforcement Learning methods and try the first Deep Reinforcement Learning algorithm in Alberto’s repository, &lt;code class=&quot;highlighter-rouge&quot;&gt;puppis&lt;/code&gt; directory. It would be to solve the game of Pong using the DQN algorithm.&lt;/p&gt;
 
 &lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
@@ -629,21 +677,4 @@ npm start
   &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;As this information, without prior knowledge, was very extensive and overwhelming, I found on the &lt;a href=&quot;https://spinningup.openai.com/en/latest/spinningup/rl_intro.html&quot;&gt;OpenAi page&lt;/a&gt; information about the definitions and actors that come into play in each Reinforced Learning algorithm.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="previous work" /><category term="weeks 1-6" /><summary type="html">Reading articles, tutorials and collecting information</summary></entry><entry><title type="html">Week 0. Hello World</title><link href="http://localhost:4000/previous%20work/week-0/" rel="alternate" type="text/html" title="Week 0. Hello World" /><published>2019-07-30T00:00:00+02:00</published><updated>2019-07-30T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-0</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-0/">&lt;p&gt;Hello, blog reader!.&lt;/p&gt;
-
-&lt;p&gt;I’m Nacho Arranz, student of the Master in &lt;a href=&quot;https://mastervisionartificial.es&quot;&gt;Artificial Vision at Universidad Rey Juan Carlos&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I’m preparing for this new adventure where we will face a problem that I haven’t studied before. This will be a challenge that will grow progressively.&lt;/p&gt;
-
-&lt;p&gt;With the post that are published every week we will be telling you the advances, problems and solutions about the project and I hope it will be nice to read it and follow it.&lt;/p&gt;
-
-&lt;p&gt;Nothing would make me prouder than these post and the tutorials that are presented to help someone understand and learn Reinforcement Learning.&lt;/p&gt;
-
-&lt;p&gt;The adventure begins!.&lt;/p&gt;
-
-&lt;figure&gt;
-	&lt;a href=&quot;&quot;&gt;&lt;img src=&quot;/assets/images/posts/the-adventure-begins.gif&quot; /&gt;&lt;/a&gt;
-	&lt;!-- &lt;figcaption&gt;.&lt;/figcaption&gt; --&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;Nacho.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="week 0" /><summary type="html">Introduce to myself</summary></entry></feed>
+&lt;p&gt;As this information, without prior knowledge, was very extensive and overwhelming, I found on the &lt;a href=&quot;https://spinningup.openai.com/en/latest/spinningup/rl_intro.html&quot;&gt;OpenAi page&lt;/a&gt; information about the definitions and actors that come into play in each Reinforced Learning algorithm.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="previous work" /><category term="weeks 1-6" /><summary type="html">Reading articles, tutorials and collecting information</summary></entry></feed>

@@ -1,0 +1,51 @@
+---
+title: "Week 19. Testing and exploring the pilot code."
+excerpt: "New structure of Neural Behaviors repository and deeping the Vanessa's code."
+
+sidebar:
+  nav: "docs"
+
+classes: wide
+
+categories:
+- landing
+- exploring
+
+tags:
+- logbook
+- studying
+- tutorials
+- week 17-18
+- dqn
+
+author: NachoAz
+pinned: false
+
+gallery:
+  - url: /assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png
+    image_path: /assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png
+    alt: "Vanessa's master's dissertation diagram."
+
+---
+
+## To Do
+
+- [X] New estructure in Neural Behaviors repo.
+- [X] Execute a neural pilot and pilot solution.
+
+
+##  Progress
+
+### 1. New estructure in Neural Behaviors repo.
+
+
+### 2. Execute a neural pilot and pilot solution.
+
+
+
+
+
+## Working
+
+
+## Learned

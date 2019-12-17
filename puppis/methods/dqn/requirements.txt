@@ -1,5 +1,6 @@
-gym
-tensorflow
-tensorboard
-opencv-python
+gym==0.14.0
+tensorflow==2.0.0
+tensorboard==2.0.2
+opencv-python==4.1.1
 atari-py==0.1.1
+numpy==1.17

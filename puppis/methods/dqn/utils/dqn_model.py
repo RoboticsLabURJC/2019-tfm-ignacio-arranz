@@ -1,9 +1,6 @@
 from __future__ import absolute_import, division, print_function
 import tensorflow as tf
 
-##tf.enable_eager_execution()
-
-
 class DQN(tf.keras.Model):
 
     def __init__(self, input_shape, n_actions):

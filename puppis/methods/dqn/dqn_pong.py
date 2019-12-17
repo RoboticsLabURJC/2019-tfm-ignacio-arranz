@@ -169,7 +169,13 @@ if __name__ == "__main__":
 
 
         if frame_idx % SYNC_TARGET_FRAMES == 0:
-            tgt_net.set_weights(net.get_weights())
+            config = net.get_config()
+
+            weights = net.get_weights()
+
+            from tensorflow import keras
+            tgt_net = keras.net.from_config(config)
+            tgt_net.set_weights(weights)
 
         batch = buffer.sample(BATCH_SIZE)
         with tf.GradientTape() as tape:

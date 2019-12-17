@@ -108,6 +108,7 @@ if __name__ == "__main__":
     device = '/cpu:0'
     if args.cuda:
         device = '/gpu:0'
+    print("\nUsing {}\n".format(device))
 
     writer = tf.compat.v2.summary.create_file_writer(logdir='runs',
                                                      flush_millis=10000,
@@ -125,7 +126,7 @@ if __name__ == "__main__":
     best_mean_reward = None
 
     # Two nets
-    net = dqn_model.DQN(env.observation_space.shape, env.action_space.n)
+    net =     dqn_model.DQN(env.observation_space.shape, env.action_space.n)
     tgt_net = dqn_model.DQN(env.observation_space.shape, env.action_space.n)
 
     optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=LEARNING_RATE)
@@ -179,9 +180,19 @@ if __name__ == "__main__":
 
 
         if frame_idx % SYNC_TARGET_FRAMES == 0:
-            tgt_net.layers[0].set_weights(net.layers[0].get_weights())
-            tgt_net.set_weights(net.get_weights())
+            # weights = net.get_weights()
+            # tgt_net.set_weights(weights)
             # tgt_net.set_weights([net.get_weights(), np.zeros(env.observation_space.shape)])
+            tgt_net = net
+
+
+            # a = net.save_weights(('./my_model.h5'))
+            # tgt_net.load_weights('my_model')
+
+
+
+
+
 
 
 
