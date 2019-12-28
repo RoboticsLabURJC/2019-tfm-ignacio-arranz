@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-12-28T13:01:38+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 19. Testing and exploring the pilot code.</title><link href="http://localhost:4000/landing/refactoring/week-19/" rel="alternate" type="text/html" title="Week 19. Testing and exploring the pilot code." /><published>2019-12-19T00:00:00+01:00</published><updated>2019-12-19T00:00:00+01:00</updated><id>http://localhost:4000/landing/refactoring/week-19</id><content type="html" xml:base="http://localhost:4000/landing/refactoring/week-19/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-12-28T13:09:22+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 19. Testing and exploring the pilot code.</title><link href="http://localhost:4000/landing/refactoring/week-19/" rel="alternate" type="text/html" title="Week 19. Testing and exploring the pilot code." /><published>2019-12-19T00:00:00+01:00</published><updated>2019-12-19T00:00:00+01:00</updated><id>http://localhost:4000/landing/refactoring/week-19</id><content type="html" xml:base="http://localhost:4000/landing/refactoring/week-19/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;New estructure in Neural Behaviors repo.&lt;/li&gt;
@@ -81,7 +81,19 @@
 
 &lt;p&gt;Temporarily, a solution has been added to the PONG game using Deep Reinforcement Learning but in this case following the guidelines of the Packtl book, which uses PyTorch as a framework.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/logbook/week1718/dqn_pytorch.gif&quot; alt=&quot;&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+&lt;figure class=&quot; &quot;&gt;
+  
+    
+      &lt;a href=&quot;/assets/images/logbook/week1718/dqn_pytorch.gif&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week1718/dqn_pytorch.gif&quot; alt=&quot;DQN Solution using PyTorhc.&quot; /&gt;
+      &lt;/a&gt;
+    
+  
+  
+    &lt;figcaption&gt;DQN Solution using PyTorch.
+&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
 
 &lt;p&gt;The results can be seen in the gif. The training has taken approximately two and a half hours with a team with these characteristics:&lt;/p&gt;
 
@@ -102,24 +114,11 @@
 
 &lt;h3 id=&quot;3-take-a-look-at-the-pilot-get-ideas-to-implement-the-based-on-reinforcement-training&quot;&gt;3. Take a look at the pilot. Get ideas to implement the based on reinforcement training.&lt;/h3&gt;
 
-&lt;!-- 
-
-
-
 &lt;figure class=&quot; &quot;&gt;
   
     
-      &lt;a href=
-        
-          &quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot;
-        
-        
-      &gt;
-        &lt;img src=
-          
-            &quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot;
-          
-          alt=&quot;Vanessa's master's dissertation diagram.&quot;&gt;
+      &lt;a href=&quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot; alt=&quot;Vanessa's master's dissertation diagram.&quot; /&gt;
       &lt;/a&gt;
     
   
@@ -127,8 +126,7 @@
     &lt;figcaption&gt;Workflow of Vanessa’s master’s dissertation.
 &lt;/figcaption&gt;
   
-&lt;/figure&gt; --&gt;
-&lt;p&gt;&lt;img src=&quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot; alt=&quot;&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+&lt;/figure&gt;
 
 &lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
 
