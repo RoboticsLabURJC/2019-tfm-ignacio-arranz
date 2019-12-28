@@ -1,16 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-12-17T22:36:55+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 17-18. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-17-18/" rel="alternate" type="text/html" title="Week 17-18. Continue with DQN algorithm. Problems with graphic card." /><published>2019-12-09T00:00:00+01:00</published><updated>2019-12-09T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-17-18</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-17-18/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-12-28T13:01:38+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 19. Testing and exploring the pilot code.</title><link href="http://localhost:4000/landing/refactoring/week-19/" rel="alternate" type="text/html" title="Week 19. Testing and exploring the pilot code." /><published>2019-12-19T00:00:00+01:00</published><updated>2019-12-19T00:00:00+01:00</updated><id>http://localhost:4000/landing/refactoring/week-19</id><content type="html" xml:base="http://localhost:4000/landing/refactoring/week-19/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;New estructure in Neural Behaviors repo.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Execute a neural pilot and pilot solution.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-new-estructure-in-neural-behaviors-repo&quot;&gt;1. New estructure in Neural Behaviors repo&lt;/h3&gt;
+
+&lt;p&gt;In the process of restructuring the code mentioned in the previous weeks these changes are being taken to the &lt;a href=&quot;https://github.com/JdeRobot/NeuralBehaviors&quot;&gt;Neural Behaviors repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The repository has been subdivided (for the time being) into three lines of research. One, the one already known and in which we are working the last weeks and that part of the final work of Vanessa Fernandez called: “&lt;a href=&quot;https://github.com/JdeRobot/NeuralBehaviors/tree/master/vision-based-end2end-learning&quot;&gt;Vision-based end-to-end using Deep Learning&lt;/a&gt;”.&lt;/p&gt;
+
+&lt;p&gt;In this repository you can see the structure that is being created to include in it the solutions of &lt;strong&gt;this&lt;/strong&gt; end of master’s work as well as others that may be included.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-execute-a-neural-pilot-and-pilot-solution&quot;&gt;2. Execute a neural pilot and pilot solution&lt;/h3&gt;
+
+&lt;p&gt;Three solutions to the restructured code have been presented here:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Manual pilot. Solution taken from the code of the master in artificial vision.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Pilot classifier. Using deep learning, values of ‘v’ and ‘w’ distributed in the number of classes corresponding to the loaded model (5 or 7) are returned to the network output.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Pilot Return: Using also neural networks, it is obtained to the output numerical values that indicate the amount of &lt;code class=&quot;highlighter-rouge&quot;&gt;v&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;w&lt;/code&gt; that must be applied to the car to follow the line.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can see the solutions in the following gallery:&lt;/p&gt;
+
+&lt;figure class=&quot;third &quot;&gt;
+  
+    
+      &lt;a href=&quot;https://raw.githubusercontent.com/JdeRobot/NeuralBehaviors/master/vision-based-end2end-learning/docs/imgs/piloto_esplicito.gif&quot;&gt;
+        &lt;img src=&quot;https://raw.githubusercontent.com/JdeRobot/NeuralBehaviors/master/vision-based-end2end-learning/docs/imgs/piloto_esplicito.gif&quot; alt=&quot;Manual Pilot&quot; /&gt;
+      &lt;/a&gt;
+    
+  
+    
+      &lt;a href=&quot;https://github.com/JdeRobot/NeuralBehaviors/blob/master/vision-based-end2end-learning/docs/imgs/piloto_neuronal.gif?raw=true&quot;&gt;
+        &lt;img src=&quot;https://github.com/JdeRobot/NeuralBehaviors/blob/master/vision-based-end2end-learning/docs/imgs/piloto_neuronal.gif?raw=true&quot; alt=&quot;Classificator Pilot&quot; /&gt;
+      &lt;/a&gt;
+    
+  
+    
+      &lt;a href=&quot;https://github.com/JdeRobot/NeuralBehaviors/blob/master/vision-based-end2end-learning/docs/imgs/piloto_neuronal.gif&quot;&gt;
+        &lt;img src=&quot;https://github.com/JdeRobot/NeuralBehaviors/blob/master/vision-based-end2end-learning/docs/imgs/piloto_neuronal.gif&quot; alt=&quot;Regressor Pilot&quot; /&gt;
+      &lt;/a&gt;
+    
+  
+  
+    &lt;figcaption&gt;Different solutions to the follow-the-line exercise. With and without neural pilot.
+&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+&lt;p&gt;It can be seen as a result that the solution is very similar. For more information visit the Neural &lt;a href=&quot;https://github.com/JdeRobot/NeuralBehaviors&quot;&gt;Behaviors repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
+
+&lt;p&gt;In order to gain confidence and security with neural network training we will train a network from the beginning with an existing dataset. As a result we expect to obtain a solution just like the existing one.&lt;/p&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
+
+&lt;p&gt;Seeing the different configurations and possibilities offered by the repository we will focus the project to create a tool that allows switching between different networks and offers quality metrics to compare results. It can be said that what we have learned is that, from something apparently closed as it can be to solve the problem for the final master’s work, we can build a useful tool for future users, students, companies, etc.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 19" /><category term="neural_behaviors" /><summary type="html">New structure of Neural Behaviors repository and deeping the Vanessa's code.</summary></entry><entry><title type="html">Week 17-18. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-17-18/" rel="alternate" type="text/html" title="Week 17-18. Continue with DQN algorithm. Problems with graphic card." /><published>2019-12-09T00:00:00+01:00</published><updated>2019-12-09T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-17-18</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-17-18/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Pong game using DQN algorithm.&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Train Vanessa’s models.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; /&gt;Train Vanessa’s models.&lt;/li&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Take a look at the pilot. Get ideas to implement the based on reinforcement training.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
 
-&lt;h3 id=&quot;1-pong-game-using-dqn-algorithm&quot;&gt;1. Pong game using DQN algorithm.&lt;/h3&gt;
+&lt;h3 id=&quot;1-pong-game-using-dqn-algorithm&quot;&gt;1. Pong game using DQN algorithm&lt;/h3&gt;
 
-&lt;h3 id=&quot;2-train-vanessas-models&quot;&gt;2. Train Vanessa’s models.&lt;/h3&gt;
+&lt;p&gt;Temporarily, a solution has been added to the PONG game using Deep Reinforcement Learning but in this case following the guidelines of the Packtl book, which uses PyTorch as a framework.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/logbook/week1718/dqn_pytorch.gif&quot; alt=&quot;&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The results can be seen in the gif. The training has taken approximately two and a half hours with a team with these characteristics:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;intel i7 7th generation 2.8 GHz 8-core processor.&lt;/li&gt;
+  &lt;li&gt;16 Gb of RAM.&lt;/li&gt;
+  &lt;li&gt;Nvidia 1050Ti GPU.&lt;/li&gt;
+  &lt;li&gt;256Gb M.2 SSD hard disk.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As a &lt;strong&gt;future work&lt;/strong&gt; there is still to solve the same exercise with the TensorFlow framework but &lt;strong&gt;solving the bug&lt;/strong&gt; that appeared in the training.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-train-vanessas-models&quot;&gt;2. Train Vanessa’s models&lt;/h3&gt;
+
+&lt;p&gt;This task has not been solved this week.&lt;/p&gt;
+
+&lt;p&gt;Before the training, a &lt;strong&gt;restructuring of all the code&lt;/strong&gt;, &lt;strong&gt;models&lt;/strong&gt; and &lt;strong&gt;dataset&lt;/strong&gt; has been carried out to adapt it to an order where &lt;strong&gt;more types of similar autonomous driving&lt;/strong&gt; projects fit.&lt;/p&gt;
 
 &lt;h3 id=&quot;3-take-a-look-at-the-pilot-get-ideas-to-implement-the-based-on-reinforcement-training&quot;&gt;3. Take a look at the pilot. Get ideas to implement the based on reinforcement training.&lt;/h3&gt;
 
@@ -44,7 +132,26 @@
 
 &lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
 
-&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 17-18" /><category term="dqn" /><summary type="html">Finishing the DQN algorithm for the game of pong. Exploring the pilot code to implement the equivalent in learning by reinforcement.</summary></entry><entry><title type="html">Week 15-16. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-15-16/" rel="alternate" type="text/html" title="Week 15-16. Continue with DQN algorithm. Problems with graphic card." /><published>2019-11-17T00:00:00+01:00</published><updated>2019-11-17T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-15-16</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-15-16/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+&lt;p&gt;There is still a lot of work to be done in restructuring the initial code. I keep working on it until I have some minimum stability that allows me to face the problem with ‘reinformenet learning’.&lt;/p&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
+
+&lt;p&gt;Landing on other people’s code is a difficult job but it forces you to understand how someone else wants their code. Communicating with the other person to reach a common point where the code can grow is an enriching job.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 17-18" /><category term="dqn" /><summary type="html">Finishing the DQN algorithm for the game of pong. Exploring the pilot code to implement the equivalent in learning by reinforcement.</summary></entry><entry><title type="html">Week 20. Networking and learning in the Gym-Pyxies tool.</title><link href="http://localhost:4000/landing/refactoring/week-20/" rel="alternate" type="text/html" title="Week 20. Networking and learning in the Gym-Pyxies tool." /><published>2019-12-05T00:00:00+01:00</published><updated>2019-12-05T00:00:00+01:00</updated><id>http://localhost:4000/landing/refactoring/week-20</id><content type="html" xml:base="http://localhost:4000/landing/refactoring/week-20/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Train a network with the Vanessa’s dataset.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Learning about Gym-Pyxies.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-train-a-network-with-the-vanessas-dataset&quot;&gt;1. Train a network with the Vanessa’s dataset&lt;/h3&gt;
+
+&lt;h3 id=&quot;2-learning-about-gym-pyxies&quot;&gt;2. Learning about Gym-Pyxies&lt;/h3&gt;
+
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="tutorials" /><category term="week 20" /><category term="neural_behaviors" /><category term="gym pyxies" /><summary type="html">Training of a network given a dataset and learning in the tool Gym-Pyxies for a first approach between Gazebo and OpenAI-gym.</summary></entry><entry><title type="html">Week 15-16. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-15-16/" rel="alternate" type="text/html" title="Week 15-16. Continue with DQN algorithm. Problems with graphic card." /><published>2019-11-17T00:00:00+01:00</published><updated>2019-11-17T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-15-16</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-15-16/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis using Python 3.&lt;/li&gt;
@@ -575,106 +682,4 @@ npm start
       &lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-&lt;/ol&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorial" /><category term="previous work" /><category term="weeks 7-8" /><summary type="html">Apply what you have learned to a small tutorial</summary></entry><entry><title type="html">Week 6. Summary of definitions and concepts.</title><link href="http://localhost:4000/previous%20work/week-6/" rel="alternate" type="text/html" title="Week 6. Summary of definitions and concepts." /><published>2019-09-06T00:00:00+02:00</published><updated>2019-09-06T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-6</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-6/">&lt;p&gt;With the aim of compiling all the information and structuring it, I have been gathering from all sources the information necessary to understand and for other people, reading this blog, to understand what has been read.&lt;/p&gt;
-
-&lt;p&gt;In a summarized way, they are explained in these points.&lt;/p&gt;
-
-&lt;h2 id=&quot;1-introduction&quot;&gt;1. Introduction&lt;/h2&gt;
-
-&lt;p&gt;In the 1950s, &lt;a href=&quot;https://en.wikipedia.org/wiki/Richard_E._Bellman&quot;&gt;Richard Bellman&lt;/a&gt; devised an approach to the problem, involving the dynamical system’s state and a value function, based on an equation, which today we call the &lt;a href=&quot;https://en.wikipedia.org/wiki/Bellman_equation&quot;&gt;Bellman equation&lt;/a&gt;.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;V(x_0) = \max_{\{a_t\}_{t=0}^\infty}\sum_{t=0}^\infty\beta^tF(x_t, a_t)&lt;/script&gt;
-
-&lt;p&gt;Bellman also introduced the discrete stochastic version of the problem known as the &lt;a href=&quot;https://en.wikipedia.org/wiki/Markov_decision_process&quot;&gt;&lt;em&gt;Markov decision process&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;So how does &lt;strong&gt;Reinforcement Learning&lt;/strong&gt; compare to &lt;strong&gt;other types&lt;/strong&gt; of learning? We’ll divide them into three types:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Supervised learning&lt;/strong&gt;: the goal is to learn to predict the $Y$ label, given the associated $X$ data, in such a way that the learning generalizes to unseen data beyond the training data. For the training data the $Y$ label’s been supplied by an expert. It’s like giving the answer to a student on a test.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Unsupervised learning&lt;/strong&gt;: attempts to learn the structure hidden in a data set. Towards a predefined type of representation like clustering, anomaly detection or independent representation. Unsupervised learning takes no action and receives no feedback, it just operates on the $X$ data set.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Reinforcement Learning&lt;/strong&gt; (RL), a agent must learn which action to select at each time stamp. Receiving a reward as feedback, usually sparse in nature. This feedback instead of being the correct answer is a scalar number representing the relative goodness of the sequences of action recently taken usually without a firm’s starting point for the sequence. The agent must learn the sequence that gives the highest total reward through trial and error. Also in reinforcement learning, the next state and reward functions are usually stochastic. The same action and the same state may produce different rewards and different next states for the agent. We consider reinforcement learning to be a third type of machine learning. Even though it may use supervised learning, or unsupervised learning as part of it’s method, it is a distinct type of learning with its own set of challenges and methods.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Other terms related to reinforcement learning are:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Value functions&lt;/strong&gt;: Measures the goodness of a state in the long run as calculated by an agent. Another way to more formally state this, it’s the expected long-term accumulation of reward, starting from state $s$, and following policy $\pi$. So a human analogy, the reward is kind of like an immediate pleasure or pain experienced by a person. But the value function represents a more farsighted judgment to the value of a state. So if we’re looking at the game of &lt;em&gt;tic-tac-toe&lt;/em&gt; and we’re the X player and we’re about to make our opening move and we’re evaluating different moves, this would be a move of high value because it has the best chance of winning the game. But this would be a move of low value. Value functions come in two basic flavors. There’s the straight value function, whose notation is V $\pi(s)$, where s is a state. This represents the goodness of that state, following policy pi. And then we have the Q function, which is parameterized also by an action. So Q $\pi(s,a)$, s is the state, a is the action that represents the goodness of that state, first taking action a, and then thereafter, following normal policy $\pi$ .&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Policy&lt;/strong&gt;: is a mapping from a particular state to an action to take in that state. And this can be deterministic, where it’s the same action each time. Or it can be stochastic, where $70\%$ of the time, you take action one, and $30\%$ of the time, you take action two. And its notation is $\pi$.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Exploration-exploitation dilemma&lt;/strong&gt;: It is one of the great dilemmas of reinforcement learning, when should the agent try and find better actions to &lt;strong&gt;explore&lt;/strong&gt; the environment and when should it &lt;strong&gt;exploit&lt;/strong&gt; the optimal action (accumulate the highest reward possible) to make progress in learning?. Some algorithms often uses the simple and greedy exploration policy where it chooses a random action. As the best option decreases over time, the agent progresses to exploitation. Let’s say we have these three doors. One on the left we tried opening and received 10€. The one in the middle we tried opening and received 5€ and the one on the right we haven’t tried yet. What should be our next action?. A greedy policy is one that always chooses the best action in a given state. The dilemma is that any successful policy will need to do a mixture of both of these. Note that this explore-exploit issue is unique to RL, it is not found in supervised or unsupervised learning.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Time step&lt;/strong&gt;. The time step divides time into discrete steps. And each of these steps determines a cycle in the environment-agent interaction. And we usually denote this time by $t$. The environment is what defines the world that the agent interacts with, and it has a basic loop that it follows. It produces a state and a reward for the agent to sense and process. And then it accepts an action from the agent and cycles back to produce another state again. The agent learns to achieve goals by interacting with the environment. Its basic loop is it senses the state and the reward from the environment, and then selects an action to pass to the environment, and then continues that in a loop. So state represents the situation in the environment that the agent is going to make his actions based on. So an example of a discrete state is a tic-tac-toe collection of squares, where each square is either blank, has an X, or has an O on it. An example of a high-dimensional state might be the pixels in a video image from a game. And an example of continuous states could be three continuous values, temperature, pressure, and flow in an industrial controller.&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Reward&lt;/strong&gt;: Is a scalar value, a floating point number, returned by the environment when the agent selects an action. It represents the goal or a set of goals. It’s determined by the reinforcement learning problem designer himself. And its usual notation is $r_t$ (for the reward at time $t$). An action is what an agent takes on each time step. It can be discrete as of one of a fixed number of actions, like in a video game, you might go left, right, up, or down. Or it might be a continuous action. Let’s say, in a self-driving car, you might be steering the wheel at a certain angle or changing the angle of the gas pedal to feed more or less gas in.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Model of the environment&lt;/strong&gt;: So in a model of the environment, we basically get the transition probability to the next state and the probability of the reward going to that state. So here’s a table that represents a model. It has state-action pairs $S1$ and $A1$. And the first entry is, the next state is $S2$, and the reward is $-1$, and the probability is $0.3$. So this is a stochastic model. Not every time you’re in state $1$ action and you take action $1$ will you go to state $2$. If we look at the second line, we have state 1 and action 1, and that takes us, in this case, to state 3 with a reward of 0. And the probability for that is $0.7$. There are two kinds of methods related to models. One is called model-free methods, where you do not have a model, and that’s a pure trial-and-error learning experience. When you have a model, it’s considered to be a planning kind of learner because you typically don’t take actions in the environment. You instead just follow what would happen through the model itself to find out what your next state is and what your reward is. And you can keep doing this over and over again to find out pass and then find the value of pass. And these model-based problems come in two subclasses. One is where you’re given the model up-front, and that’s pretty rare. And the more active area of research right now is learning the model while you’re exploring.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Episodic and continuing tasks&lt;/strong&gt;: An episodic task, we have those tasks that come to a natural end, and they’re typically repeated over and over. And one example would be a &lt;em&gt;tic-tac-toe&lt;/em&gt; game, where you get a reward at the end. Another example would be the Pac-man game, where you get rewards along the way. An example of a continuing task would be controlling an air conditioner. Typically, you would be sensing and controlling at each time step, but there’s no natural endpoint. You just keep going and going.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Example with &lt;em&gt;tic-tac-toe&lt;/em&gt; game:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Term&lt;/th&gt;
-      &lt;th&gt;Result&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Agent&lt;/td&gt;
-      &lt;td&gt;&lt;em&gt;X&lt;/em&gt; player&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Environment&lt;/td&gt;
-      &lt;td&gt;&lt;em&gt;O&lt;/em&gt; player, general rules&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;State&lt;/td&gt;
-      &lt;td&gt;9x square occupant: &lt;em&gt;X&lt;/em&gt;, &lt;em&gt;O&lt;/em&gt;, blank.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Actions&lt;/td&gt;
-      &lt;td&gt;9x place &lt;em&gt;X&lt;/em&gt; in square.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Reward&lt;/td&gt;
-      &lt;td&gt;At end of the game: 1 = win, 0 = tie, -1 = loss&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Task Type&lt;/td&gt;
-      &lt;td&gt;Episodic (the reward is given at the end)&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Approaches to solving RL Problems.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Value function methods&lt;/strong&gt;: Estimate value states (or state-action pairs). Policy based on selecting actions that lead to large value states.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Direct Policy Search&lt;/strong&gt;: Model the policy itself (state &lt;img class=&quot;emoji&quot; title=&quot;:arrow_right:&quot; alt=&quot;:arrow_right:&quot; src=&quot;https://assets.github.com/images/icons/emoji/unicode/27a1.png&quot; height=&quot;20&quot; width=&quot;20&quot; align=&quot;absmiddle&quot; /&gt; action). Adjust model parameter in direction of greatest policy improvements.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>NachoAz</name></author><category term="deep reinforcement learning" /><category term="information" /><category term="theory." /><summary type="html">Definitions of agents, environments, states, actions, rewards, ...</summary></entry><entry><title type="html">Week 1-5. Previous Work. Soaking me in knowledge.</title><link href="http://localhost:4000/previous%20work/week-1-5/" rel="alternate" type="text/html" title="Week 1-5. Previous Work. Soaking me in knowledge." /><published>2019-08-30T00:00:00+02:00</published><updated>2019-08-30T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-1-5</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-1-5/">&lt;h2 id=&quot;reading-documentation-state-of-the-art&quot;&gt;Reading Documentation. State of the Art.&lt;/h2&gt;
-
-&lt;p&gt;These first weeks we use them to acquire knowledge about everything related to Reinforcement Learning.&lt;/p&gt;
-
-&lt;p&gt;The tutors gave me a lot of information to land in this branch of machine learning so I ordered this information to gain knowledge little by little.&lt;/p&gt;
-
-&lt;p&gt;The resources used these weeks have been:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.edx.org/es/course/reinforcement-learning-explained-3&quot;&gt;edx course on Reinforcement Learning&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;Reading of two papers:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf&quot;&gt;Human-level control through deep reinforcement learning&lt;/a&gt;.&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;https://arxiv.org/pdf/1710.02298.pdf&quot;&gt;Rainbow: Combining Improvements in Deep Reinforcement Learning&lt;/a&gt;.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;As this information, without prior knowledge, was very extensive and overwhelming, I found on the &lt;a href=&quot;https://spinningup.openai.com/en/latest/spinningup/rl_intro.html&quot;&gt;OpenAi page&lt;/a&gt; information about the definitions and actors that come into play in each Reinforced Learning algorithm.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="previous work" /><category term="weeks 1-6" /><summary type="html">Reading articles, tutorials and collecting information</summary></entry></feed>
+&lt;/ol&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorial" /><category term="previous work" /><category term="weeks 7-8" /><summary type="html">Apply what you have learned to a small tutorial</summary></entry></feed>
