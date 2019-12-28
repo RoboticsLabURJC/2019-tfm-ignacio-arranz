@@ -22,7 +22,7 @@ subtitle                 : Programming Robot Intelligence
 name                     : "JdeRobot"
 description              : "Programming Robot Intelligence"
 url                      : http://jderobot.github.io/2019-tfm-ignacio-arranz
-baseurl                  : roboticslaburjc.github.io/2019-tfm-ignacio-arranz # the subpath of your site, e.g. "/blog"
+baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : JdeRobot
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : /assets/images/peloto.png
