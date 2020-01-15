@@ -1,4 +1,106 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/2019-tfm-ignacio-arranz/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/2019-tfm-ignacio-arranz/" rel="alternate" type="text/html" /><updated>2019-12-28T13:14:33+01:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 19. Testing and exploring the pilot code.</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/landing/refactoring/week-19/" rel="alternate" type="text/html" title="Week 19. Testing and exploring the pilot code." /><published>2019-12-19T00:00:00+01:00</published><updated>2019-12-19T00:00:00+01:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/landing/refactoring/week-19</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/landing/refactoring/week-19/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-01-11T20:46:00+01:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Robotics Lab URJC</title><subtitle>Programming Robot Intelligence</subtitle><author><name>Nacho Arranz</name></author><entry><title type="html">Week 20. Networking and learning in the Gym-Pyxies tool.</title><link href="http://localhost:4000/first_steps/week-20/" rel="alternate" type="text/html" title="Week 20. Networking and learning in the Gym-Pyxies tool." /><published>2020-01-05T00:00:00+01:00</published><updated>2020-01-05T00:00:00+01:00</updated><id>http://localhost:4000/first_steps/week-20</id><content type="html" xml:base="http://localhost:4000/first_steps/week-20/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+
+&lt;ul class=&quot;task-list&quot;&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Train a network with the Vanessa’s dataset.&lt;/li&gt;
+  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Learning about Gym-Pyxies.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
+
+&lt;p&gt;This beginning of the year has brought progress in the progress of the work. Small goals have been achieved that create a foundation with which to begin building the core work, teaching a vehicle to follow a line using Reinforcement Learning.&lt;/p&gt;
+
+&lt;h3 id=&quot;1-train-a-network-with-the-vanessas-dataset&quot;&gt;1. Train a network with the Vanessa’s dataset&lt;/h3&gt;
+
+&lt;p&gt;The neural network of Vanessa Fernandez’s work has been trained on a dedicated machine resulting in a functional model that has been able to run successfully.&lt;/p&gt;
+
+&lt;p&gt;As a point of review for next week is to check the TwnsorFlow facilities to verify that the GPU is being used during training as it has taken too long in previous training.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-learning-about-gym-pyxies&quot;&gt;2. Learning about Gym-Pyxies&lt;/h3&gt;
+
+&lt;p&gt;Finally all the Player/Stage software has been installed.&lt;/p&gt;
+
+&lt;p&gt;Many things have been learned in this process. During the installation of both libraries there were problems with compilation:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Player&lt;/strong&gt;: Compilation error on Ubuntu 18.04. The following library is missing:&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/bin/ld: cannot find &lt;span class=&quot;nt&quot;&gt;-lgeos&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;To solve this, install the following library:&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;libgeos++-dev
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;More information about the error in &lt;a href=&quot;https://github.com/playerproject/player/issues/18&quot;&gt;this link&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Stage&lt;/strong&gt;: Compilation error on Ubuntu 18.04. The following library is missing:&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Could NOT find FLTK &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;missing: FLTK_LIBRARIES&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;To solve this, install the following depencences:&lt;/p&gt;
+
+    &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;fltk1.3-dev
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;libxft-dev
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;libxinerama-dev
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;More information about the error in &lt;a href=&quot;https://stackoverflow.com/questions/25752961/how-to-compile-with-fltk-under-ubuntu&quot;&gt;this link&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Error in execution (Player)&lt;/strong&gt;. The terminal returns the following error:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Player v.3.1.1-dev
+
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Part of the Player/Stage/Gazebo Project &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;http://playerstage.sourceforge.net].
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;C&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 2000 - 2013 Brian Gerkey, Richard Vaughan, Andrew Howard,
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Nate Koenig, and contributors. Released under the GNU General Public License.
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; Player comes with ABSOLUTELY NO WARRANTY.  This is free software, and you
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; are welcome to redistribute it under certain conditions&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; see COPYING
+&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;details.
+
+error   : Failed to load plugin stageplugin.
+error   : libtool reports error: file not found
+error   : plugin search path: /usr/local/share/stage/worlds:/usr/local/share/stage/worlds:/usr/local/lib/player-3.1/:/usr/local/lib/
+error   : failed to load plugin: stageplugin
+error   : failed to parse config file /usr/local/share/stage/worlds/simple.cfg driver blocks
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To solve this, change the environment variable to this one:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The library is in &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/lib/&lt;/code&gt; instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/lib64/&lt;/code&gt;. For more information, visit &lt;a href=&quot;https://sourceforge.net/p/playerstage/mailman/message/30007476/&quot;&gt;this link&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Once all the issues were solved, the example looks like this.&lt;/p&gt;
+
+&lt;figure class=&quot; &quot;&gt;
+  
+    
+      &lt;a href=&quot;https://raw.githubusercontent.com/JdeRobot/NeuralBehaviors/master/vision-based-end2end-learning/docs/imgs/piloto_esplicito.gif&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week20/player_stage_demo.gif&quot; alt=&quot;Player/Stage&quot; /&gt;
+      &lt;/a&gt;
+    
+  
+  
+    &lt;figcaption&gt;Example of Player/Stage
+&lt;/figcaption&gt;
+  
+&lt;/figure&gt;
+
+&lt;p&gt;With this we already have all the tools prepared to be able to go deeper into this software and create our first Deep Reinforcement Learning project. The task for next week is to go deeper into the library.&lt;/p&gt;
+
+&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
+
+&lt;p&gt;Go deeper into the Player/Stage library by running more examples and understanding the relationship between them and communication.&lt;/p&gt;
+
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
+
+&lt;p&gt;Patience and perseverance. Reading, researching, searching, asking…in the end you get small steps that together give you small objectives that together get you to the final point. This will have to be the mantra of every day until the end of the work as well as applying it to the personal and professional life.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="tutorials" /><category term="week 20" /><category term="neural_behaviors" /><category term="gym pyxies" /><summary type="html">Training of a network given a dataset and learning in the tool Gym-Pyxies for a first approach between Gazebo and OpenAI-gym.</summary></entry><entry><title type="html">Week 19. Testing and exploring the pilot code.</title><link href="http://localhost:4000/landing/refactoring/week-19/" rel="alternate" type="text/html" title="Week 19. Testing and exploring the pilot code." /><published>2019-12-19T00:00:00+01:00</published><updated>2019-12-19T00:00:00+01:00</updated><id>http://localhost:4000/landing/refactoring/week-19</id><content type="html" xml:base="http://localhost:4000/landing/refactoring/week-19/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;New estructure in Neural Behaviors repo.&lt;/li&gt;
@@ -67,7 +169,7 @@
 
 &lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
-&lt;p&gt;Seeing the different configurations and possibilities offered by the repository we will focus the project to create a tool that allows switching between different networks and offers quality metrics to compare results. It can be said that what we have learned is that, from something apparently closed as it can be to solve the problem for the final master’s work, we can build a useful tool for future users, students, companies, etc.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 19" /><category term="neural_behaviors" /><summary type="html">New structure of Neural Behaviors repository and deeping the Vanessa's code.</summary></entry><entry><title type="html">Week 17-18. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-17-18/" rel="alternate" type="text/html" title="Week 17-18. Continue with DQN algorithm. Problems with graphic card." /><published>2019-12-09T00:00:00+01:00</published><updated>2019-12-09T00:00:00+01:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-17-18</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-17-18/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+&lt;p&gt;Seeing the different configurations and possibilities offered by the repository we will focus the project to create a tool that allows switching between different networks and offers quality metrics to compare results. It can be said that what we have learned is that, from something apparently closed as it can be to solve the problem for the final master’s work, we can build a useful tool for future users, students, companies, etc.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 19" /><category term="neural_behaviors" /><summary type="html">New structure of Neural Behaviors repository and deeping the Vanessa's code.</summary></entry><entry><title type="html">Week 17-18. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-17-18/" rel="alternate" type="text/html" title="Week 17-18. Continue with DQN algorithm. Problems with graphic card." /><published>2019-12-09T00:00:00+01:00</published><updated>2019-12-09T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-17-18</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-17-18/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Pong game using DQN algorithm.&lt;/li&gt;
@@ -84,8 +186,8 @@
 &lt;figure class=&quot; &quot;&gt;
   
     
-      &lt;a href=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week1718/dqn_pytorch.gif&quot;&gt;
-        &lt;img src=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week1718/dqn_pytorch.gif&quot; alt=&quot;DQN Solution using PyTorch.&quot; /&gt;
+      &lt;a href=&quot;/assets/images/logbook/week1718/dqn_pytorch.gif&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week1718/dqn_pytorch.gif&quot; alt=&quot;DQN Solution using PyTorch.&quot; /&gt;
       &lt;/a&gt;
     
   
@@ -116,8 +218,8 @@
 &lt;figure class=&quot; &quot;&gt;
   
     
-      &lt;a href=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot;&gt;
-        &lt;img src=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot; alt=&quot;Vanessa's master's dissertation diagram.&quot; /&gt;
+      &lt;a href=&quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week1718/TFM-Week_Vanessa_Diagram.png&quot; alt=&quot;Vanessa's master's dissertation diagram.&quot; /&gt;
       &lt;/a&gt;
     
   
@@ -133,22 +235,7 @@
 
 &lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
-&lt;p&gt;Landing on other people’s code is a difficult job but it forces you to understand how someone else wants their code. Communicating with the other person to reach a common point where the code can grow is an enriching job.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 17-18" /><category term="dqn" /><summary type="html">Finishing the DQN algorithm for the game of pong. Exploring the pilot code to implement the equivalent in learning by reinforcement.</summary></entry><entry><title type="html">Week 20. Networking and learning in the Gym-Pyxies tool.</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/landing/refactoring/week-20/" rel="alternate" type="text/html" title="Week 20. Networking and learning in the Gym-Pyxies tool." /><published>2019-12-05T00:00:00+01:00</published><updated>2019-12-05T00:00:00+01:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/landing/refactoring/week-20</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/landing/refactoring/week-20/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
-
-&lt;ul class=&quot;task-list&quot;&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Train a network with the Vanessa’s dataset.&lt;/li&gt;
-  &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Learning about Gym-Pyxies.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;progress&quot;&gt;Progress&lt;/h2&gt;
-
-&lt;h3 id=&quot;1-train-a-network-with-the-vanessas-dataset&quot;&gt;1. Train a network with the Vanessa’s dataset&lt;/h3&gt;
-
-&lt;h3 id=&quot;2-learning-about-gym-pyxies&quot;&gt;2. Learning about Gym-Pyxies&lt;/h3&gt;
-
-&lt;h2 id=&quot;working&quot;&gt;Working&lt;/h2&gt;
-
-&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="tutorials" /><category term="week 20" /><category term="neural_behaviors" /><category term="gym pyxies" /><summary type="html">Training of a network given a dataset and learning in the tool Gym-Pyxies for a first approach between Gazebo and OpenAI-gym.</summary></entry><entry><title type="html">Week 15-16. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-15-16/" rel="alternate" type="text/html" title="Week 15-16. Continue with DQN algorithm. Problems with graphic card." /><published>2019-11-17T00:00:00+01:00</published><updated>2019-11-17T00:00:00+01:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-15-16</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-15-16/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+&lt;p&gt;Landing on other people’s code is a difficult job but it forces you to understand how someone else wants their code. Communicating with the other person to reach a common point where the code can grow is an enriching job.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 17-18" /><category term="dqn" /><summary type="html">Finishing the DQN algorithm for the game of pong. Exploring the pilot code to implement the equivalent in learning by reinforcement.</summary></entry><entry><title type="html">Week 15-16. Continue with DQN algorithm. Problems with graphic card.</title><link href="http://localhost:4000/examples/landing/week-15-16/" rel="alternate" type="text/html" title="Week 15-16. Continue with DQN algorithm. Problems with graphic card." /><published>2019-11-17T00:00:00+01:00</published><updated>2019-11-17T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-15-16</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-15-16/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis using Python 3.&lt;/li&gt;
@@ -190,7 +277,7 @@
 
 &lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
-&lt;p&gt;Developing the DQN algorithm I realized that I needed to stop trying to solve the problem that occurs in the training to build the same path we take in the study of classical algorithms: &lt;strong&gt;read and study more&lt;/strong&gt;. After that little process, the code was much better understood and made more sense :-)&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 15-16" /><category term="dqn" /><summary type="html">Solving problems with the graphic card and reading more information about the DQN algorithm.</summary></entry><entry><title type="html">Week 14. Organization and first algorithm using Deep Learning: DQN.</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-14/" rel="alternate" type="text/html" title="Week 14. Organization and first algorithm using Deep Learning: DQN." /><published>2019-11-02T00:00:00+01:00</published><updated>2019-11-02T00:00:00+01:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-14</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-14/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+&lt;p&gt;Developing the DQN algorithm I realized that I needed to stop trying to solve the problem that occurs in the training to build the same path we take in the study of classical algorithms: &lt;strong&gt;read and study more&lt;/strong&gt;. After that little process, the code was much better understood and made more sense :-)&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 15-16" /><category term="dqn" /><summary type="html">Solving problems with the graphic card and reading more information about the DQN algorithm.</summary></entry><entry><title type="html">Week 14. Organization and first algorithm using Deep Learning: DQN.</title><link href="http://localhost:4000/examples/landing/week-14/" rel="alternate" type="text/html" title="Week 14. Organization and first algorithm using Deep Learning: DQN." /><published>2019-11-02T00:00:00+01:00</published><updated>2019-11-02T00:00:00+01:00</updated><id>http://localhost:4000/examples/landing/week-14</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-14/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Continuing with the replicate of Vanessa’s master’s degree thesis.&lt;/li&gt;
@@ -333,7 +420,7 @@
   &lt;li&gt;Solving the bugs in the execution of the given Pong in the repository (folder &lt;code class=&quot;highlighter-rouge&quot;&gt;puppis&lt;/code&gt;).&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 14" /><category term="dqn" /><summary type="html">Execution of the Pong game from the code provided in Alberto's repository.</summary></entry><entry><title type="html">Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II).</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-13/" rel="alternate" type="text/html" title="Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II)." /><published>2019-10-21T00:00:00+02:00</published><updated>2019-10-21T00:00:00+02:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-13</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-13/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+&lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 14" /><category term="dqn" /><summary type="html">Execution of the Pong game from the code provided in Alberto's repository.</summary></entry><entry><title type="html">Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II).</title><link href="http://localhost:4000/examples/landing/week-13/" rel="alternate" type="text/html" title="Week 13. Installing nvidia-docker and undestanding DRL algorithms. Part (II)." /><published>2019-10-21T00:00:00+02:00</published><updated>2019-10-21T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-13</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-13/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;ul class=&quot;task-list&quot;&gt;
   &lt;li class=&quot;task-list-item&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;task-list-item-checkbox&quot; disabled=&quot;disabled&quot; checked=&quot;checked&quot; /&gt;Studying new classical algorithms.&lt;/li&gt;
@@ -380,7 +467,7 @@ make: *** [all] Error 2
 
 &lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
-&lt;p&gt;Knowing the different classical methods gives an idea of ćomo work before different problems to find the best option. Although this week I have known better these algorithms, I think that to continue studying them is the way to settle and assimilate all the concepts.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 13" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week (continuing).</summary></entry><entry><title type="html">Week 12. Installing nvidia-docker and undestanding DRL algorithms.</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-12/" rel="alternate" type="text/html" title="Week 12. Installing nvidia-docker and undestanding DRL algorithms." /><published>2019-10-16T00:00:00+02:00</published><updated>2019-10-16T00:00:00+02:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-12</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-12/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
+&lt;p&gt;Knowing the different classical methods gives an idea of ćomo work before different problems to find the best option. Although this week I have known better these algorithms, I think that to continue studying them is the way to settle and assimilate all the concepts.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="week 13" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week (continuing).</summary></entry><entry><title type="html">Week 12. Installing nvidia-docker and undestanding DRL algorithms.</title><link href="http://localhost:4000/examples/landing/week-12/" rel="alternate" type="text/html" title="Week 12. Installing nvidia-docker and undestanding DRL algorithms." /><published>2019-10-16T00:00:00+02:00</published><updated>2019-10-16T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-12</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-12/">&lt;h2 id=&quot;to-do&quot;&gt;To Do&lt;/h2&gt;
 
 &lt;p&gt;The tasks proposed for this week are&lt;/p&gt;
 
@@ -437,7 +524,7 @@ make: *** [all] Error 2
 
 &lt;p&gt;This week I have focused mainly on getting to know more deeply the differences between various methods of LR. In particular, everything related to Q-Learning and SARSA. Their differences between politics, advantages and disadvantages, usefulness, etc. Knowing in a deeper way classical RL algorithms like the ones mentioned above, helps to understand the way in which DRL algorithms are taken further. I am currently studying different classical algorithms such as Dynamic Programming or Monte Carlo.&lt;/p&gt;
 
-&lt;p&gt;Continue …&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="weeks 12" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week.</summary></entry><entry><title type="html">Week 10-11. Running different exercises from repo</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-10-11/" rel="alternate" type="text/html" title="Week 10-11. Running different exercises from repo" /><published>2019-10-12T00:00:00+02:00</published><updated>2019-10-12T00:00:00+02:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-10-11</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-10-11/">&lt;p&gt;These weeks have been for the study and understanding of the different methods and agents that exist in Alberto Martín’s repository. This brings us closer to the real environments where the work will be developed.&lt;/p&gt;
+&lt;p&gt;Continue …&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="studying" /><category term="tutorials" /><category term="weeks 12" /><category term="docker" /><category term="exercises" /><summary type="html">Studying the methods seen the previous week.</summary></entry><entry><title type="html">Week 10-11. Running different exercises from repo</title><link href="http://localhost:4000/examples/landing/week-10-11/" rel="alternate" type="text/html" title="Week 10-11. Running different exercises from repo" /><published>2019-10-12T00:00:00+02:00</published><updated>2019-10-12T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-10-11</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-10-11/">&lt;p&gt;These weeks have been for the study and understanding of the different methods and agents that exist in Alberto Martín’s repository. This brings us closer to the real environments where the work will be developed.&lt;/p&gt;
 
 &lt;h1 id=&quot;to-do&quot;&gt;To Do&lt;/h1&gt;
 
@@ -484,8 +571,8 @@ make: *** [all] Error 2
 &lt;figure class=&quot; &quot;&gt;
   
     
-      &lt;a href=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week1011/cartpole_solution.gif&quot;&gt;
-        &lt;img src=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week1011/cartpole_solution.gif&quot; alt=&quot;Image week 10-11&quot; /&gt;
+      &lt;a href=&quot;/assets/images/logbook/week1011/cartpole_solution.gif&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week1011/cartpole_solution.gif&quot; alt=&quot;Image week 10-11&quot; /&gt;
       &lt;/a&gt;
     
   
@@ -507,7 +594,7 @@ make: *** [all] Error 2
 
 &lt;p&gt;As for the exercises in the repository, there is a clear difference in the times of training and final solution. The &lt;code class=&quot;highlighter-rouge&quot;&gt;cross_entropy&lt;/code&gt; method has been the fastest to solve in training with very good results in execution.&lt;/p&gt;
 
-&lt;p&gt;Methods such as Q-Learning are less effective at a time when there is no clear separation of all environmental states.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 10-11" /><summary type="html">Running different methods and agents for the resolution of DRL problems.</summary></entry><entry><title type="html">Week 9. Landing on the working infrastructure</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-9/" rel="alternate" type="text/html" title="Week 9. Landing on the working infrastructure" /><published>2019-09-23T00:00:00+02:00</published><updated>2019-09-23T00:00:00+02:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-9</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/examples/landing/week-9/">&lt;p&gt;This week we are going to install the necessary libraries to have the TensorFlow library installed as well as some examples from &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Methods such as Q-Learning are less effective at a time when there is no clear separation of all environmental states.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 10-11" /><summary type="html">Running different methods and agents for the resolution of DRL problems.</summary></entry><entry><title type="html">Week 9. Landing on the working infrastructure</title><link href="http://localhost:4000/examples/landing/week-9/" rel="alternate" type="text/html" title="Week 9. Landing on the working infrastructure" /><published>2019-09-23T00:00:00+02:00</published><updated>2019-09-23T00:00:00+02:00</updated><id>http://localhost:4000/examples/landing/week-9</id><content type="html" xml:base="http://localhost:4000/examples/landing/week-9/">&lt;p&gt;This week we are going to install the necessary libraries to have the TensorFlow library installed as well as some examples from &lt;a href=&quot;https://github.com/RoboticsLabURJC/2019-phd-alberto-martin&quot;&gt;this repository&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h1 id=&quot;to-do&quot;&gt;To Do&lt;/h1&gt;
 
@@ -583,14 +670,14 @@ npm start
 &lt;figure class=&quot;half &quot;&gt;
   
     
-      &lt;a href=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week9/week-9_image1.png&quot;&gt;
-        &lt;img src=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week9/week-9_image1.png&quot; alt=&quot;Image week 9 - 1&quot; /&gt;
+      &lt;a href=&quot;/assets/images/logbook/week9/week-9_image1.png&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week9/week-9_image1.png&quot; alt=&quot;Image week 9 - 1&quot; /&gt;
       &lt;/a&gt;
     
   
     
-      &lt;a href=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week9/week-9_image2.png&quot;&gt;
-        &lt;img src=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week9/week-9_image2.png&quot; alt=&quot;Image week 9 - 2&quot; /&gt;
+      &lt;a href=&quot;/assets/images/logbook/week9/week-9_image2.png&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week9/week-9_image2.png&quot; alt=&quot;Image week 9 - 2&quot; /&gt;
       &lt;/a&gt;
     
   
@@ -609,7 +696,7 @@ npm start
 
 &lt;h2 id=&quot;learned&quot;&gt;Learned&lt;/h2&gt;
 
-&lt;p&gt;First approach to the environment where the work will be developed.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 9" /><summary type="html">Doing some examples and installing infrastructure.</summary></entry><entry><title type="html">Week 7-8. Reading more documentation and small tutorials.</title><link href="http://localhost:4000/2019-tfm-ignacio-arranz/previous%20work/week-7-8/" rel="alternate" type="text/html" title="Week 7-8. Reading more documentation and small tutorials." /><published>2019-09-18T00:00:00+02:00</published><updated>2019-09-18T00:00:00+02:00</updated><id>http://localhost:4000/2019-tfm-ignacio-arranz/previous%20work/week-7-8</id><content type="html" xml:base="http://localhost:4000/2019-tfm-ignacio-arranz/previous%20work/week-7-8/">&lt;p&gt;In these two weeks, given the amount of information I found, I decided to put into practice some simple tutorial to help me settle all the concepts and be able to relate them.&lt;/p&gt;
+&lt;p&gt;First approach to the environment where the work will be developed.&lt;/p&gt;</content><author><name>NachoAz</name></author><category term="logbook" /><category term="first steps" /><category term="tutorials" /><category term="weeks 9" /><summary type="html">Doing some examples and installing infrastructure.</summary></entry><entry><title type="html">Week 7-8. Reading more documentation and small tutorials.</title><link href="http://localhost:4000/previous%20work/week-7-8/" rel="alternate" type="text/html" title="Week 7-8. Reading more documentation and small tutorials." /><published>2019-09-18T00:00:00+02:00</published><updated>2019-09-18T00:00:00+02:00</updated><id>http://localhost:4000/previous%20work/week-7-8</id><content type="html" xml:base="http://localhost:4000/previous%20work/week-7-8/">&lt;p&gt;In these two weeks, given the amount of information I found, I decided to put into practice some simple tutorial to help me settle all the concepts and be able to relate them.&lt;/p&gt;
 
 &lt;h2 id=&quot;small-tutorial&quot;&gt;Small tutorial&lt;/h2&gt;
 
@@ -639,14 +726,14 @@ npm start
 &lt;figure class=&quot;half &quot;&gt;
   
     
-      &lt;a href=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week78/tutorial-q-learning.gif&quot; title=&quot;Without QLearning&quot;&gt;
-        &lt;img src=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week78/tutorial-q-learning.gif&quot; alt=&quot;Without QLearning&quot; /&gt;
+      &lt;a href=&quot;/assets/images/logbook/week78/tutorial-q-learning.gif&quot; title=&quot;Without QLearning&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week78/tutorial-q-learning.gif&quot; alt=&quot;Without QLearning&quot; /&gt;
       &lt;/a&gt;
     
   
     
-      &lt;a href=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week78/tutorial-q-learning_solution.gif&quot; title=&quot;Solution using QLearning.&quot;&gt;
-        &lt;img src=&quot;/2019-tfm-ignacio-arranz/assets/images/logbook/week78/tutorial-q-learning_solution.gif&quot; alt=&quot;Solution using QLearning.&quot; /&gt;
+      &lt;a href=&quot;/assets/images/logbook/week78/tutorial-q-learning_solution.gif&quot; title=&quot;Solution using QLearning.&quot;&gt;
+        &lt;img src=&quot;/assets/images/logbook/week78/tutorial-q-learning_solution.gif&quot; alt=&quot;Solution using QLearning.&quot; /&gt;
       &lt;/a&gt;
     
   
