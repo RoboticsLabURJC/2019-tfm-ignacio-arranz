@@ -1,5 +1,12 @@
-numpy>=1.10.4
+catkin_pkg
+rospkg
+matplotlib
+defusedxml
+scikit-image
+netifaces
+numpy
 requests>=2.0
 six
 pyglet>=1.2.0
-scipy==0.17.1
+scipy==1.2.3
+
