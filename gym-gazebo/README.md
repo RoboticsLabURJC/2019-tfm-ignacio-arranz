@@ -43,11 +43,11 @@ ros-melodic-octomap-ros                  \
 ros-melodic-control-toolbox              \
 ros-melodic-pluginlib	                 \
 ros-melodic-trajectory-msgs              \
-ros-melodic-control-msgs	             \
+ros-melodic-control-msgs	         \
 ros-melodic-std-srvs 	                 \
-ros-melodic-nodelet	                     \
-ros-melodic-urdf		                 \
-ros-melodic-rviz		                 \
+ros-melodic-nodelet	                 \
+ros-melodic-urdf		         \
+ros-melodic-rviz		         \
 ros-melodic-kdl-conversions              \
 ros-melodic-eigen-conversions            \
 ros-melodic-tf2-sensor-msgs              \
