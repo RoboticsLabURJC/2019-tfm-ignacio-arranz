@@ -28,7 +28,7 @@ from keras.regularizers import l2
 from keras.optimizers import SGD , Adam
 import memory
 from keras import backend as K
-K.set_image_dim_ordering('th')
+K.common.set_image_dim_ordering('th')  # 'tf': TensorFlow or 'th': Theano
 
 class DeepQ:
     """
@@ -38,7 +38,7 @@ class DeepQ:
         traditional Q-learning:
             Q(s, a) += alpha * (reward(s,a) + gamma * max(Q(s') - Q(s,a))
         DQN:
-            target = reward(s,a) + gamma * max(Q(s')
+            target = reward(s,a) + gamma * max(Q(s'))
 
     """
     def __init__(self, outputs, memorySize, discountFactor, learningRate, learnStart):
@@ -84,7 +84,7 @@ class DeepQ:
         i = 0
         for layer in self.model.layers:
             weights = layer.get_weights()
-            print "layer ",i,": ",weights
+            print("Layer {}: {}".format(i, weights))
             i += 1
 
     def backupNetwork(self, model, backup):
@@ -131,7 +131,7 @@ class DeepQ:
         rand = random.random()
         if rand < explorationRate :
             action = np.random.randint(0, self.output_size)
-        else :
+        else:
             action = self.getMaxIndex(qValues)
         return action
 
@@ -213,11 +213,20 @@ def clear_monitor_files(training_dir):
     for file in files:
         os.unlink(file)
 
+
+
+####################################################################################################################
+# MAIN PROGRAM
+####################################################################################################################
 if __name__ == '__main__':
+
+    print("\n\n\n\nBEGIN CODEEEEE\n\n\n\n")
 
     #REMEMBER!: turtlebot_cnn_setup.bash must be executed.
     env = gym.make('GazeboCircuit2cTurtlebotCameraNnEnv-v0')
     outdir = '/tmp/gazebo_gym_experiments/'
+
+    print("\n\n\n\ENV CREATED\n\n\n\n")
 
     continue_execution = False
     #fill this if continue_execution=True
@@ -226,6 +235,11 @@ if __name__ == '__main__':
     params_json  = '/tmp/turtle_c2c_dqn_ep200.json'
 
     img_rows, img_cols, img_channels = env.img_rows, env.img_cols, env.img_channels
+
+
+    print("\n\n\n\n", img_rows, img_cols, img_channels, "\n\n\n\n")
+    exit()
+
     epochs = 100000
     steps = 1000
 
@@ -284,9 +298,17 @@ if __name__ == '__main__':
         observation = env.reset()
         cumulated_reward = 0
 
+        print("== Observation =======================")
+        print(observation)
+        print("======================================")
+
         # number of timesteps
         for t in xrange(steps):
             qValues = deepQ.getQValues(observation)
+
+            print("== Q-Values ==========================")
+            print(qValues)
+            print("======================================")
 
             action = deepQ.selectAction(qValues, explorationRate)
             newObservation, reward, done, info = env.step(action)
@@ -294,7 +316,9 @@ if __name__ == '__main__':
             deepQ.addMemory(observation, action, reward, newObservation, done)
             observation = newObservation
 
-            #We reduced the epsilon gradually
+
+
+            # We reduced the epsilon gradually
             if explorationRate > FINAL_EPSILON and stepCounter > learnStart:
                 explorationRate -= (INITIAL_EPSILON - FINAL_EPSILON) / EXPLORE
 
@@ -305,7 +329,7 @@ if __name__ == '__main__':
                 deepQ.learnOnMiniBatch(minibatch_size, False)
 
             if (t == steps-1):
-                print ("reached the end")
+                print("reached the end")
                 done = True
 
             env._flush(force=True)
@@ -320,9 +344,9 @@ if __name__ == '__main__':
                 m, s = divmod(int(time.time() - start_time + loadsim_seconds), 60)
                 h, m = divmod(m, 60)
                 if not last100Filled:
-                    print ("EP "+str(epoch)+" - {} steps".format(t+1)+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
+                    print("EP "+str(epoch)+" - {} steps".format(t+1)+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
                 else :
-                    print ("EP "+str(epoch)+" - {} steps".format(t+1)+" - last100 C_Rewards : "+str(int((sum(last100Rewards)/len(last100Rewards))))+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
+                    print("EP "+str(epoch)+" - {} steps".format(t+1)+" - last100 C_Rewards : "+str(int((sum(last100Rewards)/len(last100Rewards))))+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
                     #SAVE SIMULATION DATA
 
                     if (epoch)%100==0:
@@ -340,6 +364,6 @@ if __name__ == '__main__':
 
             stepCounter += 1
             if stepCounter % 2500 == 0:
-                print("Frames = "+str(stepCounter))
+                print("Frames = " + str(stepCounter))
 
     env.close()
