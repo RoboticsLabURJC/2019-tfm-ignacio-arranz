@@ -28,7 +28,10 @@ from keras.regularizers import l2
 from keras.optimizers import SGD , Adam
 import memory
 from keras import backend as K
-K.common.set_image_dim_ordering('th')  # 'tf': TensorFlow or 'th': Theano
+
+# To equal the inputs, we set the channels first and the image next.
+K.set_image_data_format('channels_first')
+
 
 class DeepQ:
     """
@@ -220,13 +223,11 @@ def clear_monitor_files(training_dir):
 ####################################################################################################################
 if __name__ == '__main__':
 
-    print("\n\n\n\nBEGIN CODEEEEE\n\n\n\n")
-
     #REMEMBER!: turtlebot_cnn_setup.bash must be executed.
     env = gym.make('GazeboCircuit2cTurtlebotCameraNnEnv-v0')
     outdir = '/tmp/gazebo_gym_experiments/'
 
-    print("\n\n\n\ENV CREATED\n\n\n\n")
+    print("=====================\nENV CREATED\n=====================")
 
     continue_execution = False
     #fill this if continue_execution=True
@@ -235,10 +236,7 @@ if __name__ == '__main__':
     params_json  = '/tmp/turtle_c2c_dqn_ep200.json'
 
     img_rows, img_cols, img_channels = env.img_rows, env.img_cols, env.img_channels
-
-
-    print("\n\n\n\n", img_rows, img_cols, img_channels, "\n\n\n\n")
-    exit()
+    print("\n----> IMG ROWS: {} - IMG COLS: {} - IMG CHANNELS: {}\n", img_rows, img_cols, img_channels)
 
     epochs = 100000
     steps = 1000
@@ -287,6 +285,7 @@ if __name__ == '__main__':
         copy_tree(monitor_path,outdir)
         env = gym.wrappers.Monitor(env, outdir, resume=True)
 
+
     last100Rewards = [0] * 100
     last100RewardsIndex = 0
     last100Filled = False
@@ -298,25 +297,15 @@ if __name__ == '__main__':
         observation = env.reset()
         cumulated_reward = 0
 
-        print("== Observation =======================")
-        print(observation)
-        print("======================================")
-
         # number of timesteps
         for t in xrange(steps):
             qValues = deepQ.getQValues(observation)
-
-            print("== Q-Values ==========================")
-            print(qValues)
-            print("======================================")
 
             action = deepQ.selectAction(qValues, explorationRate)
             newObservation, reward, done, info = env.step(action)
 
             deepQ.addMemory(observation, action, reward, newObservation, done)
             observation = newObservation
-
-
 
             # We reduced the epsilon gradually
             if explorationRate > FINAL_EPSILON and stepCounter > learnStart:
@@ -347,8 +336,8 @@ if __name__ == '__main__':
                     print("EP "+str(epoch)+" - {} steps".format(t+1)+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
                 else :
                     print("EP "+str(epoch)+" - {} steps".format(t+1)+" - last100 C_Rewards : "+str(int((sum(last100Rewards)/len(last100Rewards))))+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
-                    #SAVE SIMULATION DATA
-
+                    1
+                    # SAVE SIMULATION DATA
                     if (epoch)%100==0:
                         #save model weights and monitoring data every 100 epochs.
                         deepQ.saveModel('/tmp/turtle_c2c_dqn_ep'+str(epoch)+'.h5')
