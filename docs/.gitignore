@@ -15,7 +15,6 @@ Gemfile.lock
 .sass-cache
 _asset_bundler_cache
 codekit-config.json
-example/_site
 node_modules
 npm-debug.log*
 
