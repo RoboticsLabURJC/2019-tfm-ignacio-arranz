@@ -47,4 +47,4 @@ The objective of the work is the learning of the controllers of an autonomous ve
 The tutors of the project are:
 
 - [Jose Maria Cañas](https://gsyc.urjc.es/jmplaza/)
-- [Alberto Martín](https://gestion2.urjc.es/pdi/ver/alberto.martinf)
+- [Eduardo Perdices](https://gsyc.urjc.es/~eperdices/)
