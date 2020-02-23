@@ -229,7 +229,7 @@ if __name__ == '__main__':
 
     print("=====================\nENV CREATED\n=====================")
 
-    continue_execution = False
+    continue_execution = True
     #fill this if continue_execution=True
     weights_path = '/tmp/turtle_c2c_dqn_ep200.h5'
     monitor_path = '/tmp/turtle_c2c_dqn_ep200'
@@ -292,19 +292,25 @@ if __name__ == '__main__':
 
     start_time = time.time()
 
-    #start iterating from 'current epoch'.
+    # Start iterating from 'current epoch'.
     for epoch in xrange(current_epoch+1, epochs+1, 1):
         observation = env.reset()
         cumulated_reward = 0
 
-        # number of timesteps
+        # Number of timesteps
         for t in xrange(steps):
             qValues = deepQ.getQValues(observation)
 
             action = deepQ.selectAction(qValues, explorationRate)
+
+            #print(action)
+
             newObservation, reward, done, info = env.step(action)
 
+            print(reward)
+
             deepQ.addMemory(observation, action, reward, newObservation, done)
+
             observation = newObservation
 
             # We reduced the epsilon gradually
