@@ -28,6 +28,7 @@ classes: wide
   - [Aprendizaje por Refuerzo: Procesos de Decisión de Markov — Parte 1](https://medium.com/aprendizaje-por-refuerzo-introducción-al-mundo-del/aprendizaje-por-refuerzo-procesos-de-decisión-de-markov-parte-1-8a0aed1e6c59)
   - [Aprendizaje por Refuerzo: Procesos de Decisión de Markov — Parte 2](https://medium.com/aprendizaje-por-refuerzo-introducción-al-mundo-del/aprendizaje-por-refuerzo-procesos-de-decisión-de-markov-parte-2-d219358ecd76)
   - [Reinforcement Learning tutorial with TensorFlow](https://adventuresinmachinelearning.com/reinforcement-learning-tensorflow/)
+  - [Q-Learning and DQN](https://towardsdatascience.com/dqn-part-1-vanilla-deep-q-networks-6eb4a00febfb).
 
 ## Methods
   - [DQN. Pong from pixels](http://karpathy.github.io/2016/05/31/rl/)
