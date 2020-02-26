@@ -132,7 +132,7 @@ class DeepQ:
     # select the action with the highest Q value
     def selectAction(self, qValues, explorationRate):
         rand = random.random()
-        if rand < explorationRate :
+        if rand < explorationRate:
             action = np.random.randint(0, self.output_size)
         else:
             action = self.getMaxIndex(qValues)
@@ -229,14 +229,13 @@ if __name__ == '__main__':
 
     print("=====================\nENV CREATED\n=====================")
 
-    continue_execution = True
-    #fill this if continue_execution=True
+    continue_execution = False
+    # Fill this if continue_execution=True
     weights_path = '/tmp/turtle_c2c_dqn_ep200.h5'
     monitor_path = '/tmp/turtle_c2c_dqn_ep200'
     params_json  = '/tmp/turtle_c2c_dqn_ep200.json'
 
     img_rows, img_cols, img_channels = env.img_rows, env.img_cols, env.img_channels
-    print("\n----> IMG ROWS: {} - IMG COLS: {} - IMG CHANNELS: {}\n", img_rows, img_cols, img_channels)
 
     epochs = 100000
     steps = 1000
@@ -307,7 +306,7 @@ if __name__ == '__main__':
 
             newObservation, reward, done, info = env.step(action)
 
-            print(reward)
+            # print(reward)
 
             deepQ.addMemory(observation, action, reward, newObservation, done)
 
@@ -340,7 +339,7 @@ if __name__ == '__main__':
                 h, m = divmod(m, 60)
                 if not last100Filled:
                     print("EP "+str(epoch)+" - {} steps".format(t+1)+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
-                else :
+                else:
                     print("EP "+str(epoch)+" - {} steps".format(t+1)+" - last100 C_Rewards : "+str(int((sum(last100Rewards)/len(last100Rewards))))+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
                     1
                     # SAVE SIMULATION DATA

@@ -43,7 +43,14 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
         self.img_cols = 32
         self.img_channels = 1
 
-    def calculate_observation(self,data):
+
+    def _seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
+        return [seed]
+
+
+    def calculate_observation(self, data):
+        
         min_range = 0.21
         done = False
         for i, item in enumerate(data.ranges):
@@ -51,9 +58,6 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
                 done = True
         return done
 
-    def _seed(self, seed=None):
-        self.np_random, seed = seeding.np_random(seed)
-        return [seed]
 
     def step(self, action):
         rospy.wait_for_service('/gazebo/unpause_physics')
@@ -153,18 +157,23 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
 
         center_detour = abs(right_sum - left_sum)/5
 
+        # ============
+        # == REWARD ==
+        # ============
         # 3 actions
         if not done:
             if action == 0:
                 reward = 1 / float(center_detour+1)
-            elif action_sum > 45: #L or R looping
+            elif action_sum > 45: # L or R looping
                 reward = -0.5
-            else: #L or R no looping
+            else: # L or R no looping
                 reward = 0.5 / float(center_detour+1)
         else:
             reward = -1
+        
+        reward = -1
 
-        #print("detour= "+str(center_detour)+" :: reward= "+str(reward)+" ::action="+str(action))
+        # print("detour= "+str(center_detour)+" :: reward= "+str(reward)+" ::action="+str(action))
 
         '''x_t = skimage.color.rgb2gray(cv_image)
         x_t = skimage.transform.resize(x_t,(32,32))
@@ -184,6 +193,7 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
         #self.s_t = np.append(cv_image, self.s_t[:, :3, :, :], axis=1)
         #return self.s_t, reward, done, {} # observation, reward, done, info
 
+
     def reset(self):
 
         self.last50actions = [0] * 50 #used for looping avoidance
@@ -192,6 +202,7 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
         rospy.wait_for_service('/gazebo/reset_simulation')
         try:
             #reset_proxy.call()
+            # Reset environment. Return the robot to origina position.
             self.reset_proxy()
         except (rospy.ServiceException) as e:
             print ("/gazebo/reset_simulation service call failed")
