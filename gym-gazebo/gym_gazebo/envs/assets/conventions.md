@@ -1,16 +1,21 @@
-#Gazebo conventions
+# Gazebo conventions
 
-##Environment naming
-Gazebo\<World\>\<Robot\>\<Sensors\>-v\<version\>
+## Environment naming
 
-* World: Descriptive name of the world or main model starting with capital letter.
+Gazebo `<World\>\<Robot\>\<Sensors\>-v\<version\>`
 
-* Robot: Robot name starting with capital letter.
+* **World**: Descriptive name of the world or main model starting with capital letter.
 
-* Sensors: Sensor names used by the Robot, each starting with capital letter. Concatenations made using '-' character.
+* **Robot**: Robot name starting with capital letter.
 
-* version: Integer starting with 0.
+* **Sensors**: Sensor names used by the Robot, each starting with capital letter. Concatenations made using `-` character.
 
-Examples:
+* **version**: Integer starting with 0.
 
-GazeboMazeTurtlebotLidar-v0, GazeboMazeTurtlebotLidar-v1, GazeboCircuitKobukiLidar-Camera-DepthSensor-v0
+## Examples:
+
+- `GazeboMazeTurtlebotLidar-v0`
+
+- `GazeboMazeTurtlebotLidar-v1`
+
+- `GazeboCircuitKobukiLidar-Camera-DepthSensor-v0`
