@@ -12,7 +12,7 @@ Gazebo `<World\>\<Robot\>\<Sensors\>-v\<version\>`
 
 * **version**: Integer starting with 0.
 
-## Examples:
+## Examples
 
 - `GazeboMazeTurtlebotLidar-v0`
 
