@@ -11,11 +11,6 @@ chmod +x catkin_ws/src/turtlebot_simulator/turtlebot_gazebo/env-hooks/25.turtleb
 bash catkin_ws/src/turtlebot_simulator/turtlebot_gazebo/env-hooks/25.turtlebot-gazebo.sh.em
 
 #add turtlebot launch environment variable
-if [ -z "$GYM_GAZEBO_WORLD_MAZE" ]; then
-  bash -c 'echo "export GYM_GAZEBO_WORLD_MAZE="`pwd`/../assets/worlds/maze.world >> ~/.bashrc'
-else
-  bash -c 'sed "s,GYM_GAZEBO_WORLD_MAZE=[^;]*,'GYM_GAZEBO_WORLD_MAZE=`pwd`/../assets/worlds/maze.world'," -i ~/.bashrc'
-fi
 if [ -z "$GYM_GAZEBO_WORLD_CIRCUIT" ]; then
   bash -c 'echo "export GYM_GAZEBO_WORLD_CIRCUIT="`pwd`/../assets/worlds/circuit.world >> ~/.bashrc'
 else
@@ -31,18 +26,6 @@ if [ -z "$GYM_GAZEBO_WORLD_CIRCUIT2C" ]; then
 else
   bash -c 'sed "s,GYM_GAZEBO_WORLD_CIRCUIT2C=[^;]*,'GYM_GAZEBO_WORLD_CIRCUIT2C=`pwd`/../assets/worlds/circuit2c.world'," -i ~/.bashrc'
 fi
-if [ -z "$GYM_GAZEBO_WORLD_ROUND" ]; then
-  bash -c 'echo "export GYM_GAZEBO_WORLD_ROUND="`pwd`/../assets/worlds/round.world >> ~/.bashrc'
-else
-  bash -c 'sed "s,GYM_GAZEBO_WORLD_ROUND=[^;]*,'GYM_GAZEBO_WORLD_ROUND=`pwd`/../assets/worlds/round.world'," -i ~/.bashrc'
-fi
-
-#copy altered urdf models
-cp -r ../assets/urdf/kobuki_cnn_urdf/kobuki_urdf/urdf/ catkin_ws/src/kobuki/kobuki_description
-cp -r ../assets/urdf/kobuki_cnn_urdf/turtlebot_urdf/urdf/ catkin_ws/src/turtlebot/turtlebot_description
-
-#copy laser mesh file
-cp ../assets/meshes/lidar_lite_v2_withRay.dae catkin_ws/src/kobuki/kobuki_description/meshes
 
 exec bash # reload bash
 
