@@ -27,7 +27,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        gazebo_env.GazeboEnv.__init__(self, "F1Cameracircuit_vTEST.launch")
+        gazebo_env.GazeboEnv.__init__(self, "F1Cameracircuit_v0.launch")
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -52,6 +52,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
 
     def callback(self, ros_data):
+
         print("CALLBACK!!!!: ", ros_data.height, ros_data.width)
         np_arr = np.fromstring(ros_data.data, np.uint8)
         image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)        
@@ -62,6 +63,9 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
 
     def calculate_observation(self, data):
+        
+        print(data.ranges)
+
         min_range = 0.21
         done = False
         for i, item in enumerate(data.ranges):
@@ -106,8 +110,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         data = None
         while data is None:
             try:
-                data = rospy.wait_for_message('/scan', LaserScan, timeout=5)
-                # data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=5)
+                data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
             except:
                 pass
 

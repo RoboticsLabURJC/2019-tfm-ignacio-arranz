@@ -1,3 +1,2 @@
 
 from gym_gazebo.envs.turtlebot.gazebo_circuit2c_turtlebot_camera_nn import GazeboCircuit2cTurtlebotCameraNnEnv
-from gym_gazebo.envs.turtlebot.gazebo_f1_camera import GazeboF1CameraEnv

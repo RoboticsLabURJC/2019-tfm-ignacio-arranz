@@ -224,7 +224,7 @@ def clear_monitor_files(training_dir):
 if __name__ == '__main__':
 
     #REMEMBER!: turtlebot_cnn_setup.bash must be executed.
-    env = gym.make('F1Cameracircuit_vTEST-v0')
+    env = gym.make('GazeboF1CameraEnv-v0')
     outdir = '/tmp/gazebo_gym_experiments/'
 
     print("=====================\nENV CREATED\n=====================")
@@ -302,7 +302,7 @@ if __name__ == '__main__':
 
             action = deepQ.selectAction(qValues, explorationRate)
 
-            #print(action)
+            print(action)
 
             newObservation, reward, done, info = env.step(action)
 
