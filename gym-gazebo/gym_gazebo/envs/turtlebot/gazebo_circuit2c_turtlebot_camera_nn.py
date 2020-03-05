@@ -27,11 +27,13 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        gazebo_env.GazeboEnv.__init__(self, "GazeboCircuit2cTurtlebotLidar_v0.launch")
+        gazebo_env.GazeboEnv.__init__(self, "GazeboCameraNnEnv_v0.launch")
         self.vel_pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+
+        self.my_image = None
 
         self.reward_range = (-np.inf, np.inf)
 
@@ -50,7 +52,6 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
 
 
     def calculate_observation(self, data):
-        
         min_range = 0.21
         done = False
         for i, item in enumerate(data.ranges):
@@ -96,28 +97,40 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
         while data is None:
             try:
                 data = rospy.wait_for_message('/scan', LaserScan, timeout=5)
+                # data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=5)
             except:
                 pass
 
         done = self.calculate_observation(data)
 
+        # =============
+        # === IMAGE ===
+        # =============
         image_data = None
-        success=False
+        success = False
         cv_image = None
-        while image_data is None or success is False:
-            try:
-                image_data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=5)
-                h = image_data.height
-                w = image_data.width
-                cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-                #temporal fix, check image is not corrupted
-                if not (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
-                    success = True
-                else:
-                    pass
-                    #print("/camera/rgb/image_raw ERROR, retrying")
-            except:
-                pass
+        # while image_data is None or success is False:
+        #     try:
+        #         image_data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=5)
+        #         h = image_data.height
+        #         w = image_data.width
+        #         cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+        #         # temporal fix, check image is not corrupted
+        #         if not (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
+        #             success = True
+        #         else:
+        #             pass
+        #             #print("/camera/rgb/image_raw ERROR, retrying")
+        #     except:
+        #         pass
+
+        try:
+            # rospy.Subscriber("/camera/rgb/image_raw", Image, self.callback)
+            rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
+            print("---------------->", self.my_image)
+            cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+        except:
+            pass
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
@@ -136,6 +149,9 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
         action_sum = sum(self.last50actions)
 
 
+        # =============
+        # === LASER ===
+        # =============
         '''# 21 actions
         if not done:
             # Straight reward = 5, Max angle reward = 0.5
@@ -147,7 +163,6 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
                 reward = -5
         else:
             reward = -200'''
-
 
         # Add center of the track reward
         # len(data.ranges) = 100
@@ -178,14 +193,15 @@ class GazeboCircuit2cTurtlebotCameraNnEnv(gazebo_env.GazeboEnv):
         '''x_t = skimage.color.rgb2gray(cv_image)
         x_t = skimage.transform.resize(x_t,(32,32))
         x_t = skimage.exposure.rescale_intensity(x_t,out_range=(0,255))'''
-
-        cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-        cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
+        state = None
+        if cv_image:
+            cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+            cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
         #cv_image = cv_image[(self.img_rows/20):self.img_rows-(self.img_rows/20),(self.img_cols/10):self.img_cols] #crop image
         #cv_image = skimage.exposure.rescale_intensity(cv_image,out_range=(0,255))
+            state = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
 
-
-        state = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
+            
         return state, reward, done, {}
 
         # test STACK 4
