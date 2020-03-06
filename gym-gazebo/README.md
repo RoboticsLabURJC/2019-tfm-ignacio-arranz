@@ -18,6 +18,8 @@ This work presents an extension of the initial OpenAI gym for robotics using ROS
 - [Usage](#usage)
 - [Environments](#community-maintained-environments)
 
+
+
 ## Installation
 
 Installation over Ubuntu 18.04:
@@ -89,6 +91,8 @@ pip install -e .
 cd gym-gazebo/gym_gazebo/envs/installation
 bash setup_melodic.bash
 ```
+
+
 
 ## Usage
 
