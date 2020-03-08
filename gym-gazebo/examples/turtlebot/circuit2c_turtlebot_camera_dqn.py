@@ -299,10 +299,10 @@ if __name__ == '__main__':
         # Number of timesteps
         for t in xrange(steps):
             qValues = deepQ.getQValues(observation)
-
+            
             action = deepQ.selectAction(qValues, explorationRate)
 
-            #print(action)
+            # print(action)
 
             newObservation, reward, done, info = env.step(action)
 
