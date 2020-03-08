@@ -33,7 +33,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
 
-        self.my_image = None
+        # self.my_image = None
 
         self.reward_range = (-np.inf, np.inf)
 
@@ -63,13 +63,13 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
 
     def calculate_observation(self, data):
-        
-        print(data.ranges)
-
+    
         min_range = 0.21
         done = False
         for i, item in enumerate(data.ranges):
+            print("-----> {}".format(data.ranges[i]))
             if (min_range > data.ranges[i] > 0):
+                print("COLISION. RESET")
                 done = True
         return done
 
@@ -91,17 +91,17 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.vel_pub.publish(vel_cmd)'''
 
         # 3 actions
-        if action == 0: #FORWARD
+        if action == 0:  # FORWARD
             vel_cmd = Twist()
-            vel_cmd.linear.x = 0.2
+            vel_cmd.linear.x = 2  # Default 0.2
             vel_cmd.angular.z = 0.0
             self.vel_pub.publish(vel_cmd)
-        elif action == 1: #LEFT
+        elif action == 1:  # LEFT
             vel_cmd = Twist()
             vel_cmd.linear.x = 0.05
             vel_cmd.angular.z = 0.2
             self.vel_pub.publish(vel_cmd)
-        elif action == 2: #RIGHT
+        elif action == 2:  # RIGHT
             vel_cmd = Twist()
             vel_cmd.linear.x = 0.05
             vel_cmd.angular.z = -0.2
@@ -111,6 +111,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         while data is None:
             try:
                 data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
+                print("TENGO INFORMACION DEL LASER")
             except:
                 pass
 
@@ -122,28 +123,28 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         image_data = None
         success = False
         cv_image = None
-        # while image_data is None or success is False:
-        #     try:
-        #         image_data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=5)
-        #         h = image_data.height
-        #         w = image_data.width
-        #         cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-        #         # temporal fix, check image is not corrupted
-        #         if not (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
-        #             success = True
-        #         else:
-        #             pass
-        #             #print("/camera/rgb/image_raw ERROR, retrying")
-        #     except:
-        #         pass
+        while image_data is None or success is False:
+            try:
+                image_data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=5)
+                h = image_data.height
+                w = image_data.width
+                cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+                # temporal fix, check image is not corrupted
+                if not (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
+                    success = True
+                else:
+                    pass
+                    #print("/camera/rgb/image_raw ERROR, retrying")
+            except:
+                pass
 
-        try:
-            # rospy.Subscriber("/camera/rgb/image_raw", Image, self.callback)
-            rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
-            print("---------------->", self.my_image)
-            cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-        except:
-            pass
+        # try:
+        #     # rospy.Subscriber("/camera/rgb/image_raw", Image, self.callback)
+        #     rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
+        #     # print("---------------->", self.my_image)
+        #     cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+        # except:
+        #     pass
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
@@ -199,20 +200,18 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         else:
             reward = -1
         
-        reward = -1
-
         # print("detour= "+str(center_detour)+" :: reward= "+str(reward)+" ::action="+str(action))
 
         '''x_t = skimage.color.rgb2gray(cv_image)
         x_t = skimage.transform.resize(x_t,(32,32))
         x_t = skimage.exposure.rescale_intensity(x_t,out_range=(0,255))'''
-        state = None
-        if cv_image:
-            cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-            cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
-        #cv_image = cv_image[(self.img_rows/20):self.img_rows-(self.img_rows/20),(self.img_cols/10):self.img_cols] #crop image
-        #cv_image = skimage.exposure.rescale_intensity(cv_image,out_range=(0,255))
-            state = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
+        # state = None
+        # if cv_image:
+        #     cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+        #     cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
+        cv_image = cv_image[(self.img_rows/20):self.img_rows-(self.img_rows/20),(self.img_cols/10):self.img_cols] #crop image
+        cv_image = skimage.exposure.rescale_intensity(cv_image,out_range=(0,255))
+        state = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
 
             
         return state, reward, done, {}
@@ -224,7 +223,6 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
 
     def reset(self):
-
         self.last50actions = [0] * 50 #used for looping avoidance
 
         # Resets the state of the environment and returns an initial observation.
@@ -234,7 +232,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             # Reset environment. Return the robot to origina position.
             self.reset_proxy()
         except (rospy.ServiceException) as e:
-            print ("/gazebo/reset_simulation service call failed")
+            print("/gazebo/reset_simulation service call failed")
 
         # Unpause simulation to make observation
         rospy.wait_for_service('/gazebo/unpause_physics')
@@ -242,19 +240,25 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             #resp_pause = pause.call()
             self.unpause()
         except (rospy.ServiceException) as e:
-            print ("/gazebo/unpause_physics service call failed")
+            print("/gazebo/unpause_physics service call failed")
 
         image_data = None
         success=False
         cv_image = None
         while image_data is None or success is False:
             try:
-                image_data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=5)
+                image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
                 h = image_data.height
                 w = image_data.width
+
                 cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-                #temporal fix, check image is not corrupted
-                if not (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
+
+                print(cv_image[400, 240])
+
+                # temporal fix, check image is not corrupted
+                # if (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
+                if not (cv_image[320, 240, 0]==178 and cv_image[320, 240, 1]==178 and cv_image[320, 240, 2]==178):
+                    print("SUCCESS")
                     success = True
                 else:
                     pass
@@ -267,7 +271,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             #resp_pause = pause.call()
             self.pause()
         except (rospy.ServiceException) as e:
-            print ("/gazebo/pause_physics service call failed")
+            print("/gazebo/pause_physics service call failed")
 
         '''x_t = skimage.color.rgb2gray(cv_image)
         x_t = skimage.transform.resize(x_t,(32,32))
