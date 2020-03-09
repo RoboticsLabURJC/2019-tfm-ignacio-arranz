@@ -67,9 +67,8 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         min_range = 0.21
         done = False
         for i, item in enumerate(data.ranges):
-            print("-----> {}".format(data.ranges[i]))
+            #print("-----> {}".format(data.ranges[i]))
             if (min_range > data.ranges[i] > 0):
-                print("COLISION. RESET")
                 done = True
         return done
 
@@ -93,7 +92,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # 3 actions
         if action == 0:  # FORWARD
             vel_cmd = Twist()
-            vel_cmd.linear.x = 2  # Default 0.2
+            vel_cmd.linear.x = 10  # Default 0.2 - mini test = 2
             vel_cmd.angular.z = 0.0
             self.vel_pub.publish(vel_cmd)
         elif action == 1:  # LEFT
@@ -107,6 +106,10 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             vel_cmd.angular.z = -0.2
             self.vel_pub.publish(vel_cmd)
 
+
+        # =============
+        # === LASER ===
+        # =============
         data = None
         while data is None:
             try:
@@ -125,7 +128,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         cv_image = None
         while image_data is None or success is False:
             try:
-                image_data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=5)
+                image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
                 h = image_data.height
                 w = image_data.width
                 cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
@@ -207,12 +210,11 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         x_t = skimage.exposure.rescale_intensity(x_t,out_range=(0,255))'''
         # state = None
         # if cv_image:
-        #     cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-        #     cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
-        cv_image = cv_image[(self.img_rows/20):self.img_rows-(self.img_rows/20),(self.img_cols/10):self.img_cols] #crop image
-        cv_image = skimage.exposure.rescale_intensity(cv_image,out_range=(0,255))
+        cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+        cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
+        #cv_image = cv_image[(self.img_rows/20):self.img_rows-(self.img_rows/20),(self.img_cols/10):self.img_cols] #crop image
+        #cv_image = skimage.exposure.rescale_intensity(cv_image,out_range=(0,255))
         state = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
-
             
         return state, reward, done, {}
 
@@ -226,7 +228,9 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.last50actions = [0] * 50 #used for looping avoidance
 
         # Resets the state of the environment and returns an initial observation.
+        print("\n\nREINICIANDO")
         rospy.wait_for_service('/gazebo/reset_simulation')
+        print("\n\nDONEEEEEE\n\n")
         try:
             #reset_proxy.call()
             # Reset environment. Return the robot to origina position.

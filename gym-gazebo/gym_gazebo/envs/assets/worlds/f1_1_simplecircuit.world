@@ -23,7 +23,7 @@
      <scene>
         <sky>
             <clouds>
-                <speed>12</speed>
+                <speed>30</speed>
             </clouds>
         </sky>
      </scene>
