@@ -35,47 +35,44 @@ last_vel = 0
 
 
 
-
 def processed_image(img):
     
-    img = img[220:]
-    # Convert to HSV
-    img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    #wall_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # Get the image processed
-    mask = cv2.inRange(img_proc, (1, 235, 60), (180, 255, 255))
-    # Get 3 lines from the image.
-    wall = img[12][320][0]
-    line = mask[30,:]
-    base = mask[250,:]
-        
-    try:
-        # Se calcula el centro de la línea roja en la imagen segmentada (valores a 255,255,255)
-        line_center = np.divide(np.max(np.nonzero(line)) - np.min(np.nonzero(line)), 2)
-        #base_center = np.divide(np.max(np.nonzero(base)) - np.min(np.nonzero(base)), 2)
+    """
+    Conver img to HSV. Get the image processed. Get 3 lines from the image.
+    Se calcula el centro de la línea roja en la imagen segmentada (valores a 255,255,255).
 
-        line_center = np.min(np.nonzero(line)) + line_center
-        #base_center = np.min(np.nonzero(base)) + base_center
-    except ValueError:
-        line_center = last_center_line
-        #base_center = None
-        
-    # Puntos centrales de la línea segmentada
+    """
+
+    img = img[220:]
+    img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    
+    img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
+    wall = img[12][320][0]
+    mask_1 = mask[30,:]
+    mask_2 = mask[110,:]
+    mask_3 = mask[210,:]
+    base = mask[250,:]
+
+    line_1 = np.divide(np.max(np.nonzero(mask_1)) - np.min(np.nonzero(mask_1)), 2)
+    line_1 = np.min(np.nonzero(mask_1)) + line_1
+    line_2 = np.divide(np.max(np.nonzero(mask_2)) - np.min(np.nonzero(mask_2)), 2)
+    line_2 = np.min(np.nonzero(mask_2)) + line_2
+    line_3 = np.divide(np.max(np.nonzero(mask_3)) - np.min(np.nonzero(mask_3)), 2)
+    line_3 = np.min(np.nonzero(mask_3)) + line_3
+
+    print(line_1, line_2, line_3)
+
+    #cv2.line(img, (320, 30), (320, 30), (255, 255, 255), thickness=5)
+    #cv2.line(img, (320, 110), (320, 110), (255, 255, 255), thickness=5)
+    #cv2.line(img, (320, 210), (320, 210), (255, 255, 255), thickness=5)
+
+    cv2.line(mask, (line_1, 30),  (line_1, 30),  (0, 255, 255), thickness=5)
+    cv2.line(mask, (line_2, 110), (line_2, 110), (0, 255, 255), thickness=5)
+    cv2.line(mask, (line_3, 210), (line_3, 210), (0, 255, 255), thickness=5)
+
+    # Central points
     cv2.line(img, (line_center, 30), (line_center, 30), (255, 255, 255), thickness=5)
-     
-    # Puntos centrales de la imagen (verde)
-    cv2.line(img, (320, 30),  (320, 30),  (0, 255, 0), thickness=5)
-    cv2.line(img, (320, 12),  (320, 12),  (255, 255, 0), thickness=5)
-    #cv2.line(img, (320, 250),  (320, 250),  (255, 255, 0), thickness=5)
-    
-    # Linea diferencia entre punto central - error (blanco)
-    cv2.line(img, (320, 30), (line_center, 30),  (255, 0, 0), thickness=2)
-    
-    # Telemetry
-    cv2.putText(img, str("wall: {}".format(wall)), (18, 60), font, 0.4, (255,255,255), 1)
-    cv2.putText(img, str("err: {}".format(320 - line_center)), (18, 80), font, 0.4, (255,255,255), 1)
-    cv2.putText(img, str("vel: "), (18, 100), font, 0.4, (255,255,255), 1)
-    cv2.putText(img, str("turn: "), (10, 120), font, 0.4, (255,255,255), 1)
 
     return img, line_center, wall
 
