@@ -7,6 +7,7 @@ import cv2
 import sys
 import os
 import random
+import preprocess_image
 
 from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
@@ -22,6 +23,13 @@ import skimage as skimage
 from skimage import transform, color, exposure
 from skimage.transform import rotate
 from skimage.viewer import ImageViewer
+
+
+witdh = 640
+mid = 320
+
+last_center_line = 0
+
 
 class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
@@ -51,6 +59,37 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         return [seed]
 
 
+    def processed_image(self, img):
+        
+        """
+        Conver img to HSV. Get the image processed. Get 3 lines from the image.
+
+        :parameters: input image 640x480
+        :return: x, y, z: 3 coordinates
+        """
+
+        img = img[220:]
+        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        
+        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
+        wall = img[12][320][0]
+        mask_1 = mask[30,:]
+        mask_2 = mask[110,:]
+        mask_3 = mask[210,:]
+        base = mask[250,:]
+
+        line_1 = np.divide(np.max(np.nonzero(mask_1)) - np.min(np.nonzero(mask_1)), 2)
+        line_1 = np.min(np.nonzero(mask_1)) + line_1
+        line_2 = np.divide(np.max(np.nonzero(mask_2)) - np.min(np.nonzero(mask_2)), 2)
+        line_2 = np.min(np.nonzero(mask_2)) + line_2
+        line_3 = np.divide(np.max(np.nonzero(mask_3)) - np.min(np.nonzero(mask_3)), 2)
+        line_3 = np.min(np.nonzero(mask_3)) + line_3
+
+        print(line_1, line_2, line_3)
+
+        return line_1, line_2, line_3
+
     def callback(self, ros_data):
 
         print("CALLBACK!!!!: ", ros_data.height, ros_data.width)
@@ -64,12 +103,15 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
     def calculate_observation(self, data):
     
-        min_range = 0.21
-        done = False
-        for i, item in enumerate(data.ranges):
-            #print("-----> {}".format(data.ranges[i]))
-            if (min_range > data.ranges[i] > 0):
-                done = True
+        ### LASER
+        # min_range = 0.21
+        # done = False
+        # for i, item in enumerate(data.ranges):
+        #     #print("-----> {}".format(data.ranges[i]))
+        #     if (min_range > data.ranges[i] > 0):
+        #         done = True
+        x, y, z = preprocess_image(data)
+
         return done
 
 
@@ -110,15 +152,15 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # =============
         # === LASER ===
         # =============
-        data = None
-        while data is None:
-            try:
-                data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
-                print("TENGO INFORMACION DEL LASER")
-            except:
-                pass
+        # data = None
+        # while data is None:
+        #     try:
+        #         data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
+        #         print("TENGO INFORMACION DEL LASER")
+        #     except:
+        #         pass
 
-        done = self.calculate_observation(data)
+        # done = self.calculate_observation(data)
 
         # =============
         # === IMAGE ===
@@ -140,6 +182,8 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
                     #print("/camera/rgb/image_raw ERROR, retrying")
             except:
                 pass
+
+        done = self.calculate_observation(data)
 
         # try:
         #     # rospy.Subscriber("/camera/rgb/image_raw", Image, self.callback)
