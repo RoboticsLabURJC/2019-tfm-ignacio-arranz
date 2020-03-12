@@ -7,7 +7,6 @@ import cv2
 import sys
 import os
 import random
-import preprocess_image
 
 from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
@@ -25,8 +24,12 @@ from skimage.transform import rotate
 from skimage.viewer import ImageViewer
 
 
+# Images size
 witdh = 640
 mid = 320
+
+# Maximum distance from the line
+RANGES = [200, 100, 70]
 
 last_center_line = 0
 
@@ -59,6 +62,53 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         return [seed]
 
 
+    def processed_image(self, img):
+        
+        """
+        Conver img to HSV. Get the image processed. Get 3 lines from the image.
+
+        :parameters: input image 640x480
+        :return: x, y, z: 3 coordinates
+        """
+
+        # img = img[220:]
+        # img_proc = cv2.cvtColor(img[220:], cv2.COLOR_BGR2HSV)
+        
+        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        
+        mask = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
+
+        cv2.imwrite('/home/nachoaz/Desktop/myImage.png', mask)
+
+        wall = img[12][320][0]
+        mask_1 = mask[30,:]
+        mask_2 = mask[110,:]
+        mask_3 = mask[210,:]
+        base = mask[250,:]
+
+        print(mask_1)
+        print("------------------------------------------------")
+        print(np.nonzero(mask_2))
+        print("------------------------------------------------")
+        print(np.max(np.nonzero(mask_1)))
+        print("------------------------------------------------")
+        print(np.max(np.nonzero(mask_1))- np.min(np.nonzero(mask_1)))
+        print("------------------------------------------------")
+
+        line_1 = np.divide(np.max(np.nonzero(mask_1)) - np.min(np.nonzero(mask_1)), 2)
+        line_1 = np.min(np.nonzero(mask_1)) + line_1
+        line_2 = np.divide(np.max(np.nonzero(mask_2)) - np.min(np.nonzero(mask_2)), 2)
+        line_2 = np.min(np.nonzero(mask_2)) + line_2
+        line_3 = np.divide(np.max(np.nonzero(mask_3)) - np.min(np.nonzero(mask_3)), 2)
+        line_3 = np.min(np.nonzero(mask_3)) + line_3
+
+        print(line_1, line_2, line_3)
+
+        return line_1, line_2, line_3
+
+
+
+
     def callback(self, ros_data):
 
         print("CALLBACK!!!!: ", ros_data.height, ros_data.width)
@@ -70,7 +120,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # rospy.loginfo(rospy.get_caller_id() + "I see %s", data.data)
 
 
-    def calculate_observation(self, data):
+    def calculate_observation(self, image):
     
         ### LASER
         # min_range = 0.21
@@ -79,7 +129,15 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #     #print("-----> {}".format(data.ranges[i]))
         #     if (min_range > data.ranges[i] > 0):
         #         done = True
-        x, y, z = preprocess_image(data)
+        done = False
+        print("=====================================================0")
+        #cv2.imwrite('/home/nachoaz/Desktop/myImage.png', image)
+        x, y, z = self.processed_image(image)
+
+        print("\n\n---------------------------> {}\n\n".format(x,y,z))        
+        
+        if not range[0] < x < -range[0] or not range[0] < y < -range[0] or not range[0] < z < -range[0]:
+            done = True
 
         return done
 
@@ -103,7 +161,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # 3 actions
         if action == 0:  # FORWARD
             vel_cmd = Twist()
-            vel_cmd.linear.x = 10  # Default 0.2 - mini test = 2
+            vel_cmd.linear.x = 0.2  # Default 0.2 - mini test = 2
             vel_cmd.angular.z = 0.0
             self.vel_pub.publish(vel_cmd)
         elif action == 1:  # LEFT
@@ -143,6 +201,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
                 h = image_data.height
                 w = image_data.width
                 cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+                #cv_image = processed_image(image_data)
                 # temporal fix, check image is not corrupted
                 if not (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
                     success = True
@@ -152,10 +211,10 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             except:
                 pass
 
-        done = self.calculate_observation(data)
+
+        done = self.calculate_observation(cv_image)
 
         # try:
-        #     # rospy.Subscriber("/camera/rgb/image_raw", Image, self.callback)
         #     rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
         #     # print("---------------->", self.my_image)
         #     cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
@@ -196,11 +255,11 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         # Add center of the track reward
         # len(data.ranges) = 100
-        laser_len = len(data.ranges)
-        left_sum = sum(data.ranges[laser_len-(laser_len/5):laser_len-(laser_len/10)]) #80-90
-        right_sum = sum(data.ranges[(laser_len/10):(laser_len/5)]) #10-20
+        #laser_len = len(data.ranges)
+        #left_sum = sum(data.ranges[laser_len-(laser_len/5):laser_len-(laser_len/10)]) #80-90
+        #right_sum = sum(data.ranges[(laser_len/10):(laser_len/5)]) #10-20
 
-        center_detour = abs(right_sum - left_sum)/5
+        #center_detour = abs(right_sum - left_sum)/5
 
         # ============
         # == REWARD ==
@@ -208,11 +267,12 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # 3 actions
         if not done:
             if action == 0:
-                reward = 1 / float(center_detour+1)
+                print("RECOMPENSA PARA LA ACCION 0")
             elif action_sum > 45: # L or R looping
-                reward = -0.5
+                print("RECOMPENSA PARA LA ACCION 1")
+                #reward = -0.5
             else: # L or R no looping
-                reward = 0.5 / float(center_detour+1)
+                print("RECOMPENSA PARA LA ACCION 2")
         else:
             reward = -1
         
@@ -306,37 +366,4 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #self.s_t = self.s_t.reshape(1, self.s_t.shape[0], self.s_t.shape[1], self.s_t.shape[2])
         #return self.s_t
 
-
-
-    @staticmethod
-    def processed_image(self, img):
-        
-        """
-        Conver img to HSV. Get the image processed. Get 3 lines from the image.
-
-        :parameters: input image 640x480
-        :return: x, y, z: 3 coordinates
-        """
-
-        img = img[220:]
-        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        
-        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
-        wall = img[12][320][0]
-        mask_1 = mask[30,:]
-        mask_2 = mask[110,:]
-        mask_3 = mask[210,:]
-        base = mask[250,:]
-
-        line_1 = np.divide(np.max(np.nonzero(mask_1)) - np.min(np.nonzero(mask_1)), 2)
-        line_1 = np.min(np.nonzero(mask_1)) + line_1
-        line_2 = np.divide(np.max(np.nonzero(mask_2)) - np.min(np.nonzero(mask_2)), 2)
-        line_2 = np.min(np.nonzero(mask_2)) + line_2
-        line_3 = np.divide(np.max(np.nonzero(mask_3)) - np.min(np.nonzero(mask_3)), 2)
-        line_3 = np.min(np.nonzero(mask_3)) + line_3
-
-        print(line_1, line_2, line_3)
-
-        return line_1, line_2, line_3
 
