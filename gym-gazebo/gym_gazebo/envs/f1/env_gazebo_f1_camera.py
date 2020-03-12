@@ -59,37 +59,6 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         return [seed]
 
 
-    def processed_image(self, img):
-        
-        """
-        Conver img to HSV. Get the image processed. Get 3 lines from the image.
-
-        :parameters: input image 640x480
-        :return: x, y, z: 3 coordinates
-        """
-
-        img = img[220:]
-        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        
-        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
-        wall = img[12][320][0]
-        mask_1 = mask[30,:]
-        mask_2 = mask[110,:]
-        mask_3 = mask[210,:]
-        base = mask[250,:]
-
-        line_1 = np.divide(np.max(np.nonzero(mask_1)) - np.min(np.nonzero(mask_1)), 2)
-        line_1 = np.min(np.nonzero(mask_1)) + line_1
-        line_2 = np.divide(np.max(np.nonzero(mask_2)) - np.min(np.nonzero(mask_2)), 2)
-        line_2 = np.min(np.nonzero(mask_2)) + line_2
-        line_3 = np.divide(np.max(np.nonzero(mask_3)) - np.min(np.nonzero(mask_3)), 2)
-        line_3 = np.min(np.nonzero(mask_3)) + line_3
-
-        print(line_1, line_2, line_3)
-
-        return line_1, line_2, line_3
-
     def callback(self, ros_data):
 
         print("CALLBACK!!!!: ", ros_data.height, ros_data.width)
@@ -272,9 +241,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.last50actions = [0] * 50 #used for looping avoidance
 
         # Resets the state of the environment and returns an initial observation.
-        print("\n\nREINICIANDO")
         rospy.wait_for_service('/gazebo/reset_simulation')
-        print("\n\nDONEEEEEE\n\n")
         try:
             #reset_proxy.call()
             # Reset environment. Return the robot to origina position.
@@ -291,7 +258,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             print("/gazebo/unpause_physics service call failed")
 
         image_data = None
-        success=False
+        success = False
         cv_image = None
         while image_data is None or success is False:
             try:
@@ -338,3 +305,38 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #self.s_t = np.stack((cv_image, cv_image, cv_image, cv_image), axis=0)
         #self.s_t = self.s_t.reshape(1, self.s_t.shape[0], self.s_t.shape[1], self.s_t.shape[2])
         #return self.s_t
+
+
+
+    @staticmethod
+    def processed_image(self, img):
+        
+        """
+        Conver img to HSV. Get the image processed. Get 3 lines from the image.
+
+        :parameters: input image 640x480
+        :return: x, y, z: 3 coordinates
+        """
+
+        img = img[220:]
+        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        
+        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
+        wall = img[12][320][0]
+        mask_1 = mask[30,:]
+        mask_2 = mask[110,:]
+        mask_3 = mask[210,:]
+        base = mask[250,:]
+
+        line_1 = np.divide(np.max(np.nonzero(mask_1)) - np.min(np.nonzero(mask_1)), 2)
+        line_1 = np.min(np.nonzero(mask_1)) + line_1
+        line_2 = np.divide(np.max(np.nonzero(mask_2)) - np.min(np.nonzero(mask_2)), 2)
+        line_2 = np.min(np.nonzero(mask_2)) + line_2
+        line_3 = np.divide(np.max(np.nonzero(mask_3)) - np.min(np.nonzero(mask_3)), 2)
+        line_3 = np.min(np.nonzero(mask_3)) + line_3
+
+        print(line_1, line_2, line_3)
+
+        return line_1, line_2, line_3
+
