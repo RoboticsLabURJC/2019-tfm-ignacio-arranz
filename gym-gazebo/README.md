@@ -29,6 +29,14 @@ Installation over Ubuntu 18.04:
 
 ### ROS Melodic related dependencies
 
+Full ROS package:
+
+```bash
+ sudo apt install ros-melodic-desktop-full
+```
+
+More packages:
+
 ```
 sudo apt-get install                     \
 python-pip python3-vcstool python3-pyqt4 \
