@@ -217,3 +217,5 @@ sudo apt install meshlab
 sudo apt install libsdl1.2-dev
 sudo apt-get install python3-empy
 ```
+
+- Problem: `[Err] [REST.cc:205] Error in REST request python`. Solution: Change `~/.ignition/fuel/config.yaml` as following. From: `url: https://api.ignitionfuel.org` to `url: https://api.ignitionrobotics.org`.
