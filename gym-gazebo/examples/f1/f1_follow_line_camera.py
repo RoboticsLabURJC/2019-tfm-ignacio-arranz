@@ -293,22 +293,23 @@ if __name__ == '__main__':
 
     # Start iterating from 'current epoch'.
     for epoch in xrange(current_epoch+1, epochs+1, 1):
+        
         observation = env.reset()
 
         cumulated_reward = 0
 
         # Number of timesteps
         for t in xrange(steps):
-            print("Step: {}".format(t))
+            #print("Step: {}".format(t))
             qValues = deepQ.getQValues(observation)
 
             action = deepQ.selectAction(qValues, explorationRate)
 
-            print("Action: {}".format(action))
+            #print("Action: {}".format(action))
 
             newObservation, reward, done, info = env.step(action)
 
-            print("Reward: {}".format(reward))
+            #print("Reward: {}".format(reward))
 
             deepQ.addMemory(observation, action, reward, newObservation, done)
 

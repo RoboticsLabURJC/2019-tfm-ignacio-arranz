@@ -34,6 +34,21 @@ RANGES = [200, 100, 70]
 last_center_line = 0
 
 
+class ImageF1:
+    def __init__(self):
+        self.height = 3  # Image height [pixels]
+        self.width = 3  # Image width [pixels]
+        self.timeStamp = 0 # Time stamp [s] */
+        self.format = "" # Image format string (RGB8, BGR,...)
+        self.data = np.zeros((self.height, self.width, 3), np.uint8) # The image data itself
+        self.data.shape = self.height, self.width, 3
+    def __str__(self):
+        s = "Image: {\n   height: " + str(self.height) + "\n   width: " + str(self.width)
+        s = s + "\n   format: " + self.format + "\n   timeStamp: " + str(self.timeStamp) 
+        s = s + "\n   data: " + str(self.data) + "\n}"
+
+
+
 class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
@@ -62,6 +77,17 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         return [seed]
 
 
+    def imageMsg2Image(self, img, cv_image):
+
+        image = ImageF1()
+        image.width = img.width
+        image.height = img.height
+        image.format = "RGB8"
+        image.timeStamp = img.header.stamp.secs + (img.header.stamp.nsecs *1e-9)
+        image.data = cv_image
+
+        return image
+
     def processed_image(self, img):
         
         """
@@ -71,40 +97,39 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         :return: x, y, z: 3 coordinates
         """
 
-        # img = img[220:]
-        # img_proc = cv2.cvtColor(img[220:], cv2.COLOR_BGR2HSV)
-        
         img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
+
+        #gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+        ret, mask = cv2.threshold(line_pre_proc, 240, 255, cv2.THRESH_BINARY)
+
+        line_1 = mask[260,:]
+        line_2 = mask[360,:]
+        line_3 = mask[450,:]
         
-        mask = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
+        if not np.nonzero(line_1):
+            print("NO LINE 1")
+            line_1 = -1
+        else:
+            central_1 = np.divide(np.max(np.nonzero(line_1)) - np.min(np.nonzero(line_1)), 2)
+            central_1 = np.min(np.nonzero(line_1)) + central_1
 
-        cv2.imwrite('/home/nachoaz/Desktop/myImage.png', mask)
+        if not np.nonzero(line_2):
+            print("NO LINE 2")
+            line_2 = -1
+        else:            
+            central_2 = np.divide(np.max(np.nonzero(line_2)) - np.min(np.nonzero(line_2)), 2)
+            central_2 = np.min(np.nonzero(line_2)) + central_2
 
-        wall = img[12][320][0]
-        mask_1 = mask[30,:]
-        mask_2 = mask[110,:]
-        mask_3 = mask[210,:]
-        base = mask[250,:]
+        if not np.nonzero(line_3):
+            print("NO LINE 3")
+            line_3 = -1
+        else:
+            central_3 = np.divide(np.max(np.nonzero(line_3)) - np.min(np.nonzero(line_3)), 2)
+            central_3 = np.min(np.nonzero(line_3)) + central_3
 
-        print(mask_1)
-        print("------------------------------------------------")
-        print(np.nonzero(mask_2))
-        print("------------------------------------------------")
-        print(np.max(np.nonzero(mask_1)))
-        print("------------------------------------------------")
-        print(np.max(np.nonzero(mask_1))- np.min(np.nonzero(mask_1)))
-        print("------------------------------------------------")
-
-        line_1 = np.divide(np.max(np.nonzero(mask_1)) - np.min(np.nonzero(mask_1)), 2)
-        line_1 = np.min(np.nonzero(mask_1)) + line_1
-        line_2 = np.divide(np.max(np.nonzero(mask_2)) - np.min(np.nonzero(mask_2)), 2)
-        line_2 = np.min(np.nonzero(mask_2)) + line_2
-        line_3 = np.divide(np.max(np.nonzero(mask_3)) - np.min(np.nonzero(mask_3)), 2)
-        line_3 = np.min(np.nonzero(mask_3)) + line_3
-
-        print(line_1, line_2, line_3)
-
-        return line_1, line_2, line_3
+        print(central_1, central_2, central_3)
+        return central_1, central_2, central_3
 
 
 
@@ -129,14 +154,14 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #     #print("-----> {}".format(data.ranges[i]))
         #     if (min_range > data.ranges[i] > 0):
         #         done = True
+
         done = False
-        print("=====================================================0")
         #cv2.imwrite('/home/nachoaz/Desktop/myImage.png', image)
         x, y, z = self.processed_image(image)
 
-        print("\n\n---------------------------> {}\n\n".format(x,y,z))        
+        print("---------------------------> {}, {}, {}".format(x,y,z))        
         
-        if not range[0] < x < -range[0] or not range[0] < y < -range[0] or not range[0] < z < -range[0]:
+        if RANGES[0] < x < -RANGES[0] or RANGES[1] < y < -RANGES[1] or RANGES[2] < z < -RANGES[2]:
             done = True
 
         return done
@@ -161,7 +186,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # 3 actions
         if action == 0:  # FORWARD
             vel_cmd = Twist()
-            vel_cmd.linear.x = 0.2  # Default 0.2 - mini test = 2
+            vel_cmd.linear.x = 10  # Default 0.2 - mini test = 2
             vel_cmd.angular.z = 0.0
             self.vel_pub.publish(vel_cmd)
         elif action == 1:  # LEFT
@@ -177,40 +202,41 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
 
         # =============
-        # === LASER ===
-        # =============
-        # data = None
-        # while data is None:
-        #     try:
-        #         data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
-        #         print("TENGO INFORMACION DEL LASER")
-        #     except:
-        #         pass
-
-        # done = self.calculate_observation(data)
-
-        # =============
         # === IMAGE ===
         # =============
         image_data = None
         success = False
         cv_image = None
-        while image_data is None or success is False:
-            try:
-                image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
-                h = image_data.height
-                w = image_data.width
-                cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-                #cv_image = processed_image(image_data)
-                # temporal fix, check image is not corrupted
-                if not (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
-                    success = True
-                else:
-                    pass
-                    #print("/camera/rgb/image_raw ERROR, retrying")
-            except:
-                pass
 
+        
+        # while image_data is None or success is False:
+        #     try:
+        #         print("\n\n\n EN EL PUTO BUCLE  ")
+        #         image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+        #         h = image_data.height
+        #         w = image_data.width
+        #         cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+
+        #         # temporal fix, check image is not corrupted
+        #         if not (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
+        #             success = True
+        #         else:
+        #             pass
+        #             #print("/camera/rgb/image_raw ERROR, retrying")
+        #     except:
+        #         pass
+
+        while image_data is None or success is False:
+            image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+            
+            cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+            f1_image_camera = self.imageMsg2Image(image_data, cv_image)
+
+            line_1, line_2, line_3 = self.processed_image(f1_image_camera.data)
+            
+            if line_1 != -1 and line_2 != -1 and line_3 != -1:
+                success = True
+                
 
         done = self.calculate_observation(cv_image)
 
@@ -237,42 +263,17 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         action_sum = sum(self.last50actions)
 
-
-        # =============
-        # === LASER ===
-        # =============
-        '''# 21 actions
-        if not done:
-            # Straight reward = 5, Max angle reward = 0.5
-            reward = round(15*(max_ang_speed - abs(ang_vel) +0.0335), 2)
-            # print ("Action : "+str(action)+" Ang_vel : "+str(ang_vel)+" reward="+str(reward))
-
-            if action_sum > 45: #L or R looping
-                #print("90 percent of the last 50 actions were turns. LOOPING")
-                reward = -5
-        else:
-            reward = -200'''
-
-        # Add center of the track reward
-        # len(data.ranges) = 100
-        #laser_len = len(data.ranges)
-        #left_sum = sum(data.ranges[laser_len-(laser_len/5):laser_len-(laser_len/10)]) #80-90
-        #right_sum = sum(data.ranges[(laser_len/10):(laser_len/5)]) #10-20
-
-        #center_detour = abs(right_sum - left_sum)/5
-
         # ============
         # == REWARD ==
         # ============
         # 3 actions
         if not done:
             if action == 0:
-                print("RECOMPENSA PARA LA ACCION 0")
-            elif action_sum > 45: # L or R looping
-                print("RECOMPENSA PARA LA ACCION 1")
-                #reward = -0.5
-            else: # L or R no looping
-                print("RECOMPENSA PARA LA ACCION 2")
+                reward = 0.8
+            elif action_sum > 45:  # L or R looping
+                reward = -0.5
+            else:  # L or R no looping
+                reward = 0.5
         else:
             reward = -1
         
@@ -320,6 +321,9 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         image_data = None
         success = False
         cv_image = None
+
+        
+
         while image_data is None or success is False:
             try:
                 image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
@@ -328,12 +332,10 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
                 cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
 
-                print(cv_image[400, 240])
-
+                success = True
                 # temporal fix, check image is not corrupted
-                # if (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
+                #if (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
                 if not (cv_image[320, 240, 0]==178 and cv_image[320, 240, 1]==178 and cv_image[320, 240, 2]==178):
-                    print("SUCCESS")
                     success = True
                 else:
                     pass
