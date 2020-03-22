@@ -244,7 +244,7 @@ if __name__ == '__main__':
         minibatch_size = 32
         learningRate = 1e-3#1e6
         discountFactor = 0.95
-        network_outputs = 3
+        network_outputs = 5
         memorySize = 100000
         learnStart = 10000 # timesteps to observe before training
         EXPLORE = memorySize # frames over which to anneal epsilon

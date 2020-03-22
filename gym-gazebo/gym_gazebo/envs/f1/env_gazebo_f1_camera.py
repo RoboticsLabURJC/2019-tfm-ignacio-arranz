@@ -26,13 +26,22 @@ from skimage.viewer import ImageViewer
 
 # Images size
 witdh = 640
-mid = 320
+half_image_pixel = witdh/2
 
 # Maximum distance from the line
-RANGES = [200, 100, 70]
+RANGES = [300, 250, 200]
+space_reward = [np.flip(np.linspace(0,1,RANGES[0])),
+                np.flip(np.linspace(0,1,RANGES[1])),
+                np.flip(np.linspace(0,1,RANGES[2]))]
+
+points_in_image = len(RANGES)
 
 last_center_line = 0
 
+
+### OUTPUTS
+v_lineal = [1, 2, 5]
+w_angular = [-0.2, -0.1, 0, 0.2, 0.1]
 
 class ImageF1:
     def __init__(self):
@@ -88,6 +97,18 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         return image
 
+
+    def get_line(self, image_line):
+
+        try:
+            coords = np.divide(np.max(np.nonzero(image_line)) - np.min(np.nonzero(image_line)), 2)
+            coords = np.min(np.nonzero(image_line)) + coords
+        except:
+            coords = -1
+
+        return coords
+
+
     def processed_image(self, img):
         
         """
@@ -101,37 +122,19 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
 
         #gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
-        ret, mask = cv2.threshold(line_pre_proc, 240, 255, cv2.THRESH_BINARY)
+        _, mask = cv2.threshold(line_pre_proc, 240, 255, cv2.THRESH_BINARY)
 
         line_1 = mask[260,:]
         line_2 = mask[360,:]
         line_3 = mask[450,:]
-        
-        if not np.nonzero(line_1):
-            print("NO LINE 1")
-            line_1 = -1
-        else:
-            central_1 = np.divide(np.max(np.nonzero(line_1)) - np.min(np.nonzero(line_1)), 2)
-            central_1 = np.min(np.nonzero(line_1)) + central_1
 
-        if not np.nonzero(line_2):
-            print("NO LINE 2")
-            line_2 = -1
-        else:            
-            central_2 = np.divide(np.max(np.nonzero(line_2)) - np.min(np.nonzero(line_2)), 2)
-            central_2 = np.min(np.nonzero(line_2)) + central_2
-
-        if not np.nonzero(line_3):
-            print("NO LINE 3")
-            line_3 = -1
-        else:
-            central_3 = np.divide(np.max(np.nonzero(line_3)) - np.min(np.nonzero(line_3)), 2)
-            central_3 = np.min(np.nonzero(line_3)) + central_3
+        central_1 = self.get_line(line_1)
+        central_2 = self.get_line(line_2)
+        central_3 = self.get_line(line_3)
 
         print(central_1, central_2, central_3)
+
         return central_1, central_2, central_3
-
-
 
 
     def callback(self, ros_data):
@@ -145,7 +148,19 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # rospy.loginfo(rospy.get_caller_id() + "I see %s", data.data)
 
 
-    def calculate_observation(self, image):
+    def calculate_reward(self, line_1, line_2, line_3):
+
+        reward_1 = space_reward[0][np.abs(half_image_pixel - line_1)]
+        reward_2 = space_reward[1][np.abs(half_image_pixel - line_2)]
+        reward_3 = space_reward[2][np.abs(half_image_pixel - line_3)]
+
+        reward = np.divide(np.sum([reward_1, reward_2, reward_3]), points_in_image)
+
+        #print("reward_1: {} - reward_2: {} - reward_3: {}".format(reward_1, reward_2, reward_3))
+
+        return reward
+
+    def calculate_values(self, line_1, line_2, line_3):
     
         ### LASER
         # min_range = 0.21
@@ -156,12 +171,12 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #         done = True
 
         done = False
-        #cv2.imwrite('/home/nachoaz/Desktop/myImage.png', image)
-        x, y, z = self.processed_image(image)
 
-        print("---------------------------> {}, {}, {}".format(x,y,z))        
-        
-        if RANGES[0] < x < -RANGES[0] or RANGES[1] < y < -RANGES[1] or RANGES[2] < z < -RANGES[2]:
+        if half_image_pixel-RANGES[2] < line_3 < half_image_pixel+RANGES[2]:
+            if half_image_pixel-RANGES[0] < line_1 < half_image_pixel+RANGES[0] or half_image_pixel-RANGES[1] < line_2 < half_image_pixel+RANGES[1]:
+                print("In Line")
+                pass
+        else:
             done = True
 
         return done
@@ -176,28 +191,52 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         '''# 21 actions
         max_ang_speed = 0.3
-        ang_vel = (action-10)*max_ang_speed*0.1 #from (-0.33 to + 0.33)
+        ang_vel = (np.abs(action-10))*max_ang_speed*0.1   #from (-0.33 to + 0.33)
 
         vel_cmd = Twist()
         vel_cmd.linear.x = 0.2
         vel_cmd.angular.z = ang_vel
         self.vel_pub.publish(vel_cmd)'''
 
-        # 3 actions
-        if action == 0:  # FORWARD
+        # 5 actions
+        # max_ang_speed = 1
+        # ang_vel = (action-10)*max_ang_speed*0.1 #from (-0.33 to + 0.33)
+
+        # vel_cmd = Twist()
+        # vel_cmd.linear.x = 2
+        # vel_cmd.angular.z = ang_vel
+        # self.vel_pub.publish(vel_cmd)
+ 
+        # print("ACTION: {}".format(action))
+        # print("V LINEAL: {}".format(vel_cmd.linear.x))
+        # print("W ANGULAR: {}".format(vel_cmd.angular.z))
+
+        print("Action: {}".format(action))
+        # 5 actions
+        if action == 0:
             vel_cmd = Twist()
-            vel_cmd.linear.x = 10  # Default 0.2 - mini test = 2
-            vel_cmd.angular.z = 0.0
+            vel_cmd.linear.x = v_lineal[2]
+            vel_cmd.angular.z = w_angular[2]
             self.vel_pub.publish(vel_cmd)
-        elif action == 1:  # LEFT
+        elif action == 1:
             vel_cmd = Twist()
-            vel_cmd.linear.x = 0.05
-            vel_cmd.angular.z = 0.2
+            vel_cmd.linear.x = v_lineal[0]
+            vel_cmd.angular.z = w_angular[0]
             self.vel_pub.publish(vel_cmd)
-        elif action == 2:  # RIGHT
+        elif action == 2:
             vel_cmd = Twist()
-            vel_cmd.linear.x = 0.05
-            vel_cmd.angular.z = -0.2
+            vel_cmd.linear.x = v_lineal[1]
+            vel_cmd.angular.z = w_angular[1]
+            self.vel_pub.publish(vel_cmd)
+        elif action == 3:
+            vel_cmd = Twist()
+            vel_cmd.linear.x = v_lineal[1]
+            vel_cmd.angular.z = w_angular[3]
+            self.vel_pub.publish(vel_cmd)
+        elif action == 4:
+            vel_cmd = Twist()
+            vel_cmd.linear.x = v_lineal[0]
+            vel_cmd.angular.z = w_angular[4]
             self.vel_pub.publish(vel_cmd)
 
 
@@ -207,11 +246,9 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         image_data = None
         success = False
         cv_image = None
-
         
         # while image_data is None or success is False:
         #     try:
-        #         print("\n\n\n EN EL PUTO BUCLE  ")
         #         image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
         #         h = image_data.height
         #         w = image_data.width
@@ -228,17 +265,17 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         while image_data is None or success is False:
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
-            
+            # Transform the image data from ROS to CVMat
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             f1_image_camera = self.imageMsg2Image(image_data, cv_image)
 
             line_1, line_2, line_3 = self.processed_image(f1_image_camera.data)
             
-            if line_1 != -1 and line_2 != -1 and line_3 != -1:
+            if line_1 and line_2 and line_3:
                 success = True
                 
 
-        done = self.calculate_observation(cv_image)
+        done = self.calculate_values(line_1, line_2, line_3)
 
         # try:
         #     rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
@@ -267,27 +304,22 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # == REWARD ==
         # ============
         # 3 actions
-        if not done:
-            if action == 0:
-                reward = 0.8
-            elif action_sum > 45:  # L or R looping
-                reward = -0.5
-            else:  # L or R no looping
-                reward = 0.5
+        if done:
+            reward = self.calculate_reward(line_1, line_2, line_2)
+            # if action == 0:
+            #     reward = 0.8
+            # elif action_sum > 45:  # L or R looping
+            #     reward = -0.5
+            # else:  # L or R no looping
+            #     reward = 0.5
         else:
             reward = -1
-        
+
         # print("detour= "+str(center_detour)+" :: reward= "+str(reward)+" ::action="+str(action))
 
-        '''x_t = skimage.color.rgb2gray(cv_image)
-        x_t = skimage.transform.resize(x_t,(32,32))
-        x_t = skimage.exposure.rescale_intensity(x_t,out_range=(0,255))'''
-        # state = None
-        # if cv_image:
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
         cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
-        #cv_image = cv_image[(self.img_rows/20):self.img_rows-(self.img_rows/20),(self.img_cols/10):self.img_cols] #crop image
-        #cv_image = skimage.exposure.rescale_intensity(cv_image,out_range=(0,255))
+
         state = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
             
         return state, reward, done, {}
