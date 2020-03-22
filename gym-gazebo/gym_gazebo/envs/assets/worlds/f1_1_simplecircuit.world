@@ -20,7 +20,7 @@
         <speed>12</speed>
       </clouds>
     </sky>
-    <ambient>1.0 1.0 1.0 1.0</ambient>
+    <ambient>0 0 0 1</ambient>
     <shadows>false</shadows>
     <grid>false</grid>
   </scene>
