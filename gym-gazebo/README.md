@@ -66,6 +66,12 @@ ros-melodic-navigation                   \
 ros-melodic-sophus
 ```
 
+Add the `setup.bash` file to your `.bashrc`:
+
+```bash
+echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+```
+
 ### Create a virtualenv
 
 ```bash
@@ -219,3 +225,4 @@ sudo apt-get install python3-empy
 ```
 
 - Problem: `[Err] [REST.cc:205] Error in REST request python`. Solution: Change `~/.ignition/fuel/config.yaml` as following. From: `url: https://api.ignitionfuel.org` to `url: https://api.ignitionrobotics.org`.
+- Problem: `No module named 'rospy'`. Solution: `export PATH="${PATH}:${HOME}/.local/bin/"`
