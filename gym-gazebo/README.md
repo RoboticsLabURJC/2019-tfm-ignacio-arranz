@@ -63,7 +63,8 @@ ros-melodic-eigen-conversions            \
 ros-melodic-tf2-sensor-msgs              \
 ros-melodic-pcl-ros                      \
 ros-melodic-navigation                   \
-ros-melodic-sophus
+ros-melodic-sophus                       \
+python-rviz
 ```
 
 Add the `setup.bash` file to your `.bashrc`:
@@ -161,6 +162,12 @@ Finally, launch `gzclient`.
 
 ```bash
 gzclient
+```
+
+Also, you can see the F! camera using `rviz` + `ros_topic` like this:
+
+```bash
+rosrun image_view image_view image:=/F1ROS/cameraL/image_raw
 ```
 
 ### Display reward plot
