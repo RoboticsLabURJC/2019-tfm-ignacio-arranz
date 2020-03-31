@@ -28,11 +28,17 @@ from skimage.viewer import ImageViewer
 witdh = 640
 half_image_pixel = witdh/2
 
+# Coord X ROW
+x_row = [260, 360, 450]
+
 # Maximum distance from the line
-RANGES = [300, 250, 200]
-space_reward = [np.flip(np.linspace(0,1,RANGES[0])),
-                np.flip(np.linspace(0,1,RANGES[1])),
-                np.flip(np.linspace(0,1,RANGES[2]))]
+RANGES = [280, 280, 280]  # Line 1, 2 and 3
+
+# space_reward = [np.flip(np.linspace(0,1,RANGES[0])),
+#                 np.flip(np.linspace(0,1,RANGES[1])),
+#                 np.flip(np.linspace(0,1,RANGES[2]))]
+
+space_reward = np.flip(np.linspace(0, 1, 300))
 
 points_in_image = len(RANGES)
 
@@ -40,8 +46,8 @@ last_center_line = 0
 
 
 ### OUTPUTS
-v_lineal = [1, 2, 5]
-w_angular = [-0.2, -0.1, 0, 0.2, 0.1]
+v_lineal = [3, 8, 15]
+w_angular = [-1, -0.6, 0, 1, 0.6]
 
 class ImageF1:
     def __init__(self):
@@ -98,7 +104,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         return image
 
 
-    def get_line(self, image_line):
+    def get_center(self, image_line):
 
         try:
             coords = np.divide(np.max(np.nonzero(image_line)) - np.min(np.nonzero(image_line)), 2)
@@ -124,15 +130,15 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
         _, mask = cv2.threshold(line_pre_proc, 240, 255, cv2.THRESH_BINARY)
 
-        line_1 = mask[260,:]
-        line_2 = mask[360,:]
-        line_3 = mask[450,:]
+        line_1 = mask[x_row[0],:]
+        line_2 = mask[x_row[1],:]
+        line_3 = mask[x_row[2],:]
 
-        central_1 = self.get_line(line_1)
-        central_2 = self.get_line(line_2)
-        central_3 = self.get_line(line_3)
+        central_1 = self.get_center(line_1)
+        central_2 = self.get_center(line_2)
+        central_3 = self.get_center(line_3)
 
-        print(central_1, central_2, central_3)
+        #print(central_1, central_2, central_3)
 
         return central_1, central_2, central_3
 
@@ -150,15 +156,26 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
     def calculate_reward(self, line_1, line_2, line_3):
 
-        reward_1 = space_reward[0][np.abs(half_image_pixel - line_1)]
-        reward_2 = space_reward[1][np.abs(half_image_pixel - line_2)]
-        reward_3 = space_reward[2][np.abs(half_image_pixel - line_3)]
+        #print(line_1, line_2, line_3)
+        #print(np.abs(half_image_pixel - line_3))
+        # if line_1 != -1:
+        #     reward_1 = space_reward[np.abs(half_image_pixel - line_1)]
+        # else:
+        #     reward_1 = -1
+        # if line_2 != -1:   
+        #     reward_2 = space_reward[np.abs(half_image_pixel - line_2)]
+        # else:
+        #     reward_2 = -1
 
-        reward = np.divide(np.sum([reward_1, reward_2, reward_3]), points_in_image)
+        reward_3 = space_reward[np.abs(half_image_pixel - line_3)]
+            
+
+        # reward = np.divide(np.sum([reward_1, reward_2, reward_3]), points_in_image)
 
         #print("reward_1: {} - reward_2: {} - reward_3: {}".format(reward_1, reward_2, reward_3))
 
-        return reward
+        return reward_3
+
 
     def calculate_values(self, line_1, line_2, line_3):
     
@@ -171,10 +188,11 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #         done = True
 
         done = False
-
+    
         if half_image_pixel-RANGES[2] < line_3 < half_image_pixel+RANGES[2]:
             if half_image_pixel-RANGES[0] < line_1 < half_image_pixel+RANGES[0] or half_image_pixel-RANGES[1] < line_2 < half_image_pixel+RANGES[1]:
-                print("In Line")
+                
+                #print("In Line")
                 pass
         else:
             done = True
@@ -211,7 +229,6 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # print("V LINEAL: {}".format(vel_cmd.linear.x))
         # print("W ANGULAR: {}".format(vel_cmd.angular.z))
 
-        print("Action: {}".format(action))
         # 5 actions
         if action == 0:
             vel_cmd = Twist()
@@ -274,7 +291,6 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             if line_1 and line_2 and line_3:
                 success = True
                 
-
         done = self.calculate_values(line_1, line_2, line_3)
 
         # try:
@@ -304,7 +320,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # == REWARD ==
         # ============
         # 3 actions
-        if done:
+        if not done:
             reward = self.calculate_reward(line_1, line_2, line_2)
             # if action == 0:
             #     reward = 0.8
@@ -331,9 +347,11 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
 
     def reset(self):
+
         self.last50actions = [0] * 50 #used for looping avoidance
 
         # Resets the state of the environment and returns an initial observation.
+        time.sleep(0.05)
         rospy.wait_for_service('/gazebo/reset_simulation')
         try:
             #reset_proxy.call()
@@ -399,5 +417,4 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #self.s_t = np.stack((cv_image, cv_image, cv_image, cv_image), axis=0)
         #self.s_t = self.s_t.reshape(1, self.s_t.shape[0], self.s_t.shape[1], self.s_t.shape[2])
         #return self.s_t
-
 
