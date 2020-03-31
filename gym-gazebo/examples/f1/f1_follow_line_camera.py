@@ -54,15 +54,15 @@ if __name__ == '__main__':
 
     #REMEMBER!: turtlebot_cnn_setup.bash must be executed.
     env = gym.make('GazeboF1CameraEnv-v0')
-    outdir = '/logs/f1_gym_experiments/'
+    outdir = './logs/f1_gym_experiments/'
 
     print("=====================\nENV CREATED\n=====================")
 
     continue_execution = False
     # Fill this if continue_execution=True
-    weights_path = '/logs/f1_dqn_ep200.h5'
-    monitor_path = '/logs/f1_dqn_ep200'
-    params_json  = '/logs/f1_dqn_ep200.json'
+    weights_path = './logs/f1_dqn_ep200.h5'
+    monitor_path = './logs/f1_dqn_ep200'
+    params_json  = './logs/f1_dqn_ep200.json'
 
     img_rows, img_cols, img_channels = env.img_rows, env.img_cols, env.img_channels
 
@@ -177,14 +177,14 @@ if __name__ == '__main__':
                     # SAVE SIMULATION DATA
                     if (epoch)%100==0:
                         #save model weights and monitoring data every 100 epochs.
-                        deepQ.saveModel('/tmp/turtle_c2c_dqn_ep'+str(epoch)+'.h5')
+                        deepQ.saveModel('./logs/f1_dqn_ep'+str(epoch)+'.h5')
                         env._flush()
-                        copy_tree(outdir,'/tmp/turtle_c2c_dqn_ep'+str(epoch))
+                        copy_tree(outdir,'./logs/f1_dqn_ep'+str(epoch))
                         #save simulation parameters.
                         parameter_keys = ['explorationRate','minibatch_size','learnStart','learningRate','discountFactor','memorySize','network_outputs','current_epoch','stepCounter','EXPLORE','INITIAL_EPSILON','FINAL_EPSILON','loadsim_seconds']
                         parameter_values = [explorationRate, minibatch_size, learnStart, learningRate, discountFactor, memorySize, network_outputs, epoch, stepCounter, EXPLORE, INITIAL_EPSILON, FINAL_EPSILON,s]
                         parameter_dictionary = dict(zip(parameter_keys, parameter_values))
-                        with open('/tmp/turtle_c2c_dqn_ep'+str(epoch)+'.json', 'w') as outfile:
+                        with open('./logs/f1_dqn_ep'+str(epoch)+'.json', 'w') as outfile:
                             json.dump(parameter_dictionary, outfile)
                 break
 
