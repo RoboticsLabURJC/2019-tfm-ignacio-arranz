@@ -46,6 +46,32 @@ If in the process of building the server there is a dependency problem, for exam
 
 - Error building Jekyll server: 
 
-```bash
-jekyll build --incremental --verbose
-```
+    ```bash
+    jekyll build --incremental --verbose
+    ```
+
+- Update `Rubygems`, `bundler` and `Gemfile.lock`:
+
+  ```
+  warn_for_outdated_bundler_version': You must use Bundler 2 or greater with this lockfile. (Bundler::LockfileError)
+  ```
+
+  To use Bundler 2 in your `.lockfile`:
+
+  #### Update Rubygems
+
+  ```
+  gem update --system
+  ```
+
+  #### Update bundler
+
+  ```
+  gem install bundler
+  ```
+
+  #### Update Gemfile.lock in your project
+
+  ```
+  bundler update --bundler
+  ```
