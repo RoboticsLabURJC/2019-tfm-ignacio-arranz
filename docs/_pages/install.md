@@ -7,7 +7,6 @@ sidebar:
   nav: "docs"
 ---
 
-# Requisites
 ## Installation
 
 Installation over Ubuntu 18.04:
