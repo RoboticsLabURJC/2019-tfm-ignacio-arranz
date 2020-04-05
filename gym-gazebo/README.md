@@ -18,8 +18,6 @@ This work presents an extension of the initial OpenAI gym for robotics using ROS
 - [Usage](#usage)
 - [Environments](#community-maintained-environments)
 
-
-
 ## Installation
 
 Installation over Ubuntu 18.04:
@@ -95,9 +93,8 @@ pip install -r requirements
 
 ```bash
 cd ~
-git clone https://github.com/erlerobot/gym-gazebo
+git clone https://github.com/RoboticsLabURJC/2019-tfm-ignacio-arranz.git
 cd gym-gazebo
-pip install -e .
 ```
 
 #### Run bash files, build the ROS workspace:
@@ -106,8 +103,6 @@ pip install -e .
 cd gym-gazebo/gym_gazebo/envs/installation
 bash setup_melodic.bash
 ```
-
-
 
 ## Usage
 
@@ -127,11 +122,11 @@ bash setup_melodic.bash
 
 ### Running an environment
 
-- Load the environment variables corresponding to the robot you want to launch. E.g. to load the Turtlebot:
+- Load the environment variables corresponding to the robot you want to launch. E.g. to load the Formula 1:
 
 ```bash
 cd gym_gazebo/envs/installation
-bash turtlebot_setup.bash
+bash formula1_setup.bash
 ```
 
 Note: all the setup scripts are available in `gym_gazebo/envs/installation`
@@ -139,8 +134,8 @@ Note: all the setup scripts are available in `gym_gazebo/envs/installation`
 - Run any of the examples available in `examples/`. E.g.:
 
 ```bash
-cd examples/turtlebot
-python circuit2_turtlebot_lidar_qlearn.py
+cd examples/f1
+python f1_follow_line_camera.py
 ```
 
 ### Display the simulation
@@ -149,14 +144,7 @@ To see what's going on in Gazebo during a simulation, run gazebo client. In orde
 
 1. Open a new terminal.
 2. Source the corresponding setup script, which will update the _GAZEBO_MODEL_PATH_ variable: e.g. `source setup_turtlebot.bash`
-3. Export the _GAZEBO_MASTER_URI_, provided by the [gazebo_env](https://github.com/erlerobot/gym-gazebo/blob/7c63c16532f0d8b9acf73663ba7a53f248021453/gym_gazebo/envs/gazebo_env.py#L33). You will see that variable printed at the beginning of every script execution. e.g. `export GAZEBO_MASTER_URI=http://localhost:13853`
-
-**Note**: This instructions are needed now since `gazebo_env` creates a random port for the GAZEBO_MASTER_URI, which allows to run multiple instances of the simulation at the same time. You can remove the following two lines from the environment if you are not planning to launch multiple instances:
-
-```bash
-os.environ["ROS_MASTER_URI"] = "http://localhost:"+self.port
-os.environ["GAZEBO_MASTER_URI"] = "http://localhost:"+self.port_gazebo
-```
+3. Export the _GAZEBO_MASTER_URI_, provided by the [gazebo_env](https://github.com/erlerobot/gym-gazebo/blob/7c63c16532f0d8b9acf73663ba7a53f248021453/gym_gazebo/envs/gazebo_env.py#L33). You will see that variable printed at the beginning of every script execution. e.g. `export GAZEBO_MASTER_URI=http://localhost:11311`
 
 Finally, launch `gzclient`.
 
@@ -164,13 +152,13 @@ Finally, launch `gzclient`.
 gzclient
 ```
 
-Also, you can see the F! camera using `rviz` + `ros_topic` like this:
+Also, you can see the F1 camera using `rviz` + `ros_topic` like this:
 
 ```bash
 rosrun image_view image_view image:=/F1ROS/cameraL/image_raw
 ```
 
-### Display reward plot
+### Display reward plot (under review)
 
 Display a graph showing the current reward history by running the following script:
 
@@ -191,6 +179,11 @@ We recommend creating an alias to kill those processes.
 echo "alias killgazebogym='killall -9 rosout roslaunch rosmaster gzserver nodelet robot_state_publisher gzclient'" >> ~/.bashrc
 ```
 
+You can also run a script that stops the processes, in the `scripts` folder:
+
+```bash
+gym_gazebo/scripts/stop.sh
+```
 
 ## Community-maintained environments
 
