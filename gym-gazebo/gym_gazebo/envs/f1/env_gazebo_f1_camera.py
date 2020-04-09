@@ -224,12 +224,10 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # vel_cmd.linear.x = 2
         # vel_cmd.angular.z = ang_vel
         # self.vel_pub.publish(vel_cmd)
- 
-        # print("ACTION: {}".format(action))
-        # print("V LINEAL: {}".format(vel_cmd.linear.x))
-        # print("W ANGULAR: {}".format(vel_cmd.angular.z))
 
-        # 5 actions
+        ######################
+        # ACTIONS - 5 actions - v_lineal = [3, 8, 15] - w_angular = [-1,  -0.6,  0,  1,  0.6]
+        ######################
         if action == 0:
             vel_cmd = Twist()
             vel_cmd.linear.x = v_lineal[2]
@@ -255,7 +253,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             vel_cmd.linear.x = v_lineal[0]
             vel_cmd.angular.z = w_angular[4]
             self.vel_pub.publish(vel_cmd)
-
+        #print("Action: {} - V_Lineal: {} - W_Angular: {}".format(action, vel_cmd.linear.x, vel_cmd.angular.z))
 
         # =============
         # === IMAGE ===

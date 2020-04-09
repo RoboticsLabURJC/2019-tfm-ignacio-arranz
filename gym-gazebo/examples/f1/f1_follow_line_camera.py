@@ -60,9 +60,9 @@ if __name__ == '__main__':
 
     continue_execution = False
     # Fill this if continue_execution=True
-    weights_path = './logs/f1_dqn_ep200.h5'
-    monitor_path = './logs/f1_dqn_ep200'
-    params_json  = './logs/f1_dqn_ep200.json'
+    weights_path = './logs/f1_dqn_ep9900.h5'
+    monitor_path = './logs/f1_dqn_ep9900'
+    params_json  = './logs/f1_dqn_ep9900.json'
 
     img_rows, img_cols, img_channels = env.img_rows, env.img_cols, env.img_channels
 
@@ -139,7 +139,7 @@ if __name__ == '__main__':
             newObservation, reward, done, _ = env.step(action)
 
             #print("Reward: {}".format(reward))
-
+ 
             deepQ.addMemory(observation, action, reward, newObservation, done)
 
             observation = newObservation
