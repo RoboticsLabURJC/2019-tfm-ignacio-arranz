@@ -55,14 +55,16 @@ if __name__ == '__main__':
     #REMEMBER!: turtlebot_cnn_setup.bash must be executed.
     env = gym.make('GazeboF1CameraEnv-v0')
     outdir = './logs/f1_gym_experiments/'
-
+    
+    current_file_path = os.path.abspath(os.path.dirname(__file__))
+    
     print("=====================\nENV CREATED\n=====================")
 
-    continue_execution = False
+    continue_execution = True
     # Fill this if continue_execution=True
-    weights_path = './logs/f1_dqn_ep9900.h5'
-    monitor_path = './logs/f1_dqn_ep9900'
-    params_json  = './logs/f1_dqn_ep9900.json'
+    weights_path = os.path.join(current_file_path, 'logs/f1_dqn_ep9900.h5')
+    monitor_path = os.path.join(current_file_path, 'logs/f1_dqn_ep9900')
+    params_json  = os.path.join(current_file_path, 'logs/f1_dqn_ep9900.json')
 
     img_rows, img_cols, img_channels = env.img_rows, env.img_cols, env.img_channels
 
@@ -105,7 +107,7 @@ if __name__ == '__main__':
             FINAL_EPSILON = d.get('FINAL_EPSILON')
             loadsim_seconds = d.get('loadsim_seconds')
 
-        deepQ = DeepQ(network_outputs, memorySize, discountFactor, learningRate, learnStart)
+        deepQ = DeepQ(network_outputs, memorySize, discountFactor, learningRate, learnStart, img_rows, img_cols, img_channels)
         deepQ.initNetworks()
         deepQ.loadWeights(weights_path)
 
