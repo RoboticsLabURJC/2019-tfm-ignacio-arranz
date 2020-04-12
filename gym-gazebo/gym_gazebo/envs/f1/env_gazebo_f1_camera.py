@@ -1,49 +1,45 @@
-import gym
-import rospy
-import roslaunch
-import time
-import numpy as np
-import cv2
-import sys
 import os
 import random
+import sys
+import time
 
-from gym import utils, spaces
-from gym_gazebo.envs import gazebo_env
-from geometry_msgs.msg import Twist
-from std_srvs.srv import Empty
-
-from sensor_msgs.msg import Image
-from sensor_msgs.msg import LaserScan
-from gym.utils import seeding
-from cv_bridge import CvBridge, CvBridgeError
-
+import cv2
+import gym
+import numpy as np
+import roslaunch
+import rospy
 import skimage as skimage
-from skimage import transform, color, exposure
+
+from cv_bridge import CvBridge, CvBridgeError
+from geometry_msgs.msg import Twist
+from gym import spaces, utils
+from gym.utils import seeding
+from sensor_msgs.msg import Image, LaserScan
+from skimage import color, exposure, transform
 from skimage.transform import rotate
 from skimage.viewer import ImageViewer
+from std_srvs.srv import Empty
 
+
+from gazebo_msgs.msg import ModelState 
+from gazebo_msgs.srv import GetModelState
+from gazebo_msgs.srv import SetModelState
+
+from gym_gazebo.envs import gazebo_env
 
 # Images size
 witdh = 640
-half_image_pixel = witdh/2
+center_image = witdh/2
 
 # Coord X ROW
 x_row = [260, 360, 450]
-
 # Maximum distance from the line
-RANGES = [280, 280, 280]  # Line 1, 2 and 3
+RANGES = [300, 280, 250]  # Line 1, 2 and 3
 
-# space_reward = [np.flip(np.linspace(0,1,RANGES[0])),
-#                 np.flip(np.linspace(0,1,RANGES[1])),
-#                 np.flip(np.linspace(0,1,RANGES[2]))]
-
+# Deprecated?
 space_reward = np.flip(np.linspace(0, 1, 300))
 
-points_in_image = len(RANGES)
-
 last_center_line = 0
-
 
 ### OUTPUTS
 v_lineal = [3, 8, 15]
@@ -57,6 +53,7 @@ class ImageF1:
         self.format = "" # Image format string (RGB8, BGR,...)
         self.data = np.zeros((self.height, self.width, 3), np.uint8) # The image data itself
         self.data.shape = self.height, self.width, 3
+
     def __str__(self):
         s = "Image: {\n   height: " + str(self.height) + "\n   width: " + str(self.width)
         s = s + "\n   format: " + self.format + "\n   timeStamp: " + str(self.timeStamp) 
@@ -73,18 +70,42 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-
-        # self.my_image = None
-
-        self.reward_range = (-np.inf, np.inf)
-
+        self.pose = rospy.ServiceProxy('/gazebo/default/pose/local/info', GetModelState)
+        print("-----------------------------------------")
+        print(self.pose)
+        print("-----------------------------------------")
         self._seed()
-
+        
         self.last50actions = [0] * 50
-
+        
         self.img_rows = 32
         self.img_cols = 32
         self.img_channels = 1
+
+        self.action_space = self._generate_action_space()
+
+
+    def _generate_action_space(self):
+        actions = 21
+
+        max_ang_speed = 1
+        min_lin_speed = 2
+        max_lin_speed = 12
+
+        action_space_dict = {}
+
+        for action in range(actions):    
+            if action > actions/2:
+                diff = action - round(actions/2)
+                vel_lin = max_lin_speed - diff # from (3 to 15)
+            else:
+                vel_lin = action + min_lin_speed # from (3 to 15)
+            vel_ang = round((action - actions/2) * max_ang_speed * 0.1 , 2) # from (-1 to + 1)
+            action_space_dict[action] = (vel_lin, vel_ang)
+            # print("Action: {} - V: {} - W: {}".format(action, vel_lin, vel_ang))
+        # print(action_space_dict)
+    
+        return action_space_dict
 
 
     def _seed(self, seed=None):
@@ -150,50 +171,49 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)        
         
         self.my_image = image_np
-
         # rospy.loginfo(rospy.get_caller_id() + "I see %s", data.data)
 
 
-    def calculate_reward(self, line_1, line_2, line_3):
+    def calculate_reward(self, point_1, point_2, point_3):
 
-        #print(line_1, line_2, line_3)
-        #print(np.abs(half_image_pixel - line_3))
-        # if line_1 != -1:
-        #     reward_1 = space_reward[np.abs(half_image_pixel - line_1)]
-        # else:
-        #     reward_1 = -1
-        # if line_2 != -1:   
-        #     reward_2 = space_reward[np.abs(half_image_pixel - line_2)]
-        # else:
-        #     reward_2 = -1
+        ALPHA = 0
+        BETA = 0
+        GAMMA = 1
 
-        reward_3 = space_reward[np.abs(half_image_pixel - line_3)]
-            
+        # distance:
+        error_1 = abs(center_image - point_1)
+        error_2 = abs(center_image - point_2)
+        error_3 = abs(center_image - point_3)
 
-        # reward = np.divide(np.sum([reward_1, reward_2, reward_3]), points_in_image)
-
-        #print("reward_1: {} - reward_2: {} - reward_3: {}".format(reward_1, reward_2, reward_3))
-
-        return reward_3
-
-
-    def calculate_values(self, line_1, line_2, line_3):
+        if error_1 > RANGES[0] and error_2 > RANGES[1]:
+            ALPHA = 0.1
+            BETA = 0.2
+            GAMMA = 0.7
+        elif error_1 > RANGES[0]:
+            ALPHA = 0.1
+            BETA = 0
+            GAMMA = 0.9
+        elif error_2 > RANGES[1]:
+            ALPHA = 0
+            BETA = 0.1
+            GAMMA = 0.9
     
-        ### LASER
-        # min_range = 0.21
-        # done = False
-        # for i, item in enumerate(data.ranges):
-        #     #print("-----> {}".format(data.ranges[i]))
-        #     if (min_range > data.ranges[i] > 0):
-        #         done = True
+        # print(point_1, point_2, point_3)
+        
+        d = ALPHA * np.true_divide(error_1, center_image) + BETA * np.true_divide(error_2, center_image) + GAMMA * np.true_divide(error_3, center_image)
+
+        reward = np.round(np.exp(-d), 4)
+
+        return reward
+
+
+    def calculate_values(self, point_1, point_2, point_3):
 
         done = False
     
-        if half_image_pixel-RANGES[2] < line_3 < half_image_pixel+RANGES[2]:
-            if half_image_pixel-RANGES[0] < line_1 < half_image_pixel+RANGES[0] or half_image_pixel-RANGES[1] < line_2 < half_image_pixel+RANGES[1]:
-                
-                #print("In Line")
-                pass
+        if center_image-RANGES[2] < point_3 < center_image+RANGES[2]:
+            if center_image-RANGES[0] < point_1 < center_image+RANGES[0] or center_image-RANGES[1] < point_2 < center_image+RANGES[1]:
+                pass # In Line
         else:
             done = True
 
@@ -207,53 +227,15 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         except (rospy.ServiceException) as e:
             print ("/gazebo/unpause_physics service call failed")
 
-        '''# 21 actions
-        max_ang_speed = 0.3
-        ang_vel = (np.abs(action-10))*max_ang_speed*0.1   #from (-0.33 to + 0.33)
-
+        ######################
+        # ACTIONS - 21 actions
+        ######################
         vel_cmd = Twist()
-        vel_cmd.linear.x = 0.2
-        vel_cmd.angular.z = ang_vel
-        self.vel_pub.publish(vel_cmd)'''
+        vel_cmd.linear.x = self.action_space[action][0]
+        vel_cmd.angular.z = self.action_space[action][1]
+        self.vel_pub.publish(vel_cmd)
 
-        # 5 actions
-        # max_ang_speed = 1
-        # ang_vel = (action-10)*max_ang_speed*0.1 #from (-0.33 to + 0.33)
-
-        # vel_cmd = Twist()
-        # vel_cmd.linear.x = 2
-        # vel_cmd.angular.z = ang_vel
-        # self.vel_pub.publish(vel_cmd)
-
-        ######################
-        # ACTIONS - 5 actions - v_lineal = [3, 8, 15] - w_angular = [-1,  -0.6,  0,  1,  0.6]
-        ######################
-        if action == 0:
-            vel_cmd = Twist()
-            vel_cmd.linear.x = v_lineal[2]
-            vel_cmd.angular.z = w_angular[2]
-            self.vel_pub.publish(vel_cmd)
-        elif action == 1:
-            vel_cmd = Twist()
-            vel_cmd.linear.x = v_lineal[0]
-            vel_cmd.angular.z = w_angular[0]
-            self.vel_pub.publish(vel_cmd)
-        elif action == 2:
-            vel_cmd = Twist()
-            vel_cmd.linear.x = v_lineal[1]
-            vel_cmd.angular.z = w_angular[1]
-            self.vel_pub.publish(vel_cmd)
-        elif action == 3:
-            vel_cmd = Twist()
-            vel_cmd.linear.x = v_lineal[1]
-            vel_cmd.angular.z = w_angular[3]
-            self.vel_pub.publish(vel_cmd)
-        elif action == 4:
-            vel_cmd = Twist()
-            vel_cmd.linear.x = v_lineal[0]
-            vel_cmd.angular.z = w_angular[4]
-            self.vel_pub.publish(vel_cmd)
-        #print("Action: {} - V_Lineal: {} - W_Angular: {}".format(action, vel_cmd.linear.x, vel_cmd.angular.z))
+        # print("Action: {} - V_Lineal: {} - W_Angular: {}".format(action, vel_cmd.linear.x, vel_cmd.angular.z))
 
         # =============
         # === IMAGE ===
@@ -261,22 +243,6 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         image_data = None
         success = False
         cv_image = None
-        
-        # while image_data is None or success is False:
-        #     try:
-        #         image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
-        #         h = image_data.height
-        #         w = image_data.width
-        #         cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-
-        #         # temporal fix, check image is not corrupted
-        #         if not (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
-        #             success = True
-        #         else:
-        #             pass
-        #             #print("/camera/rgb/image_raw ERROR, retrying")
-        #     except:
-        #         pass
 
         while image_data is None or success is False:
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
@@ -284,19 +250,12 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             f1_image_camera = self.imageMsg2Image(image_data, cv_image)
 
-            line_1, line_2, line_3 = self.processed_image(f1_image_camera.data)
+            point_1, point_2, point_3 = self.processed_image(f1_image_camera.data)
             
-            if line_1 and line_2 and line_3:
+            if point_1 and point_2 and point_3:
                 success = True
                 
-        done = self.calculate_values(line_1, line_2, line_3)
-
-        # try:
-        #     rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
-        #     # print("---------------->", self.my_image)
-        #     cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-        # except:
-        #     pass
+        done = self.calculate_values(point_1, point_2, point_3)
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
@@ -319,7 +278,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # ============
         # 3 actions
         if not done:
-            reward = self.calculate_reward(line_1, line_2, line_2)
+            reward = self.calculate_reward(point_1, point_2, point_3)
             # if action == 0:
             #     reward = 0.8
             # elif action_sum > 45:  # L or R looping
@@ -415,4 +374,3 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #self.s_t = np.stack((cv_image, cv_image, cv_image, cv_image), axis=0)
         #self.s_t = self.s_t.reshape(1, self.s_t.shape[0], self.s_t.shape[1], self.s_t.shape[2])
         #return self.s_t
-
