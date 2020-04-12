@@ -60,7 +60,7 @@ if __name__ == '__main__':
     
     print("=====================\nENV CREATED\n=====================")
 
-    continue_execution = True
+    continue_execution = False
     # Fill this if continue_execution=True
     weights_path = os.path.join(current_file_path, 'logs/f1_dqn_ep9900.h5')
     monitor_path = os.path.join(current_file_path, 'logs/f1_dqn_ep9900')
@@ -75,7 +75,7 @@ if __name__ == '__main__':
         minibatch_size = 32
         learningRate = 1e-3#1e6
         discountFactor = 0.95
-        network_outputs = 5
+        network_outputs = 21 # default = 5
         memorySize = 100000
         learnStart = 10000 # timesteps to observe before training (default: 10.000)
         EXPLORE = memorySize # frames over which to anneal epsilon
