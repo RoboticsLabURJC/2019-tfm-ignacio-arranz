@@ -125,7 +125,7 @@ if __name__ == '__main__':
     # Start iterating from 'current epoch'.
     for epoch in xrange(current_epoch+1, epochs+1, 1):
         
-        observation = env.reset()
+        observation, pos = env.reset()
 
         cumulated_reward = 0
 
@@ -172,9 +172,10 @@ if __name__ == '__main__':
                 m, s = divmod(int(time.time() - start_time + loadsim_seconds), 60)
                 h, m = divmod(m, 60)
                 if not last100Filled:
-                    print("EP "+str(epoch)+" - {} steps".format(t+1)+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
+                    print("EP: {} - Steps: {} - CReward: {} - Eps: {} - Pos: {} - Time: {}:{}:{} ".format(epoch, t+1, round(cumulated_reward, 2), round(explorationRate, 2), pos[:3], h, m, s))
+
                 else:
-                    print("EP "+str(epoch)+" - {} steps".format(t+1)+" - last100 C_Rewards : "+str(int((sum(last100Rewards)/len(last100Rewards))))+" - CReward: "+str(round(cumulated_reward, 2))+"  Eps="+str(round(explorationRate, 2))+"  Time: %d:%02d:%02d" % (h, m, s))
+                    print("EP: {} - Steps: {} - last100 C_Rewards: {} - CReward: {} - Eps={} - Pos: {} Time: {}:{}:{}".format(epoch, t+1, sum(last100Rewards)/len(last100Rewards), round(cumulated_reward, 2), round(explorationRate, 2), pos[:3], h, m, s))
                     1
                     # SAVE SIMULATION DATA
                     if (epoch)%100==0:

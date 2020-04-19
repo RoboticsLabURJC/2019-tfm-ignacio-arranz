@@ -7,10 +7,13 @@ import cv2
 import gym
 import numpy as np
 import roslaunch
+import rospkg
 import rospy
 import skimage as skimage
 
 from cv_bridge import CvBridge, CvBridgeError
+from gazebo_msgs.msg import ModelState
+from gazebo_msgs.srv import GetModelState, SetModelState
 from geometry_msgs.msg import Twist
 from gym import spaces, utils
 from gym.utils import seeding
@@ -19,11 +22,6 @@ from skimage import color, exposure, transform
 from skimage.transform import rotate
 from skimage.viewer import ImageViewer
 from std_srvs.srv import Empty
-
-
-from gazebo_msgs.msg import ModelState 
-from gazebo_msgs.srv import GetModelState
-from gazebo_msgs.srv import SetModelState
 
 from gym_gazebo.envs import gazebo_env
 
@@ -44,6 +42,10 @@ last_center_line = 0
 ### OUTPUTS
 v_lineal = [3, 8, 15]
 w_angular = [-1, -0.6, 0, 1, 0.6]
+
+### POSES
+positions = [(53.462, -38.9884, 0.004, 0, 0, 1.57, -1.57),
+             (53.462, -10.734, 0.004, 0, 0, 1.57, -1.57)]
 
 class ImageF1:
     def __init__(self):
@@ -70,10 +72,9 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-        self.pose = rospy.ServiceProxy('/gazebo/default/pose/local/info', GetModelState)
-        print("-----------------------------------------")
-        print(self.pose)
-        print("-----------------------------------------")
+        self.state_msg = ModelState()
+        self.state_msg.model_name = 'f1_renault'        
+
         self._seed()
         
         self.last50actions = [0] * 50
@@ -88,7 +89,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
     def _generate_action_space(self):
         actions = 21
 
-        max_ang_speed = 1
+        max_ang_speed = 1.5
         min_lin_speed = 2
         max_lin_speed = 12
 
@@ -111,6 +112,28 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
+
+
+    def set_new_pose(self, new_pos):
+
+        # (pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
+        self.state_msg.pose.position.x = new_pos[0]
+        self.state_msg.pose.position.y = new_pos[1]
+        self.state_msg.pose.position.z = new_pos[2]
+        self.state_msg.pose.orientation.x = new_pos[3]
+        self.state_msg.pose.orientation.y = new_pos[4]
+        self.state_msg.pose.orientation.z = new_pos[5]
+        self.state_msg.pose.orientation.w = new_pos[6]
+
+        rospy.wait_for_service('/gazebo/set_model_state')
+
+        try:
+            set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
+            # resp = set_state(self.state_msg)
+        except rospy.ServiceException, e:
+            print("Service call failed: %s") % e
+
+
 
 
     def imageMsg2Image(self, img, cv_image):
@@ -279,12 +302,6 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # 3 actions
         if not done:
             reward = self.calculate_reward(point_1, point_2, point_3)
-            # if action == 0:
-            #     reward = 0.8
-            # elif action_sum > 45:  # L or R looping
-            #     reward = -0.5
-            # else:  # L or R no looping
-            #     reward = 0.5
         else:
             reward = -1
 
@@ -305,11 +322,19 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
     def reset(self):
 
-        self.last50actions = [0] * 50 #used for looping avoidance
+        self.last50actions = [0] * 50  # used for looping avoidance
 
         # Resets the state of the environment and returns an initial observation.
-        time.sleep(0.05)
-        rospy.wait_for_service('/gazebo/reset_simulation')
+        time.sleep(0.1)
+        #rospy.wait_for_service('/gazebo/reset_simulation')
+        
+    
+        pos = random.choice(positions)
+        self.set_new_pose(pos)
+        
+        print(pos)
+
+
         try:
             #reset_proxy.call()
             # Reset environment. Return the robot to origina position.
@@ -328,27 +353,31 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         image_data = None
         success = False
         cv_image = None
-
         
+        # while image_data is None or success is False:
+        #     try:
+        #         image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+        #         h = image_data.height
+        #         w = image_data.width
+
+        #         cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+
+        #         success = True
+        #         if not (cv_image[320, 240, 0]==178 and cv_image[320, 240, 1]==178 and cv_image[320, 240, 2]==178):
+        #             success = True
+        #     except:
+        #         pass
 
         while image_data is None or success is False:
-            try:
-                image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
-                h = image_data.height
-                w = image_data.width
+            image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+            # Transform the image data from ROS to CVMat
+            cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+            f1_image_camera = self.imageMsg2Image(image_data, cv_image)
 
-                cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-
+            point_1, point_2, point_3 = self.processed_image(f1_image_camera.data)
+            
+            if point_1 and point_2 and point_3:
                 success = True
-                # temporal fix, check image is not corrupted
-                #if (cv_image[h//2,w//2,0]==178 and cv_image[h//2,w//2,1]==178 and cv_image[h//2,w//2,2]==178):
-                if not (cv_image[320, 240, 0]==178 and cv_image[320, 240, 1]==178 and cv_image[320, 240, 2]==178):
-                    success = True
-                else:
-                    pass
-                    #print("/camera/rgb/image_raw ERROR, retrying")
-            except:
-                pass
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
@@ -357,10 +386,6 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         except (rospy.ServiceException) as e:
             print("/gazebo/pause_physics service call failed")
 
-        '''x_t = skimage.color.rgb2gray(cv_image)
-        x_t = skimage.transform.resize(x_t,(32,32))
-        x_t = skimage.exposure.rescale_intensity(x_t,out_range=(0,255))'''
-
 
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
         cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
@@ -368,7 +393,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #cv_image = skimage.exposure.rescale_intensity(cv_image,out_range=(0,255))
 
         state = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
-        return state
+        return state, pos
 
         # test STACK 4
         #self.s_t = np.stack((cv_image, cv_image, cv_image, cv_image), axis=0)
