@@ -62,8 +62,43 @@ class ImageF1:
         s = s + "\n   data: " + str(self.data) + "\n}"
 
 
-
 class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
+    """
+    Description:
+        A Formula 1 car has to complete one lap of a circuit following a red line painted on the ground. Initially it will
+        not use the complete information of the image but some coordinates that refer to the error made with respect to the
+        center of the line.
+    Source:
+        Master's final project at King Juan Carlos University. JdeRobot. BehaviorSuite. Author: Ignacio Arranz
+    Observation: 
+        Type: Array
+        Num	Observation               Min   Max
+        ----------------------------------------
+        0	Vel. Lineal (m/s)         1     10
+        1	Vel. Angular (rad/seg)   -2     2
+        2	Error 1                  -300   300
+        3	Error 2                  -280   280
+        4   Error 3                  -250   250
+    Actions:
+        Type: Dict
+        Num	Action
+        ----------
+        0:   -2
+        1:   -1
+        2:    0
+        3:    1
+        4:    2
+    Reward:
+        The reward depends on the set of the 3 errors. As long as the lowest point is within range, there will still
+        be steps. If errors 1 and 2 fall outside the range, a joint but weighted reward will be posted, always giving
+        more importance to the lower one.
+    Starting State:
+        The observations will start from different points in order to prevent you from performing the same actions
+        initially. This variability will enrich the set of state/actions.
+    Episode Termination:
+        The episode ends when the lower error is outside the established range (see table in the observation space).
+    """
+
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
@@ -83,7 +118,23 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.img_cols = 32
         self.img_channels = 1
 
-        self.action_space = self._generate_action_space()
+        self.action_space = self._generate_simple_action_space()
+
+
+    def _generate_simple_action_space(self):
+        actions = 5
+
+        max_ang_speed = 2
+
+        action_space = {}
+
+        for action in range(actions):    
+            if action > actions/2:
+                diff = action - round(actions/2)
+            vel_ang = round((action - actions/2) * max_ang_speed * 0.1 , 2) # from (-1 to + 1)
+            action_space[action] = vel_ang
+    
+        return action_space
 
 
     def _generate_action_space(self):
@@ -254,7 +305,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # ACTIONS - 21 actions
         ######################
         vel_cmd = Twist()
-        vel_cmd.linear.x = self.action_space[action][0]
+        vel_cmd.linear.x = 2 # self.action_space[action][0]
         vel_cmd.angular.z = self.action_space[action][1]
         self.vel_pub.publish(vel_cmd)
 
@@ -299,20 +350,23 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # ============
         # == REWARD ==
         # ============
-        # 3 actions
+        # 21 actions
         if not done:
             reward = self.calculate_reward(point_1, point_2, point_3)
         else:
             reward = -1
 
-        # print("detour= "+str(center_detour)+" :: reward= "+str(reward)+" ::action="+str(action))
-
+        # When we use full image as input, the observation will be an image.
+        # Meanwhile, our observation will be a obsevation_space value.
+        '''
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
         cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
-
         state = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
-            
-        return state, reward, done, {}
+        '''
+        
+        #   
+        # OpenAI standard return: observation, reward, done, info
+        return state, reward, done, {}  
 
         # test STACK 4
         #cv_image = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
@@ -326,13 +380,14 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         # Resets the state of the environment and returns an initial observation.
         time.sleep(0.1)
-        #rospy.wait_for_service('/gazebo/reset_simulation')
+        rospy.wait_for_service('/gazebo/reset_simulation')
         
     
-        pos = random.choice(positions)
-        self.set_new_pose(pos)
+        pos = 0
+        # pos = random.choice(positions)
+        # self.set_new_pose(pos)
         
-        print(pos)
+        # print(pos)
 
 
         try:
