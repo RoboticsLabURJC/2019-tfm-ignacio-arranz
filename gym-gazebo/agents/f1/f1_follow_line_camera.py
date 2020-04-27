@@ -75,7 +75,7 @@ if __name__ == '__main__':
         minibatch_size = 32
         learningRate = 1e-3#1e6
         discountFactor = 0.95
-        network_outputs = 21 # default = 5
+        network_outputs = 5
         memorySize = 100000
         learnStart = 10000 # timesteps to observe before training (default: 10.000)
         EXPLORE = memorySize # frames over which to anneal epsilon
@@ -131,7 +131,7 @@ if __name__ == '__main__':
 
         # Number of timesteps
         for t in xrange(steps):
-            #print("Step: {}".format(t))
+            # print("Step: {}".format(t))
             qValues = deepQ.getQValues(observation)
 
             action = deepQ.selectAction(qValues, explorationRate)
@@ -139,7 +139,7 @@ if __name__ == '__main__':
             # print("Action: {}".format(action))
 
             newObservation, reward, done, _ = env.step(action)
-
+            
             #print("Reward: {}".format(reward))
  
             deepQ.addMemory(observation, action, reward, newObservation, done)
@@ -172,11 +172,10 @@ if __name__ == '__main__':
                 m, s = divmod(int(time.time() - start_time + loadsim_seconds), 60)
                 h, m = divmod(m, 60)
                 if not last100Filled:
-                    print("EP: {} - Steps: {} - CReward: {} - Eps: {} - Pos: {} - Time: {}:{}:{} ".format(epoch, t+1, round(cumulated_reward, 2), round(explorationRate, 2), pos[:3], h, m, s))
-
+                    print("EP: {} - Steps: {} - CReward: {} - Eps: {} - Time: {}:{}:{} ".format(epoch, t+1, round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
                 else:
-                    print("EP: {} - Steps: {} - last100 C_Rewards: {} - CReward: {} - Eps={} - Pos: {} Time: {}:{}:{}".format(epoch, t+1, sum(last100Rewards)/len(last100Rewards), round(cumulated_reward, 2), round(explorationRate, 2), pos[:3], h, m, s))
-                    1
+                    print("EP: {} - Steps: {} - last100 C_Rewards: {} - CReward: {} - Eps={} - Time: {}:{}:{}".format(epoch, t+1, sum(last100Rewards)/len(last100Rewards), round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
+                    
                     # SAVE SIMULATION DATA
                     if (epoch)%100==0:
                         #save model weights and monitoring data every 100 epochs.
@@ -189,6 +188,7 @@ if __name__ == '__main__':
                         parameter_dictionary = dict(zip(parameter_keys, parameter_values))
                         with open('./logs/f1_dqn_ep'+str(epoch)+'.json', 'w') as outfile:
                             json.dump(parameter_dictionary, outfile)
+
                 break
 
             stepCounter += 1
