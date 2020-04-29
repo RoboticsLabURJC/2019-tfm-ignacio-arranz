@@ -11,8 +11,8 @@
   </include>
   <include>
       <uri>model://f1_renault</uri>
-    <!-- default: 53.462 -10.734 0.004 0 0 -1.57  -->
-    <pose>53.462 -38.9884 0.004 0 0 -1.57</pose> 
+      <!-- default: 53.462 -10.734 0.004 0 0 -1.57 -->
+    <pose>53.462 -41.9884 0.004 0 0 -1.57</pose> 
   </include>
 
   <scene>
