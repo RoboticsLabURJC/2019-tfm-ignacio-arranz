@@ -172,9 +172,9 @@ if __name__ == '__main__':
                 m, s = divmod(int(time.time() - start_time + loadsim_seconds), 60)
                 h, m = divmod(m, 60)
                 if not last100Filled:
-                    print("EP: {} - Steps: {} - CReward: {} - Eps: {} - Time: {}:{}:{} ".format(epoch, t+1, round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
+                    print("EP: {} - Steps: {} - Position: {} - CReward: {} - Eps: {} - Time: {}:{}:{} ".format(epoch, t+1, pos, round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
                 else:
-                    print("EP: {} - Steps: {} - last100 C_Rewards: {} - CReward: {} - Eps={} - Time: {}:{}:{}".format(epoch, t+1, sum(last100Rewards)/len(last100Rewards), round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
+                    print("EP: {} - Steps: {} - Position: {} -last100 C_Rewards: {} - CReward: {} - Eps={} - Time: {}:{}:{}".format(epoch, t+1, pos, sum(last100Rewards)/len(last100Rewards), round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
                     
                     # SAVE SIMULATION DATA
                     if (epoch)%100==0:

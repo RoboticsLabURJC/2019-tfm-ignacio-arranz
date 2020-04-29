@@ -25,6 +25,7 @@ from std_srvs.srv import Empty
 
 from gym_gazebo.envs import gazebo_env
 
+
 # Images size
 witdh = 640
 center_image = witdh/2
@@ -46,8 +47,11 @@ v_lineal = [3, 8, 15]
 w_angular = [-1, -0.6, 0, 1, 0.6]
 
 ### POSES
-positions = [(53.462, -38.9884, 0.004, 0, 0, 1.57, -1.57),
-             (53.462, -10.734, 0.004, 0, 0, 1.57, -1.57)]
+positions = [(0, 53.462, -41.988, 0.004, 0, 0, 1.57, -1.57),
+             (1, 53.462, -8.734, 0.004, 0, 0, 1.57, -1.57),
+             (2, 39.712, -30.741, 0.004, 0, 0, 1.56, 1.56),
+             (3, -7.894, -39.051, 0.004, 0, 0.01, -2.021, 2.021),
+             (4, 20.043, 37.130, 0.003, 0, 0.103, -1.4383, -1.4383)]
 
 class ImageF1:
     def __init__(self):
@@ -110,9 +114,10 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
 
-        self.state_msg = ModelState()
-        self.set_state = rospy.ServiceProxy("/gazebo/set_model_state", SetModelState)
-        self.state_msg.model_name = 'f1_renault'        
+        # self.state_msg = ModelState()
+        # self.set_state = rospy.ServiceProxy("/gazebo/set_model_state", SetModelState)
+        # self.state_msg.model_name = 'f1_renault'
+
         self.reward_range = (-np.inf, np.inf)
         self._seed()
         
@@ -121,6 +126,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.img_rows = 32
         self.img_cols = 32
         self.img_channels = 1
+
 
         self.action_space = self._generate_simple_action_space()
 
@@ -170,23 +176,31 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
 
     def set_new_pose(self, new_pos):
+        """
+        (pos_number, pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
+        """
 
-        # (pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
-        self.state_msg.pose.position.x = new_pos[0]
-        self.state_msg.pose.position.y = new_pos[1]
-        self.state_msg.pose.position.z = new_pos[2]
-        self.state_msg.pose.orientation.x = new_pos[3]
-        self.state_msg.pose.orientation.y = new_pos[4]
-        self.state_msg.pose.orientation.z = new_pos[5]
-        self.state_msg.pose.orientation.w = new_pos[6]
+        pos_number = positions[0]
+
+        state = ModelState()
+        state.model_name = "f1_renault"
+        state.pose.position.x = positions[new_pos][1]
+        state.pose.position.y = positions[new_pos][2]
+        state.pose.position.z = positions[new_pos][3]
+        state.pose.orientation.x = positions[new_pos][4]
+        state.pose.orientation.y = positions[new_pos][5]
+        state.pose.orientation.z = positions[new_pos][6]
+        state.pose.orientation.w = positions[new_pos][7]
 
         rospy.wait_for_service('/gazebo/set_model_state')
 
         try:
             set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
-            # resp = set_state(self.state_msg)
+            resp = set_state(state)
         except rospy.ServiceException, e:
             print("Service call failed: %s") % e
+
+        return pos_number
 
 
     def imageMsg2Image(self, img, cv_image):
@@ -390,23 +404,21 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # ========
         # = POSE =
         # ========
-        pos = 0
-        # pos = random.choice(positions)
-        # self.set_new_pose(pos)        
-        # print(pos)
+        pos = random.choice(list(enumerate(positions)))[0]
+        self.set_new_pose(pos)
         
         # =========
         # = RESET =
         # =========
         # Resets the state of the environment and returns an initial observation.
         time.sleep(0.05)
-        rospy.wait_for_service('/gazebo/reset_simulation')
-        try:
-            #reset_proxy.call()
-            # Reset environment. Return the robot to original position.
-            self.reset_proxy()
-        except (rospy.ServiceException) as e:
-            print("/gazebo/reset_simulation service call failed")
+        # rospy.wait_for_service('/gazebo/reset_simulation')
+        # try:
+        #     #reset_proxy.call()
+        #     # Reset environment. Return the robot to original position.
+        #     self.reset_proxy()
+        # except (rospy.ServiceException) as e:
+        #     print("/gazebo/reset_simulation service call failed")
 
         # Unpause simulation to make observation
         rospy.wait_for_service('/gazebo/unpause_physics')
@@ -430,6 +442,10 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
                 success = True
             else:
                 pass
+
+
+
+
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
