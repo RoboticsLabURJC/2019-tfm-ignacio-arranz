@@ -42,6 +42,7 @@ space_reward = np.flip(np.linspace(0, 1, 300))
 
 last_center_line = 0
 
+font = cv2.FONT_HERSHEY_COMPLEX
 ### OUTPUTS
 v_lineal = [3, 8, 15]
 w_angular = [-1, -0.6, 0, 1, 0.6]
@@ -118,6 +119,8 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # self.set_state = rospy.ServiceProxy("/gazebo/set_model_state", SetModelState)
         # self.state_msg.model_name = 'f1_renault'
 
+        self.position = None
+
         self.reward_range = (-np.inf, np.inf)
         self._seed()
         
@@ -127,6 +130,8 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.img_cols = 32
         self.img_channels = 1
 
+        #self.bridge = CvBridge()
+        #self.image_sub = rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
 
         self.action_space = self._generate_simple_action_space()
 
@@ -173,6 +178,27 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
+
+    def show_telemetry(self, img, point_1, point_2, point_3, action, reward, w_angular):        
+        # Puntos centrales de la imagen (verde)
+        cv2.line(img, (320, x_row[0]), (320, x_row[0]), (255,255,0), thickness=5)
+        cv2.line(img, (320, x_row[1]), (320, x_row[1]), (255,255,0), thickness=5)
+        cv2.line(img, (320, x_row[2]), (320, x_row[2]), (255,255,0), thickness=5)
+        # Linea diferencia entre punto central - error (blanco)
+        cv2.line(img, (center_image, x_row[0]), (point_1, x_row[0]), (255, 255, 255), thickness=2)
+        cv2.line(img, (center_image, x_row[1]), (point_2, x_row[1]), (255, 255, 255), thickness=2)
+        cv2.line(img, (center_image, x_row[2]), (point_3, x_row[2]), (255, 255, 255), thickness=2)
+        # Telemetry
+        cv2.putText(img, str("action: {}".format(action)), (18, 280), font, 0.4, (255,255,255), 1)
+        cv2.putText(img, str("w ang: {}".format(w_angular)), (18, 300), font, 0.4, (255,255,255), 1)
+        cv2.putText(img, str("reward: {}".format(reward)), (18, 320), font, 0.4, (255,255,255), 1)
+        cv2.putText(img, str("err1: {}".format(center_image - point_1)), (18, 340), font, 0.4, (255,255,255), 1)
+        cv2.putText(img, str("err2: {}".format(center_image - point_2)), (18, 360), font, 0.4, (255,255,255), 1)
+        cv2.putText(img, str("err3: {}".format(center_image - point_3)), (18, 380), font, 0.4, (255,255,255), 1)
+        cv2.putText(img, str("pose: {}".format(self.position)), (18, 400), font, 0.4, (255,255,255), 1)
+                
+        cv2.imshow("Image window", img)
+        cv2.waitKey(3)
 
 
     def set_new_pose(self, new_pos):
@@ -254,14 +280,34 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         return central_1, central_2, central_3
 
 
-    def callback(self, ros_data):
+    def callback(self, data):
 
-        print("CALLBACK!!!!: ", ros_data.height, ros_data.width)
-        np_arr = np.fromstring(ros_data.data, np.uint8)
-        image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)        
+        #print("CALLBACK!!!!: ", ros_data.height, ros_data.width)
+        #np_arr = np.fromstring(ros_data.data, np.uint8)
+        #image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)        
         
-        self.my_image = image_np
+        #self.my_image = image_np
         # rospy.loginfo(rospy.get_caller_id() + "I see %s", data.data)
+
+        try:
+           cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+        except CvBridgeError as e:
+          print(e)
+    
+        (rows,cols,channels) = cv_image.shape
+        if cols > 60 and rows > 60 :
+          cv2.circle(cv_image, (50,50), 10, 255)
+    
+        cv2.imshow("Image window", cv_image)
+        cv2.waitKey(3)
+    
+        # try:
+        #   self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
+        # except CvBridgeError as e:
+        #   print(e)
+
+
+
 
 
     def calculate_error(self, point_1, point_2, point_3):
@@ -380,7 +426,12 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         if not done:
             reward = self.calculate_reward(error_1, error_2, error_3)
         else:
-            reward = -1
+            reward = -100
+
+        # ===============
+        # == TELEMETRY ==
+        # ===============
+        self.show_telemetry(f1_image_camera.data, point_1, point_2, point_3, action, reward, vel_cmd.angular.z)
 
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
         cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
@@ -405,6 +456,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # = POSE =
         # ========
         pos = random.choice(list(enumerate(positions)))[0]
+        self.position = pos
         self.set_new_pose(pos)
         
         # =========
@@ -442,10 +494,6 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
                 success = True
             else:
                 pass
-
-
-
-
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
