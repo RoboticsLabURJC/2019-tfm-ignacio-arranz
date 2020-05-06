@@ -60,16 +60,16 @@ if __name__ == '__main__':
     
     print("=====================\nENV CREATED\n=====================")
 
-    continue_execution = False
+    continue_execution = True
     # Fill this if continue_execution=True
-    weights_path = os.path.join(current_file_path, 'logs/f1_dqn_ep9900.h5')
-    monitor_path = os.path.join(current_file_path, 'logs/f1_dqn_ep9900')
-    params_json  = os.path.join(current_file_path, 'logs/f1_dqn_ep9900.json')
+    weights_path = os.path.join(current_file_path, 'logs/f1_dqn_ep27000.h5')
+    monitor_path = os.path.join(current_file_path, 'logs/f1_dqn_ep27000')
+    params_json  = os.path.join(current_file_path, 'logs/f1_dqn_ep27000.json')
 
     img_rows, img_cols, img_channels = env.img_rows, env.img_cols, env.img_channels
 
-    epochs = 100000
-    steps = 1000
+    epochs = 10000000
+    steps = 1000000
 
     if not continue_execution:
         minibatch_size = 32
@@ -174,15 +174,15 @@ if __name__ == '__main__':
                 if not last100Filled:
                     print("EP: {} - Steps: {} - Position: {} - CReward: {} - Eps: {} - Time: {}:{}:{} ".format(epoch, t+1, pos, round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
                 else:
-                    print("EP: {} - Steps: {} - Position: {} -last100 C_Rewards: {} - CReward: {} - Eps={} - Time: {}:{}:{}".format(epoch, t+1, pos, sum(last100Rewards)/len(last100Rewards), round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
+                    print("EP: {} - Steps: {} - Position: {} - last100 C_Rewards: {} - CReward: {} - Eps={} - Time: {}:{}:{}".format(epoch, t+1, pos, sum(last100Rewards)/len(last100Rewards), round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
                     
                     # SAVE SIMULATION DATA
-                    if (epoch)%100==0:
-                        #save model weights and monitoring data every 100 epochs.
+                    if (epoch)%1000==0:
+                        # Save model weights and monitoring data every 100 epochs.
                         deepQ.saveModel('./logs/f1_dqn_ep'+str(epoch)+'.h5')
                         env._flush()
                         copy_tree(outdir,'./logs/f1_dqn_ep'+str(epoch))
-                        #save simulation parameters.
+                        # Save simulation parameters.
                         parameter_keys = ['explorationRate','minibatch_size','learnStart','learningRate','discountFactor','memorySize','network_outputs','current_epoch','stepCounter','EXPLORE','INITIAL_EPSILON','FINAL_EPSILON','loadsim_seconds']
                         parameter_values = [explorationRate, minibatch_size, learnStart, learningRate, discountFactor, memorySize, network_outputs, epoch, stepCounter, EXPLORE, INITIAL_EPSILON, FINAL_EPSILON,s]
                         parameter_dictionary = dict(zip(parameter_keys, parameter_values))

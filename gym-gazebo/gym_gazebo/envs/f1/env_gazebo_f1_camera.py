@@ -426,7 +426,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         if not done:
             reward = self.calculate_reward(error_1, error_2, error_3)
         else:
-            reward = -100
+            reward = -200
 
         # ===============
         # == TELEMETRY ==
