@@ -114,7 +114,8 @@ class DeepQ:
         """
         if isFinal:
             return reward
-        else :
+        else:
+            print("Target: {}".format(reward, self.discountFactor, self.getMaxQ(qValuesNewState)))
             return reward + self.discountFactor * self.getMaxQ(qValuesNewState)
 
 

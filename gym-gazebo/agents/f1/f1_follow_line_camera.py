@@ -60,7 +60,7 @@ if __name__ == '__main__':
     
     print("=====================\nENV CREATED\n=====================")
 
-    continue_execution = True
+    continue_execution = False
     # Fill this if continue_execution=True
     weights_path = os.path.join(current_file_path, 'logs/f1_dqn_ep27000.h5')
     monitor_path = os.path.join(current_file_path, 'logs/f1_dqn_ep27000')
