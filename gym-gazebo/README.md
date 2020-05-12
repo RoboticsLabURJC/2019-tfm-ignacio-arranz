@@ -213,7 +213,7 @@ community support:**
 More information in original [gym-gazebo](https://github.com/erlerobot/gym-gazebo) repository.
 
 
-## FAQ
+## Troubleshooting
 
 Other possible libraries. Maybe these packages are necessary.
 
@@ -226,3 +226,5 @@ sudo apt-get install python3-empy
 
 - Problem: `[Err] [REST.cc:205] Error in REST request python`. Solution: Change `~/.ignition/fuel/config.yaml` as following. From: `url: https://api.ignitionfuel.org` to `url: https://api.ignitionrobotics.org`.
 - Problem: `No module named 'rospy'`. Solution: `export PATH="${PATH}:${HOME}/.local/bin/"`
+
+- `Error. No module named rospy` in PyCharm-community edition. [Follow this thread in ROS forum](https://answers.ros.org/question/304101/configure-pycharm-to-make-the-linting-work-properly/).
