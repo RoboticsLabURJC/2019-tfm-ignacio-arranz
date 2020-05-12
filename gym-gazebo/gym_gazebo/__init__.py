@@ -114,7 +114,7 @@ register(
 # cart pole
 register(
     id='GazeboCartPole-v0',
-    entry_point='gym_gazebo.envs.gazebo_cartpole:GazeboCartPolev0Env',
+    entry_point='gym_gazebo.envs.cartpole:GazeboCartPolev0Env',
 )
 
 register(
