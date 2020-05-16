@@ -18,7 +18,7 @@
   </include>
 
   <!-- send robot urdf to param server -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find cartpole_gazebo)/urdf/carpole_gazebo_urdf.xacro.urdf" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find cartpole_gazebo)/cartpole/carpole_gazebo_urdf.xacro.urdf" />
 
   <!-- push robot_description to factory and spawn robot in gazebo -->
   <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -z 0.1" respawn="false" output="screen" />

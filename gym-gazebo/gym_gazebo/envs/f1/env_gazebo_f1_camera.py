@@ -326,23 +326,23 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         BETA = 0
         GAMMA = 1
 
-        if error_1 > RANGES[0] and error_2 > RANGES[1]:
-            ALPHA = 0.1
-            BETA = 0.2
-            GAMMA = 0.7
-        elif error_1 > RANGES[0]:
-            ALPHA = 0.1
-            BETA = 0
-            GAMMA = 0.9
-        elif error_2 > RANGES[1]:
-            ALPHA = 0
-            BETA = 0.1
-            GAMMA = 0.9
+        # if error_1 > RANGES[0] and error_2 > RANGES[1]:
+        #     ALPHA = 0.1
+        #     BETA = 0.2
+        #     GAMMA = 0.7
+        # elif error_1 > RANGES[0]:
+        #     ALPHA = 0.1
+        #     BETA = 0
+        #     GAMMA = 0.9
+        # elif error_2 > RANGES[1]:
+        #     ALPHA = 0
+        #     BETA = 0.1
+        #     GAMMA = 0.9
 
-        d = ALPHA * np.true_divide(error_1, center_image) + \
-            BETA  * np.true_divide(error_2, center_image) + \
-            GAMMA * np.true_divide(error_3, center_image)
-
+        #d = ALPHA * np.true_divide(error_1, center_image) + \
+        #    BETA  * np.true_divide(error_2, center_image) + \
+        #    GAMMA * np.true_divide(error_3, center_image)
+        d = np.true_divide(error_3, center_image)
         reward = np.round(np.exp(-d), 4)
 
         return reward
