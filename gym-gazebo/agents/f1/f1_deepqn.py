@@ -47,9 +47,11 @@ class DeepQ:
         self.learnStart = learnStart
         self.learningRate = learningRate
 
+
     def initNetworks(self):
         model = self.createModel()
         self.model = model
+
 
     def createModel(self):
         # Network structure must be directly changed here.
@@ -71,12 +73,14 @@ class DeepQ:
 
         return model
 
+
     def printNetwork(self):
         i = 0
         for layer in self.model.layers:
             weights = layer.get_weights()
             print("Layer {}: {}".format(i, weights))
             i += 1
+
 
     def backupNetwork(self, model, backup):
         weightMatrix = []
@@ -89,27 +93,33 @@ class DeepQ:
             layer.set_weights(weights)
             i += 1
 
+
     def updateTargetNetwork(self):
         self.backupNetwork(self.model, self.targetModel)
 
-    # predict Q values for all the actions
+    
     def getQValues(self, state):
+        # predict Q values for all the actions
         predicted = self.model.predict(state)
         return predicted[0]
+
 
     def getTargetQValues(self, state):
         predicted = self.targetModel.predict(state)
         return predicted[0]
 
+
     def getMaxQ(self, qValues):
         return np.max(qValues)
+
 
     def getMaxIndex(self, qValues):
         return np.argmax(qValues)
 
-    # calculate the target function
+    
     def calculateTarget(self, qValuesNewState, reward, isFinal):
         """
+        # calculate the target function
         target = reward(s,a) + gamma * max(Q(s')
         """
         if isFinal:

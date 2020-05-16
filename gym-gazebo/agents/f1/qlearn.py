@@ -8,7 +8,7 @@ class QLearn:
         self.gamma = gamma      # discount factor
         self.actions = actions
 
-    def getQ(self, state, action):
+    def getQValues(self, state, action):
         return self.q.get((state, action), 0.0)
 
     def learnQ(self, state, action, reward, value):
@@ -22,7 +22,7 @@ class QLearn:
         else:
             self.q[(state, action)] = oldv + self.alpha * (value - oldv)
 
-    def chooseAction(self, state, return_q=False):
+    def selectAction(self, state, return_q=False):
         q = [self.getQ(state, a) for a in self.actions]
         maxQ = max(q)
 
@@ -49,3 +49,9 @@ class QLearn:
     def learn(self, state1, action1, reward, state2):
         maxqnew = max([self.getQ(state2, a) for a in self.actions])
         self.learnQ(state1, action1, reward, reward + self.gamma*maxqnew)
+
+
+    def reset(self):
+        self.state = self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
+        self.steps_beyond_done = None
+        return np.array(self.state)

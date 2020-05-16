@@ -13,7 +13,8 @@ from distutils.dir_util import copy_tree
 
 import gym
 import numpy as np
-from gym import wrappers
+
+from gym import (wrappers, logger)
 from keras import backend as K
 from keras import optimizers
 from keras.initializers import normal
@@ -131,18 +132,16 @@ if __name__ == '__main__':
 
         # Number of timesteps
         for t in xrange(steps):
-            # print("Step: {}".format(t))
+
+            # make the model.predict
             qValues = deepQ.getQValues(observation)
-
             action = deepQ.selectAction(qValues, explorationRate)
-
-            # print("Action: {}".format(action))
-
             newObservation, reward, done, _ = env.step(action)
-            
-            #print("Reward: {}".format(reward))
- 
             deepQ.addMemory(observation, action, reward, newObservation, done)
+
+            # print("Step: {}".format(t))
+            # print("Action: {}".format(action))
+            # print("Reward: {}".format(reward))
 
             observation = newObservation
 
