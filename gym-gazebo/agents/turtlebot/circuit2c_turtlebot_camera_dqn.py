@@ -218,6 +218,22 @@ def clear_monitor_files(training_dir):
 
 
 
+def setup_summaries():
+    episode_reward = tf.Variable(0.)
+    tf.summary.scalar("Episode_Reward", episode_reward)
+    episode_ave_max_q = tf.Variable(0.)
+    tf.summary.scalar("Max_Q_Value", episode_ave_max_q)
+    logged_epsilon = tf.Variable(0.)
+    tf.summary.scalar("Epsilon", logged_epsilon)
+    logged_T = tf.Variable(0.)
+    summary_vars = [episode_reward, episode_ave_max_q, logged_epsilon]
+    summary_placeholders = [tf.placeholder("float") for i in range(len(summary_vars))]
+    update_ops = [summary_vars[i].assign(summary_placeholders[i]) for i in range(len(summary_vars))]
+    summary_op = tf.summary.merge_all()
+    return summary_placeholders, update_ops, summary_op
+
+
+
 ####################################################################################################################
 # MAIN PROGRAM
 ####################################################################################################################
@@ -229,11 +245,11 @@ if __name__ == '__main__':
 
     print("=====================\nENV CREATED\n=====================")
 
-    continue_execution = False
+    continue_execution = True
     # Fill this if continue_execution=True
-    weights_path = '/tmp/turtle_c2c_dqn_ep200.h5'
-    monitor_path = '/tmp/turtle_c2c_dqn_ep200'
-    params_json  = '/tmp/turtle_c2c_dqn_ep200.json'
+    weights_path = '/home/nachoaz/Desktop/turtle_c2c_dqn_ep6000.h5'
+    monitor_path = '/home/nachoaz/Desktop/turtle_c2c_dqn_ep6000'
+    params_json  = '/home/nachoaz/Desktop/turtle_c2c_dqn_ep6000.json'
 
     img_rows, img_cols, img_channels = env.img_rows, env.img_cols, env.img_channels
 
@@ -288,6 +304,9 @@ if __name__ == '__main__':
     last100Rewards = [0] * 100
     last100RewardsIndex = 0
     last100Filled = False
+
+    # TensorBoard
+    summary_ops = setup_summaries()
 
     start_time = time.time()
 
