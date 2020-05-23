@@ -1,14 +1,15 @@
 #!/usr/bin/env python
-import gym
-from gym import wrappers
-import gym_gazebo
-import time
-import numpy
 import random
 import time
 
-import qlearn
+import gym
+import numpy
+from gym import wrappers
+
+import gym_gazebo
 import liveplot
+import qlearn
+
 
 def render():
     render_skip = 0 #Skip first X episodes.
