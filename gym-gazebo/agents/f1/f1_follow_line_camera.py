@@ -11,10 +11,12 @@ import os
 import time
 from distutils.dir_util import copy_tree
 
+import matplotlib
+import matplotlib.pyplot as plt
+
 import gym
 import numpy as np
-
-from gym import (wrappers, logger)
+from gym import logger, wrappers
 from keras import backend as K
 from keras import optimizers
 from keras.initializers import normal
@@ -27,8 +29,8 @@ from keras.models import Sequential, load_model
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.regularizers import l2
 
-from f1_deepqn import DeepQ
 import gym_gazebo
+from f1_deepqn import DeepQ
 
 # To equal the inputs, we set the channels first and the image next.
 K.set_image_data_format('channels_first')
@@ -46,6 +48,24 @@ def clear_monitor_files(training_dir):
     for file in files:
         os.unlink(file)
 
+def plot_durations(reward, epoch, step):
+    plt.figure(2)
+    plt.clf()
+    
+    plt.title('Training...')
+    plt.xlabel('Episode')
+    plt.ylabel('Duration')
+    plt.plot(steps)
+    # Take 100 episode averages and plot them too
+    if step >= 50:
+        means = np.mean(episode_durations)
+        plt.plot(means)
+
+    plt.pause(0.001)  # pause a bit so that plots are updated
+
+
+
+episode_durations = []
 
 
 ####################################################################################################################
@@ -131,7 +151,7 @@ if __name__ == '__main__':
         cumulated_reward = 0
 
         # Number of timesteps
-        for t in xrange(steps):
+        for step in xrange(steps):
 
             # make the model.predict
             qValues = deepQ.getQValues(observation)
@@ -155,7 +175,7 @@ if __name__ == '__main__':
             if stepCounter >= learnStart:
                 deepQ.learnOnMiniBatch(minibatch_size, False)
 
-            if (t == steps-1):
+            if (step == steps-1):
                 print("reached the end")
                 done = True
 
@@ -163,6 +183,9 @@ if __name__ == '__main__':
             cumulated_reward += reward
 
             if done:
+                episode_durations.append(step)
+                plot_durations(reward, epoch, step)
+
                 last100Rewards[last100RewardsIndex] = cumulated_reward
                 last100RewardsIndex += 1
                 if last100RewardsIndex >= 100:
@@ -171,9 +194,9 @@ if __name__ == '__main__':
                 m, s = divmod(int(time.time() - start_time + loadsim_seconds), 60)
                 h, m = divmod(m, 60)
                 if not last100Filled:
-                    print("EP: {} - Steps: {} - Position: {} - CReward: {} - Eps: {} - Time: {}:{}:{} ".format(epoch, t+1, pos, round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
+                    print("EP: {} - Steps: {} - Position: {} - CReward: {} - Eps: {} - Time: {}:{}:{} ".format(epoch, step+1, pos, round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
                 else:
-                    print("EP: {} - Steps: {} - Position: {} - last100 C_Rewards: {} - CReward: {} - Eps={} - Time: {}:{}:{}".format(epoch, t+1, pos, sum(last100Rewards)/len(last100Rewards), round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
+                    print("EP: {} - Steps: {} - Position: {} - last100 C_Rewards: {} - CReward: {} - Eps={} - Time: {}:{}:{}".format(epoch, step+1, pos, sum(last100Rewards)/len(last100Rewards), round(cumulated_reward, 2), round(explorationRate, 2), h, m, s))
                     
                     # SAVE SIMULATION DATA
                     if (epoch)%1000==0:
