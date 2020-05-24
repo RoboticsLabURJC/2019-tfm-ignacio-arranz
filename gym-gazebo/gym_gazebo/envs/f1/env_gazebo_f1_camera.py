@@ -179,6 +179,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
+
     def show_telemetry(self, img, point_1, point_2, point_3, action, reward, w_angular):        
         # Puntos centrales de la imagen (verde)
         cv2.line(img, (320, x_row[0]), (320, x_row[0]), (255,255,0), thickness=5)
