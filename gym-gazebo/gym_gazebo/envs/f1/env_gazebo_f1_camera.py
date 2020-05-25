@@ -24,7 +24,7 @@ from skimage.viewer import ImageViewer
 from std_srvs.srv import Empty
 
 from gym_gazebo.envs import gazebo_env
-
+from agents.f1.settings import telemetry
 
 # Images size
 witdh = 640
@@ -432,7 +432,8 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # ===============
         # == TELEMETRY ==
         # ===============
-        self.show_telemetry(f1_image_camera.data, point_1, point_2, point_3, action, reward, vel_cmd.angular.z)
+        if telemetry:
+            self.show_telemetry(f1_image_camera.data, point_1, point_2, point_3, action, reward, vel_cmd.angular.z)
 
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
         cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
