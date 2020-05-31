@@ -12,6 +12,12 @@ register(
     entry_point='gym_gazebo.envs.f1:GazeboF1CameraEnv',
     # More arguments here
 )
+# F1 Qlearn
+register(
+    id='GazeboF1QLearnEnv-v0',
+    entry_point='gym_gazebo.envs.f1:GazeboF1QLearnEnv',
+    # More arguments here
+)
 
 # Turtlebot envs
 register(
