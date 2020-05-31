@@ -44,15 +44,13 @@ if __name__ == '__main__':
     start_time = time.time()
     total_episodes = 10000
     highest_reward = 0
-
+    
     for episode in range(total_episodes):
-        print("\n\n", episode)
+        print("\n\nEpisode: {}".format(episode))
         done = False
         cumulated_reward = 0  # Should going forward give more reward then L/R ?
-
+        
         observation = env.reset()
-
-
 
         if qlearn.epsilon > 0.05:
             qlearn.epsilon *= epsilon_discount
@@ -64,7 +62,7 @@ if __name__ == '__main__':
         for i in range(1500):
 
             # Pick an action based on the current state
-            action = qlearn.chooseAction(state)
+            action = qlearn.selectAction(state)
 
             # Execute the action and get feedback
             observation, reward, done, info = env.step(action)

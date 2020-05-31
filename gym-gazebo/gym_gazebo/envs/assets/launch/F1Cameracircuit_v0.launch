@@ -2,7 +2,7 @@
 <launch>
   <arg name="world_file" default="$(env GYM_GAZEBO_WORLD_CIRCUIT_F1)"/>
   <arg name="paused"     value="true"/> 
-  <arg name="gui"        default="false"/>
+  <arg name="gui"        default="true"/>
   <arg name="headless"   value="true"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">

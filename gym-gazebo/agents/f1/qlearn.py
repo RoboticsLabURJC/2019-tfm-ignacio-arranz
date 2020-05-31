@@ -23,7 +23,7 @@ class QLearn:
             self.q[(state, action)] = oldv + self.alpha * (value - oldv)
 
     def selectAction(self, state, return_q=False):
-        q = [self.getQ(state, a) for a in self.actions]
+        q = [self.getQValues(state, a) for a in self.actions]
         maxQ = max(q)
 
         if random.random() < self.epsilon:
