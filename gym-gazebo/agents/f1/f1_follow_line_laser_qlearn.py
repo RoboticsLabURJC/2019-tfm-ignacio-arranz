@@ -5,7 +5,7 @@ import gym_gazebo
 import numpy as np
 from gym import logger, wrappers
 
-from qlearn import QLearn
+from f1_qlearn import QLearn
 import liveplot
 
 
@@ -34,8 +34,8 @@ if __name__ == '__main__':
 
     last_time_steps = np.ndarray(0)
 
-    qlearn = QLearn(actions=range(env.action_space.n),
-                           alpha=0.2, gamma=0.8, epsilon=0.9)
+    actions = range(env.action_space.n)
+    qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.8, epsilon=0.9)
 
     initial_epsilon = qlearn.epsilon
 

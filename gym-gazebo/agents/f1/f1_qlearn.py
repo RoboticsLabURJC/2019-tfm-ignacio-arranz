@@ -1,3 +1,7 @@
+import gym
+from gym import wrappers
+
+
 import random
 
 class QLearn:
