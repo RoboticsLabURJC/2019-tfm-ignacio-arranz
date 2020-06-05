@@ -20,7 +20,6 @@ def render():
         env.render(close=True)
 
 
-
 ####################################################################################################################
 # MAIN PROGRAM
 ####################################################################################################################
@@ -35,18 +34,18 @@ if __name__ == '__main__':
     last_time_steps = np.ndarray(0)
 
     actions = range(env.action_space.n)
-    qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.8, epsilon=0.9)
+    qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
     initial_epsilon = qlearn.epsilon
 
-    epsilon_discount = 0.9986
+    epsilon_discount = 0.9996  # Default 0.9986
 
     start_time = time.time()
     total_episodes = 10000
     highest_reward = 0
     
     for episode in range(total_episodes):
-        print("\n\nEpisode: {}".format(episode))
+
         done = False
         cumulated_reward = 0  # Should going forward give more reward then L/R ?
         
