@@ -24,8 +24,9 @@ def render():
 # MAIN PROGRAM
 ####################################################################################################################
 if __name__ == '__main__':
-
-    env = gym.make('GazeboF1QLearnEnv-v0')
+    # GazeboF1QlearnLaserEnv-v0
+    # GazeboF1QlearnCameraEnv-v0
+    env = gym.make('GazeboF1QlearnCameraEnv-v0')
     outdir = './logs/f1_qlearn_gym_experiments/'
 
     env = gym.wrappers.Monitor(env, outdir, force=True)
@@ -41,7 +42,7 @@ if __name__ == '__main__':
     epsilon_discount = 0.9996  # Default 0.9986
 
     start_time = time.time()
-    total_episodes = 10000
+    total_episodes = 20000
     highest_reward = 0
     
     for episode in range(total_episodes):
@@ -84,6 +85,9 @@ if __name__ == '__main__':
 
         if episode % 100 == 0:
             plotter.plot(env)
+            print("\nQVALUES\n-------\n")
+            print("LEN Qvalues: {}\n".format(len(qlearn.q)))
+            print(qlearn.q)
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
