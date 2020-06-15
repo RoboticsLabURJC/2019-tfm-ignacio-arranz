@@ -30,6 +30,8 @@ classes: wide
   - [Reinforcement Learning tutorial with TensorFlow](https://adventuresinmachinelearning.com/reinforcement-learning-tensorflow/)
   - [Q-Learning and DQN](https://towardsdatascience.com/dqn-part-1-vanilla-deep-q-networks-6eb4a00febfb).
   - [DQN Nature Paper](https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf)
+  
+  - [RL and DQN. Learning play from pixels]{https://rubenfiszel.github.io/posts/rl4j/2016-08-24-Reinforcement-Learning-and-DQN.html}
 
 ## Methods
   - [DQN. Pong from pixels](http://karpathy.github.io/2016/05/31/rl/)
