@@ -32,6 +32,8 @@ classes: wide
   - [DQN Nature Paper](https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf)
   
   - [RL and DQN. Learning play from pixels]{https://rubenfiszel.github.io/posts/rl4j/2016-08-24-Reinforcement-Learning-and-DQN.html}
+  
+  - [Simple reinforcement learning methods to learn CartPole](http://kvfrans.com/simple-algoritms-for-solving-cartpole/)
 
 ## Methods
   - [DQN. Pong from pixels](http://karpathy.github.io/2016/05/31/rl/)
