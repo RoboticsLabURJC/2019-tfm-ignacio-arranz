@@ -35,6 +35,7 @@ space_reward = np.flip(np.linspace(0, 1, 300))
 
 last_center_line = 0
 
+
 class ImageF1:
     def __init__(self):
         self.height = 3  # Image height [pixels]
@@ -59,13 +60,15 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-
         self.action_space = spaces.Discrete(3)  # F,L,R
         self.reward_range = (-np.inf, np.inf)
-        print("\n\n\n ------ CREANDO ENTORNO ------ \n\n\n")
         self._seed()
 
-    def discretize_observation(self, data, new_ranges):
+    def render(self, mode='human'):
+        pass
+
+    @staticmethod
+    def discrete_observation(data, new_ranges):
 
         discretized_ranges = []
         min_range = 0.05
@@ -81,30 +84,26 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
                 else:
                     discretized_ranges.append(int(data.ranges[i]))
             if min_range > data.ranges[i] > 0:
-                #print("Data ranges: {}".format(data.ranges[i]))
+                # print("Data ranges: {}".format(data.ranges[i]))
                 done = True
                 break
 
-            #print("LECTURA --> {}".format(data.ranges[12]))
-
-
         return discretized_ranges, done
 
-
-    def imageMsg2Image(self, img, cv_image):
+    @staticmethod
+    def image_msg_to_image(img, cv_image):
 
         image = ImageF1()
         image.width = img.width
         image.height = img.height
         image.format = "RGB8"
-        image.timeStamp = img.header.stamp.secs + (img.header.stamp.nsecs *1e-9)
+        image.timeStamp = img.header.stamp.secs + (img.header.stamp.nsecs * 1e-9)
         image.data = cv_image
 
         return image
 
-
-    def get_center(self, image_line):
-
+    @staticmethod
+    def get_center(image_line):
         try:
             coords = np.divide(np.max(np.nonzero(image_line)) - np.min(np.nonzero(image_line)), 2)
             coords = np.min(np.nonzero(image_line)) + coords
@@ -113,9 +112,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         return coords
 
-
     def processed_image(self, img):
-
         """
         Convert img to HSV. Get the image processed. Get 3 lines from the image.
 
@@ -123,6 +120,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         :return: x, y, z: 3 coordinates
         """
 
+        print("\n----------\n {} \n--------\n".format(type(img)))
         img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
 
@@ -141,8 +139,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         return [central_1, central_2, central_3]
 
-
-    def calculate_observation(self, data):
+    @staticmethod
+    def calculate_observation(data):
         min_range = 0.5  # Default: 0.21
         done = False
         for i, item in enumerate(data.ranges):
@@ -150,8 +148,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
                 done = True
         return done
 
-
-    def get_center_of_laser(self, data):
+    @staticmethod
+    def get_center_of_laser(data):
 
         laser_len = len(data.ranges)
         left_sum = sum(data.ranges[laser_len - (laser_len / 5):laser_len - (laser_len / 10)])  # 80-90
@@ -165,17 +163,12 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-
-
-
-
-
-
     def step(self, action):
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
             self.unpause()
-        except (rospy.ServiceException) as e:
+        except rospy.ServiceException as e:
+            print(e)
             print("/gazebo/unpause_physics service call failed")
 
         if action == 0:  # FORWARD
@@ -192,33 +185,31 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             vel_cmd = Twist()
             vel_cmd.linear.x = 3  # 0.05
             vel_cmd.angular.z = -1  # -0.3
-            # Get camera info
 
+        # Get camera info
         image_data = None
+        cv_image = None
+        f1_image_camera = None
         while image_data is None:
-                image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
-                # Transform the image data from ROS to CVMat
-                cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-                f1_image_camera = self.imageMsg2Image(image_data, cv_image)
+            image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+            # Transform the image data from ROS to CVMat
+            cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+            f1_image_camera = self.image_msg_to_image(image_data, cv_image)
+
+        state = self.processed_image(f1_image_camera.data)
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
-            #resp_pause = pause.call()
+            # resp_pause = pause.call()
             self.pause()
-        except (rospy.ServiceException) as e:
-            print("/gazebo/pause_physics service call failed")
-
-        state = self.processed_image(image_data)
-
-
-
-
+        except rospy.ServiceException as e:
+            print("/gazebo/pause_physics service call failed: {}".format(e))
 
 
         done = False
         if abs(state[3]) > 2:
             done = True
-        #print("center: {}".format(center_detour))
+        # print("center: {}".format(center_detour))
 
         # 3 actions
         # if not done:
@@ -237,11 +228,10 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         else:
             reward = -200
 
-
-
-
-
         return state, reward, done, {}
+
+
+
 
 
     def reset(self):
@@ -249,19 +239,19 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         # Resets the state of the environment and returns an initial observation.
         rospy.wait_for_service('/gazebo/reset_simulation')
         try:
-            #reset_proxy.call()
+            # reset_proxy.call()
             self.reset_proxy()
             self.unpause()
-        except (rospy.ServiceException) as e:
-            print("/gazebo/reset_simulation service call failed")
+        except rospy.ServiceException as e:
+            print("/gazebo/reset_simulation service call failed: {}".format(e))
 
         # Unpause simulation to make observation
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
-            #resp_pause = pause.call()
+            # resp_pause = pause.call()
             self.unpause()
-        except (rospy.ServiceException) as e:
-            print("/gazebo/unpause_physics service call failed")
+        except rospy.ServiceException as e:
+            print("/gazebo/unpause_physics service call failed: {}".format(e))
 
         # Get camera info
         image_data = None
@@ -269,13 +259,13 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
             # Transform the image data from ROS to CVMat
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-            f1_image_camera = self.imageMsg2Image(image_data, cv_image)
+            f1_image_camera = self.image_msg_to_image(image_data, cv_image)
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
-            #resp_pause = pause.call()
+            # resp_pause = pause.call()
             self.pause()
-        except (rospy.ServiceException) as e:
-            print("/gazebo/pause_physics service call failed")
+        except rospy.ServiceException as e:
+            print("/gazebo/pause_physics service call failed: {}".format(e))
         state = self.processed_image(image_data)
         return state

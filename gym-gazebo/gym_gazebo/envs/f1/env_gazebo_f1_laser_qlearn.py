@@ -15,8 +15,6 @@ from std_srvs.srv import Empty
 from sensor_msgs.msg import LaserScan
 
 
-
-
 class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
@@ -29,6 +27,9 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         self.action_space = spaces.Discrete(3)  # F, L, R
         self.reward_range = (-np.inf, np.inf)
         self._seed()
+
+    def render(self, mode='human'):
+        pass
 
     @staticmethod
     def discrete_observation(data, new_ranges):

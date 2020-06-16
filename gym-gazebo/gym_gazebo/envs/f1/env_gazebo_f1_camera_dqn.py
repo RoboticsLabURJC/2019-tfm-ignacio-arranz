@@ -43,38 +43,41 @@ space_reward = np.flip(np.linspace(0, 1, 300))
 last_center_line = 0
 
 font = cv2.FONT_HERSHEY_COMPLEX
-### OUTPUTS
+
+# OUTPUTS
 v_lineal = [3, 8, 15]
 w_angular = [-1, -0.6, 0, 1, 0.6]
 
-### POSES
+# POSES
 positions = [(0, 53.462, -41.988, 0.004, 0, 0, 1.57, -1.57),
              (1, 53.462, -8.734, 0.004, 0, 0, 1.57, -1.57),
              (2, 39.712, -30.741, 0.004, 0, 0, 1.56, 1.56),
              (3, -7.894, -39.051, 0.004, 0, 0.01, -2.021, 2.021),
              (4, 20.043, 37.130, 0.003, 0, 0.103, -1.4383, -1.4383)]
 
+
 class ImageF1:
     def __init__(self):
         self.height = 3  # Image height [pixels]
         self.width = 3  # Image width [pixels]
-        self.timeStamp = 0 # Time stamp [s] */
-        self.format = "" # Image format string (RGB8, BGR,...)
-        self.data = np.zeros((self.height, self.width, 3), np.uint8) # The image data itself
+        self.width = 3  # Image width [pixels]
+        self.timeStamp = 0  # Time stamp [s] */
+        self.format = ""  # Image format string (RGB8, BGR,...)
+        self.data = np.zeros((self.height, self.width, 3), np.uint8)  # The image data itself
         self.data.shape = self.height, self.width, 3
 
     def __str__(self):
         s = "Image: {\n   height: " + str(self.height) + "\n   width: " + str(self.width)
-        s = s + "\n   format: " + self.format + "\n   timeStamp: " + str(self.timeStamp) 
-        s = s + "\n   data: " + str(self.data) + "\n}"
+        s = s + "\n  format: " + self.format + "\n   timeStamp: " + str(self.timeStamp)
+        return s + "\n  data: " + str(self.data) + "\n}"
 
 
-class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
+class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
     """
     Description:
-        A Formula 1 car has to complete one lap of a circuit following a red line painted on the ground. Initially it will
-        not use the complete information of the image but some coordinates that refer to the error made with respect to the
-        center of the line.
+        A Formula 1 car has to complete one lap of a circuit following a red line painted on the ground. Initially it
+        will not use the complete information of the image but some coordinates that refer to the error made with
+        respect to the center of the line.
     Source:
         Master's final project at Universidad Rey Juan Carlos. RoboticsLab Urjc. JdeRobot. Author: Ignacio Arranz
     Observation: 
@@ -106,7 +109,6 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         The episode ends when the lower error is outside the established range (see table in the observation space).
     """
 
-
     def __init__(self):
         # Launch the simulation with the given launchfile name
         gazebo_env.GazeboEnv.__init__(self, "F1Cameracircuit_v0.launch")
@@ -130,13 +132,16 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.img_cols = 32
         self.img_channels = 1
 
-        #self.bridge = CvBridge()
-        #self.image_sub = rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
+        # self.bridge = CvBridge()
+        # self.image_sub = rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
 
         self.action_space = self._generate_simple_action_space()
 
+    def render(self, mode='human'):
+        pass
 
-    def _generate_simple_action_space(self):
+    @staticmethod
+    def _generate_simple_action_space():
         actions = 5
 
         max_ang_speed = -4
@@ -151,8 +156,8 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
     
         return action_space
 
-
-    def _generate_action_space(self):
+    @staticmethod
+    def _generate_action_space():
         actions = 21
 
         max_ang_speed = 1.5
@@ -178,29 +183,29 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def show_telemetry(self, img, point_1, point_2, point_3, action, reward, w_angular):        
+    def show_telemetry(self, img, point_1, point_2, point_3, action, reward):
         # Puntos centrales de la imagen (verde)
-        cv2.line(img, (320, x_row[0]), (320, x_row[0]), (255,255,0), thickness=5)
-        cv2.line(img, (320, x_row[1]), (320, x_row[1]), (255,255,0), thickness=5)
-        cv2.line(img, (320, x_row[2]), (320, x_row[2]), (255,255,0), thickness=5)
+        cv2.line(img, (320, x_row[0]), (320, x_row[0]), (255, 255, 0), thickness=5)
+        cv2.line(img, (320, x_row[1]), (320, x_row[1]), (255, 255, 0), thickness=5)
+        cv2.line(img, (320, x_row[2]), (320, x_row[2]), (255, 255, 0), thickness=5)
         # Linea diferencia entre punto central - error (blanco)
         cv2.line(img, (center_image, x_row[0]), (point_1, x_row[0]), (255, 255, 255), thickness=2)
         cv2.line(img, (center_image, x_row[1]), (point_2, x_row[1]), (255, 255, 255), thickness=2)
         cv2.line(img, (center_image, x_row[2]), (point_3, x_row[2]), (255, 255, 255), thickness=2)
         # Telemetry
-        cv2.putText(img, str("action: {}".format(action)), (18, 280), font, 0.4, (255,255,255), 1)
-        cv2.putText(img, str("w ang: {}".format(w_angular)), (18, 300), font, 0.4, (255,255,255), 1)
-        cv2.putText(img, str("reward: {}".format(reward)), (18, 320), font, 0.4, (255,255,255), 1)
-        cv2.putText(img, str("err1: {}".format(center_image - point_1)), (18, 340), font, 0.4, (255,255,255), 1)
-        cv2.putText(img, str("err2: {}".format(center_image - point_2)), (18, 360), font, 0.4, (255,255,255), 1)
-        cv2.putText(img, str("err3: {}".format(center_image - point_3)), (18, 380), font, 0.4, (255,255,255), 1)
-        cv2.putText(img, str("pose: {}".format(self.position)), (18, 400), font, 0.4, (255,255,255), 1)
+        cv2.putText(img, str("action: {}".format(action)), (18, 280), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("w ang: {}".format(w_angular)), (18, 300), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("reward: {}".format(reward)), (18, 320), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("err1: {}".format(center_image - point_1)), (18, 340), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("err2: {}".format(center_image - point_2)), (18, 360), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("err3: {}".format(center_image - point_3)), (18, 380), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("pose: {}".format(self.position)), (18, 400), font, 0.4, (255, 255, 255), 1)
                 
         cv2.imshow("Image window", img)
         cv2.waitKey(3)
 
-
-    def set_new_pose(self, new_pos):
+    @staticmethod
+    def set_new_pose(new_pos):
         """
         (pos_number, pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
         """
@@ -221,27 +226,27 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         try:
             set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
-            resp = set_state(state)
-        except rospy.ServiceException, e:
-            print("Service call failed: %s") % e
+            # resp = set_state(state)
+        except rospy.ServiceException as e:
+            print(e)
+            print("Service call failed: {}".format(e))
 
         return pos_number
 
-
-    def imageMsg2Image(self, img, cv_image):
+    @staticmethod
+    def image_msg_to_image(img, cv_image):
 
         image = ImageF1()
         image.width = img.width
         image.height = img.height
         image.format = "RGB8"
-        image.timeStamp = img.header.stamp.secs + (img.header.stamp.nsecs *1e-9)
+        image.timeStamp = img.header.stamp.secs + (img.header.stamp.nsecs * 1e-9)
         image.data = cv_image
 
         return image
 
-
-    def get_center(self, image_line):
-
+    @staticmethod
+    def get_center(image_line):
         try:
             coords = np.divide(np.max(np.nonzero(image_line)) - np.min(np.nonzero(image_line)), 2)
             coords = np.min(np.nonzero(image_line)) + coords
@@ -250,9 +255,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         return coords
 
-
     def processed_image(self, img):
-        
         """
         Conver img to HSV. Get the image processed. Get 3 lines from the image.
 
@@ -260,42 +263,43 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         :return: x, y, z: 3 coordinates
         """
 
+        print("\n----------\n {} \n--------\n".format(type(img)))
+
         img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
 
-        #gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+        # gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
         _, mask = cv2.threshold(line_pre_proc, 240, 255, cv2.THRESH_BINARY)
 
-        line_1 = mask[x_row[0],:]
-        line_2 = mask[x_row[1],:]
-        line_3 = mask[x_row[2],:]
+        line_1 = mask[x_row[0], :]
+        line_2 = mask[x_row[1], :]
+        line_3 = mask[x_row[2], :]
 
         central_1 = self.get_center(line_1)
         central_2 = self.get_center(line_2)
         central_3 = self.get_center(line_3)
 
-        #print(central_1, central_2, central_3)
+        # print(central_1, central_2, central_3)
 
         return central_1, central_2, central_3
 
-
     def callback(self, data):
 
-        #print("CALLBACK!!!!: ", ros_data.height, ros_data.width)
-        #np_arr = np.fromstring(ros_data.data, np.uint8)
-        #image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)        
+        # print("CALLBACK!!!!: ", ros_data.height, ros_data.width)
+        # np_arr = np.fromstring(ros_data.data, np.uint8)
+        # image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
         
-        #self.my_image = image_np
+        # self.my_image = image_np
         # rospy.loginfo(rospy.get_caller_id() + "I see %s", data.data)
 
         try:
-           cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+            cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
         except CvBridgeError as e:
-          print(e)
+            print(e)
     
-        (rows,cols,channels) = cv_image.shape
-        if cols > 60 and rows > 60 :
-          cv2.circle(cv_image, (50,50), 10, 255)
+        (rows, cols,channels) = cv_image.shape
+        if cols > 60 and rows > 60:
+            cv2.circle(cv_image, (50, 50), 10, 255)
     
         cv2.imshow("Image window", cv_image)
         cv2.waitKey(3)
@@ -305,10 +309,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # except CvBridgeError as e:
         #   print(e)
 
-
-
-
-
+    @staticmethod
     def calculate_error(self, point_1, point_2, point_3):
 
         error_1 = abs(center_image - point_1)
@@ -317,13 +318,13 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         return error_1, error_2, error_3
         
-
-    def calculate_reward(self, error_1, error_2, error_3):
+    @staticmethod
+    def calculate_reward(error_1, error_2, error_3):
 
         global center_image
-        ALPHA = 0
-        BETA = 0
-        GAMMA = 1
+        alpha = 0
+        beta = 0
+        gamma = 1
 
         # if error_1 > RANGES[0] and error_2 > RANGES[1]:
         #     ALPHA = 0.1
@@ -338,34 +339,35 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         #     BETA = 0.1
         #     GAMMA = 0.9
 
-        #d = ALPHA * np.true_divide(error_1, center_image) + \
-        #    BETA  * np.true_divide(error_2, center_image) + \
-        #    GAMMA * np.true_divide(error_3, center_image)
+        # d = ALPHA * np.true_divide(error_1, center_image) + \
+        # beta * np.true_divide(error_2, center_image) + \
+        # gamma * np.true_divide(error_3, center_image)
         d = np.true_divide(error_3, center_image)
         reward = np.round(np.exp(-d), 4)
 
         return reward
 
-
-    def is_game_over(self, point_1, point_2, point_3):
+    @staticmethod
+    def is_game_over(point_1, point_2, point_3):
 
         done = False
     
         if center_image-RANGES[2] < point_3 < center_image+RANGES[2]:
-            if center_image-RANGES[0] < point_1 < center_image+RANGES[0] or center_image-RANGES[1] < point_2 < center_image+RANGES[1]:
-                pass # In Line
+            if center_image-RANGES[0] < point_1 < center_image+RANGES[0] or \
+                    center_image-RANGES[1] < point_2 < center_image+RANGES[1]:
+                pass  # In Line
         else:
             done = True
 
         return done
-
 
     def step(self, action):
 
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
             self.unpause()
-        except (rospy.ServiceException) as e:
+        except rospy.ServiceException as e:
+            print(e)
             print ("/gazebo/unpause_physics service call failed")
 
         # =============
@@ -383,36 +385,36 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         image_data = None
         success = False
         cv_image = None
+        f1_image_camera = None
         while image_data is None or success is False:
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
             # Transform the image data from ROS to CVMat
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-            f1_image_camera = self.imageMsg2Image(image_data, cv_image)
+            f1_image_camera = self.image_msg_to_image(image_data, cv_image)
 
             if f1_image_camera:
                 success = True
 
-
         point_1, point_2, point_3 = self.processed_image(f1_image_camera.data)
         
-        ### DONE
+        # DONE
         done = self.is_game_over(point_1, point_2, point_3)
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
-            #resp_pause = pause.call()
+            # resp_pause = pause.call()
             self.pause()
-        except (rospy.ServiceException) as e:
+        except rospy.ServiceException as e:
+            print(e)
             print ("/gazebo/pause_physics service call failed")
 
-
-        self.last50actions.pop(0) #remove oldest
+        self.last50actions.pop(0)  # remove oldest
         if action == 0:
             self.last50actions.append(0)
         else:
             self.last50actions.append(1)
 
-        action_sum = sum(self.last50actions)
+        # action_sum = sum(self.last50actions)
 
         # =====================
         # == CALCULATE ERROR ==
@@ -431,22 +433,21 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # == TELEMETRY ==
         # ===============
         if telemetry:
-            self.show_telemetry(f1_image_camera.data, point_1, point_2, point_3, action, reward, vel_cmd.angular.z)
+            self.show_telemetry(f1_image_camera.data, point_1, point_2, point_3, action, reward)
 
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
         cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
         observation = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
         
-        #info = [vel_cmd.linear.x, vel_cmd.angular.z, error_1, error_2, error_3]
+        # info = [vel_cmd.linear.x, vel_cmd.angular.z, error_1, error_2, error_3]
         
         # OpenAI standard return: observation, reward, done, info
         return observation, reward, done, {}
 
         # test STACK 4
-        #cv_image = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
-        #self.s_t = np.append(cv_image, self.s_t[:, :3, :, :], axis=1)
-        #return self.s_t, reward, done, {} # observation, reward, done, info
-
+        # cv_image = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
+        # self.s_t = np.append(cv_image, self.s_t[:, :3, :, :], axis=1)
+        # return self.s_t, reward, done, {} # observation, reward, done, info
 
     def reset(self):
         
@@ -475,11 +476,11 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
         # Unpause simulation to make observation
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
-            #resp_pause = pause.call()
+            # resp_pause = pause.call()
             self.unpause()
-        except (rospy.ServiceException) as e:
+        except rospy.ServiceException as e:
+            print(e)
             print("/gazebo/unpause_physics service call failed")
-
 
         image_data = None
         cv_image = None
@@ -488,7 +489,7 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
             # Transform the image data from ROS to CVMat
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-            f1_image_camera = self.imageMsg2Image(image_data, cv_image)
+            f1_image_camera = self.image_msg_to_image(image_data, cv_image)
             
             if f1_image_camera:
                 success = True
@@ -497,21 +498,21 @@ class GazeboF1CameraEnv(gazebo_env.GazeboEnv):
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
-            #resp_pause = pause.call()
+            # resp_pause = pause.call()
             self.pause()
-        except (rospy.ServiceException) as e:
+        except rospy.ServiceException as e:
+            print(e)
             print("/gazebo/pause_physics service call failed")
-
 
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
         cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
-        #cv_image = cv_image[(self.img_rows/20):self.img_rows-(self.img_rows/20),(self.img_cols/10):self.img_cols] #crop image
-        #cv_image = skimage.exposure.rescale_intensity(cv_image,out_range=(0,255))
+        # cv_image = cv_image[(self.img_rows/20):self.img_rows-(self.img_rows/20),(self.img_cols/10):self.img_cols] #crop image
+        # cv_image = skimage.exposure.rescale_intensity(cv_image,out_range=(0,255))
 
         state = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
         return state, pos
 
         # test STACK 4
-        #self.s_t = np.stack((cv_image, cv_image, cv_image, cv_image), axis=0)
-        #self.s_t = self.s_t.reshape(1, self.s_t.shape[0], self.s_t.shape[1], self.s_t.shape[2])
-        #return self.s_t
+        # self.s_t = np.stack((cv_image, cv_image, cv_image, cv_image), axis=0)
+        # self.s_t = self.s_t.reshape(1, self.s_t.shape[0], self.s_t.shape[1], self.s_t.shape[2])
+        # return self.s_t
