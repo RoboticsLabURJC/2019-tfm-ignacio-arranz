@@ -34,9 +34,14 @@ classes: wide
   - [RL and DQN. Learning play from pixels]{https://rubenfiszel.github.io/posts/rl4j/2016-08-24-Reinforcement-Learning-and-DQN.html}
   
   - [Simple reinforcement learning methods to learn CartPole](http://kvfrans.com/simple-algoritms-for-solving-cartpole/)
+  - [Amazon Warehouse using Reinforcement Learning](https://towardsdatascience.com/get-started-with-reinforcement-learning-and-python-how-to-automatize-a-warehouse-robot-4f996bede325<Paste>)
 
 ## Methods
   - [DQN. Pong from pixels](http://karpathy.github.io/2016/05/31/rl/)
   - [RL — DQN Deep Q-network](https://medium.com/@jonathan_hui/rl-dqn-deep-q-network-e207751f7ae4)
   - [Playing CartPole through Asynchronous Advantage Actor Critic (A3C)](https://medium.com/tensorflow/deep-reinforcement-learning-playing-cartpole-through-asynchronous-advantage-actor-critic-a3c-7eab2eea5296)
   - [Aprendizaje por refuerzo: algoritmo Q Learning](http://www.cs.us.es/~fsancho/?e=109).
+
+## Repos
+
+  - [DQN examples in PyTorch](https://github.com/Lazydok/RL-Pytorch-cartpole)
