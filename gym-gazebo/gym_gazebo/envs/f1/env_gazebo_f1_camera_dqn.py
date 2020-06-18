@@ -389,7 +389,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         while image_data is None or success is False:
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
             # Transform the image data from ROS to CVMat
-            cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+            cv_imagecv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             f1_image_camera = self.image_msg_to_image(image_data, cv_image)
 
             if f1_image_camera:
