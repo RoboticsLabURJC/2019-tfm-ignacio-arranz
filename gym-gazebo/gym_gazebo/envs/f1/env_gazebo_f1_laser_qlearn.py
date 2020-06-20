@@ -103,8 +103,14 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
             self.vel_pub.publish(vel_cmd)
 
         laser_data = None
-        while laser_data is None:
-            laser_data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
+        success = False
+        while laser_data is None or not success:
+            try:
+                laser_data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
+            finally:
+                print("F1 lost....rebooting")
+                success = True
+
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:

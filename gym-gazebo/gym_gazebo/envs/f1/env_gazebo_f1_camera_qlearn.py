@@ -205,7 +205,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         except rospy.ServiceException as e:
             print("/gazebo/pause_physics service call failed: {}".format(e))
 
-
         done = False
         if abs(state[3]) > 2:
             done = True
