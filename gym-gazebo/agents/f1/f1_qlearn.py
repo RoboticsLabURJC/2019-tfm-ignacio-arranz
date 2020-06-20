@@ -1,7 +1,7 @@
 import gym
 from gym import wrappers
 
-
+import numpy as np
 import random
 
 class QLearn:
@@ -16,10 +16,10 @@ class QLearn:
         return self.q.get((state, action), 0.0)
 
     def learnQ(self, state, action, reward, value):
-        '''
+        """
         Q-learning:
             Q(s, a) += alpha * (reward(s,a) + max(Q(s') - Q(s,a))            
-        '''
+        """
         oldv = self.q.get((state, action), None)
         if oldv is None:
             self.q[(state, action)] = reward
@@ -53,7 +53,6 @@ class QLearn:
     def learn(self, state1, action1, reward, state2):
         maxqnew = max([self.getQValues(state2, a) for a in self.actions])
         self.learnQ(state1, action1, reward, reward + self.gamma*maxqnew)
-
 
     def reset(self):
         self.state = self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
