@@ -2,6 +2,7 @@ import gym
 import rospy
 import roslaunch
 import time
+import random
 import numpy as np
 
 from gym import utils, spaces
@@ -15,6 +16,13 @@ from std_srvs.srv import Empty
 from sensor_msgs.msg import LaserScan
 
 
+# POSES
+positions = [(0, 53.462, -41.988, 0.004, 0, 0, 1.57, -1.57),
+             (1, 53.462, -8.734, 0.004, 0, 0, 1.57, -1.57),
+             (2, 39.712, -30.741, 0.004, 0, 0, 1.56, 1.56),
+             (3, -7.894, -39.051, 0.004, 0, 0.01, -2.021, 2.021),
+             (4, 20.043, 37.130, 0.003, 0, 0.103, -1.4383, -1.4383)]
+
 class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
@@ -24,12 +32,37 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-        self.action_space = spaces.Discrete(3)  # F, L, R
+        self.action_space = spaces.Discrete(5)  # F, L, R
         self.reward_range = (-np.inf, np.inf)
+        self.position = None
         self._seed()
 
     def render(self, mode='human'):
         pass
+
+    @staticmethod
+    def set_new_pose(new_pos):
+        """
+        (pos_number, pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
+        """
+        pos_number = positions[0]
+
+        state = ModelState()
+        state.model_name = "f1_renault"
+        state.pose.position.x = positions[new_pos][1]
+        state.pose.position.y = positions[new_pos][2]
+        state.pose.position.z = positions[new_pos][3]
+        state.pose.orientation.x = positions[new_pos][4]
+        state.pose.orientation.y = positions[new_pos][5]
+        state.pose.orientation.z = positions[new_pos][6]
+        state.pose.orientation.w = positions[new_pos][7]
+
+        rospy.wait_for_service('/gazebo/set_model_state')
+        try:
+            rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
+        except rospy.ServiceException as e:
+            print("Service call failed: {}".format(e))
+        return pos_number
 
     @staticmethod
     def discrete_observation(data, new_ranges):
@@ -86,20 +119,35 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
             print(e)
             print("/gazebo/unpause_physics service call failed")
 
-        if action == 0:  # FORWARD
+        if action == 0:  # FORWARD 1
             vel_cmd = Twist()
             vel_cmd.linear.x = 3
             vel_cmd.angular.z = 0.0
             self.vel_pub.publish(vel_cmd)
-        elif action == 1:  # LEFT
+        if action == 1:  # FORWARD 2
+            vel_cmd = Twist()
+            vel_cmd.linear.x = 6
+            vel_cmd.angular.z = 0.0
+            self.vel_pub.publish(vel_cmd)
+        elif action == 2:  # LEFT 1
             vel_cmd = Twist()
             vel_cmd.linear.x = 3  # 0.05
             vel_cmd.angular.z = 1  # 0.3
             self.vel_pub.publish(vel_cmd)
-        elif action == 2:  # RIGHT
+        elif action == 3:  # RIGHT 1
             vel_cmd = Twist()
             vel_cmd.linear.x = 3  # 0.05
             vel_cmd.angular.z = -1  # -0.3
+            self.vel_pub.publish(vel_cmd)
+        elif action == 4:  # LEFT 2
+            vel_cmd = Twist()
+            vel_cmd.linear.x = 4  # 0.05
+            vel_cmd.angular.z = 4  # 0.3
+            self.vel_pub.publish(vel_cmd)
+        elif action == 5:  # RIGHT 2
+            vel_cmd = Twist()
+            vel_cmd.linear.x = 4  # 0.05
+            vel_cmd.angular.z = -4  # -0.3
             self.vel_pub.publish(vel_cmd)
 
         laser_data = None
@@ -108,50 +156,48 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
             try:
                 laser_data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
             finally:
-                print("F1 lost....rebooting")
                 success = True
-
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
             # resp_pause = pause.call()
             self.pause()
         except rospy.ServiceException as e:
-            print(e)
-            print("/gazebo/pause_physics service call failed")
+            print("/gazebo/pause_physics service call failed: {}".format(e))
 
         state, _ = self.discrete_observation(laser_data, 5)
 
         laser_len = len(laser_data.ranges)
         left_sum = sum(laser_data.ranges[laser_len - (laser_len / 5):laser_len - (laser_len / 10)])  # 80-90
         right_sum = sum(laser_data.ranges[(laser_len / 10):(laser_len / 5)])  # 10-20
-
         center_detour = (right_sum - left_sum) / 5
+
         done = False
-        if abs(center_detour) > 2:
+        if abs(center_detour) > 4:
             done = True
         # print("center: {}".format(center_detour))
 
+        #############
         # 3 actions
-        # if not done:
-        #     if abs(center_detour) < 2:
-        #          reward = 1 / float(center_detour + 1)
-        #     else:  # L or R no looping
-        #          reward = 0.5 / float(center_detour + 1)
-        # else:
-        #     reward = -200
-
+        #############
         if not done:
-            if action == 0:
-                reward = 5
-            else:
-                reward = 1
+            if abs(center_detour) < 4:
+                 reward = 5
+            else:  # L or R no looping
+                reward = 2
         else:
             reward = -200
+
 
         return state, reward, done, {}
 
     def reset(self):
+
+        # ========
+        # = POSE =
+        # ========
+        # pos = random.choice(list(enumerate(positions)))[0]
+        # print(self.position)
 
         # Resets the state of the environment and returns an initial observation.
         rospy.wait_for_service('/gazebo/reset_simulation')
@@ -169,21 +215,23 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
             # resp_pause = pause.call()
             self.unpause()
         except rospy.ServiceException as e:
-            print(e)
-            print("/gazebo/unpause_physics service call failed")
+            print("/gazebo/unpause_physics service call failed: {}".format(e))
 
         # read laser data
-        data = None
-        while data is None:
-            data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
-            # print("[Laser data here]")
+        laser_data = None
+        success = False
+        while laser_data is None or not success:
+            try:
+                laser_data = rospy.wait_for_message('/F1ROS/laser/scan', LaserScan, timeout=5)
+            finally:
+                success = True
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
             # resp_pause = pause.call()
             self.pause()
         except rospy.ServiceException as e:
-            print(e)
-            print("/gazebo/pause_physics service call failed")
-        state = self.discrete_observation(data, 5)
+            print("/gazebo/pause_physics service call failed: {}".format(e))
+        state = self.discrete_observation(laser_data, 5)
+
         return state
