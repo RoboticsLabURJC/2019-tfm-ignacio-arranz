@@ -28,10 +28,12 @@ def save_model():
     # (S x A), where s are all states, a are all the possible actions. After the environment is solved, just save this
     # matrix as a csv file. I have a quick implementation of this on my GitHub under Reinforcement Learning.
     date = datetime.datetime.now()
-    format = date.strftime("%Y%m%d_%H:%M:%S")
+    format = date.strftime("%Y%m%d_%H%M%S")
     file_name = "qlearn_model_e_{}_a_{}_g_{}".format(qlearn.epsilon, qlearn.alpha, qlearn.gamma)
     file = open("logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
     pickle.dump(qlearn.q, file)
+
+    print(qlearn.q)
 
 
 ####################################################################################################################
@@ -51,7 +53,7 @@ if __name__ == '__main__':
     actions = range(env.action_space.n)
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
-    load_model = True  # TODO: environment variable
+    load_model = False  # TODO: environment variable
     if load_model:
         qlean_file = open('logs/qlearn_models/qlearn_model_e_0.4018_a_0.2_g_0.9.pkl', 'rb')
         model = pickle.load(qlean_file)
@@ -68,7 +70,7 @@ if __name__ == '__main__':
         initial_epsilon = qlearn.epsilon
 
     total_episodes = 200000
-    epsilon_discount = 0.98  # Default 0.9986
+    epsilon_discount = 0.9986  # Default 0.9986
 
     start_time = time.time()
     for episode in range(total_episodes):
@@ -85,7 +87,7 @@ if __name__ == '__main__':
 
         state = ''.join(map(str, observation))
 
-        for i in range(1500000):
+        for step in range(1500000):
 
             # Pick an action based on the current state
             action = qlearn.selectAction(state)
@@ -106,10 +108,10 @@ if __name__ == '__main__':
             if not done:
                 state = nextState
             else:
-                last_time_steps = np.append(last_time_steps, [int(i + 1)])
+                last_time_steps = np.append(last_time_steps, [int(step + 1)])
                 break
 
-        if episode % 10 == 0:
+        if episode % 100 == 0:
             plotter.plot(env)
             print("\nSaving model . . .\n")
             save_model()
@@ -118,7 +120,7 @@ if __name__ == '__main__':
         h, m = divmod(m, 60)
         print ("EP: " + str(episode + 1) + " - [alpha: " + str(round(qlearn.alpha, 2)) + " - gamma: " + str(
             round(qlearn.gamma, 2)) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + "] - Reward: " + str(
-            cumulated_reward) + "     Time: %d:%02d:%02d" % (h, m, s))
+            cumulated_reward) + " - Time: %d:%02d:%02d" % (h, m, s) + " - steps: " + str(step))
 
         # Github table content
     print ("\n|" + str(total_episodes) + "|" + str(qlearn.alpha) + "|" + str(qlearn.gamma) + "|" + str(
