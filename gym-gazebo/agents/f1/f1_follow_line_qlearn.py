@@ -1,4 +1,5 @@
 import time
+import datetime
 import pickle
 
 import gym
@@ -6,7 +7,7 @@ import gym_gazebo
 import numpy as np
 from gym import logger, wrappers
 
-from f1_qlearn import QLearn
+from qlearn import QLearn
 import liveplot
 
 
@@ -26,8 +27,10 @@ def save_model():
     # Tabular RL: Tabular Q-learning basically stores the policy (Q-values) of  the agent into a matrix of shape
     # (S x A), where s are all states, a are all the possible actions. After the environment is solved, just save this
     # matrix as a csv file. I have a quick implementation of this on my GitHub under Reinforcement Learning.
+    date = datetime.datetime.now()
+    format = date.strftime("%Y%m%d_%H:%M:%S")
     file_name = "qlearn_model_e_{}_a_{}_g_{}".format(qlearn.epsilon, qlearn.alpha, qlearn.gamma)
-    file = open("logs/qlearn_models/" + file_name + '.pkl', 'wb')
+    file = open("logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
     pickle.dump(qlearn.q, file)
 
 
@@ -48,20 +51,23 @@ if __name__ == '__main__':
     actions = range(env.action_space.n)
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
-    load_model = True
+    load_model = True  # TODO: environment variable
     if load_model:
-        qlean_file = open('logs/qlearn_model/qlearn_model.pkl', 'rb')
+        qlean_file = open('logs/qlearn_models/qlearn_model_e_0.4018_a_0.2_g_0.9.pkl', 'rb')
         model = pickle.load(qlean_file)
+        print("dict size: {}".format(len(model)))
+        print(model)
+
         qlearn.q = model
         qlearn.alpha = 0.2
         qlearn.gamma = 0.9
-        qlearn.epsilon = 0.72
+        qlearn.epsilon = 0.2
         highest_reward = 4000
     else:
         highest_reward = 0
         initial_epsilon = qlearn.epsilon
 
-    total_episodes = 20000
+    total_episodes = 200000
     epsilon_discount = 0.98  # Default 0.9986
 
     start_time = time.time()
@@ -79,7 +85,8 @@ if __name__ == '__main__':
 
         state = ''.join(map(str, observation))
 
-        for i in range(1500):
+        for i in range(1500000):
+
             # Pick an action based on the current state
             action = qlearn.selectAction(state)
 
@@ -102,7 +109,7 @@ if __name__ == '__main__':
                 last_time_steps = np.append(last_time_steps, [int(i + 1)])
                 break
 
-        if episode % 100 == 0:
+        if episode % 10 == 0:
             plotter.plot(env)
             print("\nSaving model . . .\n")
             save_model()
