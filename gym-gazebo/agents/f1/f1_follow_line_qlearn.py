@@ -53,17 +53,16 @@ if __name__ == '__main__':
     actions = range(env.action_space.n)
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
-    load_model = False  # TODO: environment variable
+    load_model = True  # TODO: environment variable
     if load_model:
-        qlean_file = open('logs/qlearn_models/qlearn_model_e_0.4018_a_0.2_g_0.9.pkl', 'rb')
+        qlean_file = open('logs/qlearn_models/20200622_131033qlearn_model_e_0.139063502362_a_0.2_g_0.9.pkl', 'rb')
         model = pickle.load(qlean_file)
         print("dict size: {}".format(len(model)))
         print(model)
-
         qlearn.q = model
         qlearn.alpha = 0.2
         qlearn.gamma = 0.9
-        qlearn.epsilon = 0.2
+        qlearn.epsilon = 0.6
         highest_reward = 4000
     else:
         highest_reward = 0
