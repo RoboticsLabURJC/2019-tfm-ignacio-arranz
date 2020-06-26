@@ -8,8 +8,21 @@ logger = logging.getLogger(__name__)
 
 # F1 envs
 register(
-    id='GazeboF1CameraEnv-v0',
-    entry_point='gym_gazebo.envs.f1:GazeboF1CameraEnv',
+    id='GazeboF1QlearnCameraEnv-v0',
+    entry_point='gym_gazebo.envs.f1:GazeboF1QlearnCameraEnv',
+    # More arguments here
+)
+# F1 Qlearn
+register(
+    id='GazeboF1QlearnLaserEnv-v0',
+    entry_point='gym_gazebo.envs.f1:GazeboF1QlearnLaserEnv',
+    # More arguments here
+)
+
+# F1 DQN
+register(
+    id='GazeboF1CameraEnvDQN-v0',
+    entry_point='gym_gazebo.envs.f1:GazeboF1CameraEnvDQN',
     # More arguments here
 )
 
