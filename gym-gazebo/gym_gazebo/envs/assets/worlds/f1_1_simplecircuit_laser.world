@@ -12,7 +12,8 @@
   <include>
       <uri>model://f1_renault_laser</uri>
       <!-- default: 53.462 -10.734 0.004 0 0 -1.57 -->
-    <pose>53.462 -41.9884 0.004 0 0 -1.57</pose> 
+      <!--<pose>53.462 -41.9884 0.004 0 0 -1.57</pose>-->
+    <pose>13.13 51.93 0.004 0 0 -0.1482</pose>
   </include>
 
   <scene>
