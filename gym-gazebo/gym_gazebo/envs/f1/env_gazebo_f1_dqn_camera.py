@@ -116,25 +116,17 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-
         # self.state_msg = ModelState()
         # self.set_state = rospy.ServiceProxy("/gazebo/set_model_state", SetModelState)
-        # self.state_msg.model_name = 'f1_renault'
-
         self.position = None
-
         self.reward_range = (-np.inf, np.inf)
         self._seed()
-        
         self.last50actions = [0] * 50
-        
         self.img_rows = 32
         self.img_cols = 32
         self.img_channels = 1
-
         # self.bridge = CvBridge()
         # self.image_sub = rospy.Subscriber("/F1ROS/cameraL/image_raw", Image, self.callback)
-
         self.action_space = self._generate_simple_action_space()
 
     def render(self, mode='human'):
@@ -209,7 +201,6 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         """
         (pos_number, pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
         """
-
         pos_number = positions[0]
 
         state = ModelState()
@@ -228,7 +219,6 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
             set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
             # resp = set_state(state)
         except rospy.ServiceException as e:
-            print(e)
             print("Service call failed: {}".format(e))
 
         return pos_number
@@ -405,8 +395,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
             # resp_pause = pause.call()
             self.pause()
         except rospy.ServiceException as e:
-            print(e)
-            print ("/gazebo/pause_physics service call failed")
+            print("/gazebo/pause_physics service call failed: {}".format(e))
 
         self.last50actions.pop(0)  # remove oldest
         if action == 0:
@@ -479,8 +468,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
             # resp_pause = pause.call()
             self.unpause()
         except rospy.ServiceException as e:
-            print(e)
-            print("/gazebo/unpause_physics service call failed")
+            print("/gazebo/unpause_physics service call failed: {}".format(e))
 
         image_data = None
         cv_image = None
@@ -501,8 +489,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
             # resp_pause = pause.call()
             self.pause()
         except rospy.ServiceException as e:
-            print(e)
-            print("/gazebo/pause_physics service call failed")
+            print("/gazebo/pause_physics service call failed: {}".format(e))
 
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
         cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
