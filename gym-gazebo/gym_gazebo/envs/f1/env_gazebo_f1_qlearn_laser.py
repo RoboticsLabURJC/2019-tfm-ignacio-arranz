@@ -183,6 +183,8 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         if not done:
             if abs(center_detour) < 4:
                  reward = 5
+            elif abs(center_detour < 2) and action == 1:
+                reward = 10
             else:  # L or R no looping
                 reward = 2
         else:
