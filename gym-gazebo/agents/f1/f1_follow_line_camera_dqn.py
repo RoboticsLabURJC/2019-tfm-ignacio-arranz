@@ -20,7 +20,7 @@ from gym import logger, wrappers
 from keras import backend as K
 
 from settings import my_board
-from f1_deepqn import DeepQ
+from dqn import DeepQ
 
 
 # To equal the inputs, we set the channels first and the image next.

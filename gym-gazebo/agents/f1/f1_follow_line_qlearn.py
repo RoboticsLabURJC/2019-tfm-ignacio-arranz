@@ -3,12 +3,13 @@ import datetime
 import pickle
 
 import gym
+import liveplot
 import gym_gazebo
 import numpy as np
 from gym import logger, wrappers
-
 from qlearn import QLearn
-import liveplot
+
+import agents.f1.settings as settings
 
 
 def render():
@@ -40,9 +41,14 @@ def save_model():
 # MAIN PROGRAM
 ####################################################################################################################
 if __name__ == '__main__':
-    # GazeboF1QlearnLaserEnv-v0
-    # GazeboF1QlearnCameraEnv-v0
-    env = gym.make('GazeboF1QlearnLaserEnv-v0')
+    current_env = "laser"
+    if current_env == "laser":
+        env = gym.make('GazeboF1QlearnLaserEnv-v0')
+    elif current_env == "camera":
+        env = gym.make('GazeboF1QlearnCameraEnv-v0')
+    else:
+        print("NO correct env selected")
+
     outdir = './logs/f1_qlearn_gym_experiments/'
 
     env = gym.wrappers.Monitor(env, outdir, force=True)
@@ -53,12 +59,11 @@ if __name__ == '__main__':
     actions = range(env.action_space.n)
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
-    load_model = True  # TODO: environment variable
-    if load_model:
-        qlean_file = open('logs/qlearn_models/20200622_131033qlearn_model_e_0.139063502362_a_0.2_g_0.9.pkl', 'rb')
-        model = pickle.load(qlean_file)
-        print("dict size: {}".format(len(model)))
-        print(model)
+    if settings.load_model:
+        exit(1)
+        qlearn_file = open('logs/qlearn_models/20200628_LASER_5ACTS_155827qlearn_model_e_0.243550191511_a_0.2_g_0.9.pkl', 'rb')
+        model = pickle.load(qlearn_file)
+        print("Number of (action, state): {}".format(len(model)))
         qlearn.q = model
         qlearn.alpha = 0.2
         qlearn.gamma = 0.9
@@ -75,7 +80,7 @@ if __name__ == '__main__':
     for episode in range(total_episodes):
 
         done = False
-        cumulated_reward = 0  # Should going forward give more reward then L/R ?
+        cumulated_reward = 0  # Should going forward give more reward then L/R z?
         
         observation = env.reset()
 
@@ -95,11 +100,13 @@ if __name__ == '__main__':
             observation, reward, done, info = env.step(action)
             cumulated_reward += reward
 
+
+
             if highest_reward < cumulated_reward:
                 highest_reward = cumulated_reward
 
             nextState = ''.join(map(str, observation))
-
+            print(nextState)
             qlearn.learn(state, action, reward, nextState)
 
             env._flush(force=True)
@@ -110,10 +117,13 @@ if __name__ == '__main__':
                 last_time_steps = np.append(last_time_steps, [int(step + 1)])
                 break
 
+            # print("Obser: {} - Rew: {}".format(observation, reward))
+
         if episode % 100 == 0:
-            plotter.plot(env)
-            print("\nSaving model . . .\n")
-            save_model()
+            #plotter.plot(env)
+            if settings.save_model:
+                print("\nSaving model . . .\n")
+                save_model()
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
