@@ -17,6 +17,7 @@ from std_srvs.srv import Empty
 from sensor_msgs.msg import Image, LaserScan
 
 from gym.utils import seeding
+from agents.f1.settings import telemetry
 
 
 # Images size
@@ -29,6 +30,7 @@ x_row = [260, 360, 450]
 RANGES = [300, 280, 250]  # Line 1, 2 and 3
 
 RESET_RANGE = [-40, 40]
+font = cv2.FONT_HERSHEY_COMPLEX
 
 # Deprecated?
 space_reward = np.flip(np.linspace(0, 1, 300))
@@ -66,6 +68,32 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def render(self, mode='human'):
         pass
+
+    def _gazebo_pause(self):
+        rospy.wait_for_service('/gazebo/pause_physics')
+        try:
+            # resp_pause = pause.call()
+            self.pause()
+        except rospy.ServiceException as e:
+            print("/gazebo/pause_physics service call failed: {}".format(e))
+
+    def _gazebo_unpause(self):
+        rospy.wait_for_service('/gazebo/unpause_physics')
+        try:
+            self.unpause()
+        except rospy.ServiceException as e:
+            print(e)
+            print("/gazebo/unpause_physics service call failed")
+
+    def _gazebo_reset(self):
+        # Resets the state of the environment and returns an initial observation.
+        rospy.wait_for_service('/gazebo/reset_simulation')
+        try:
+            # reset_proxy.call()
+            self.reset_proxy()
+            self.unpause()
+        except rospy.ServiceException as e:
+            print("/gazebo/reset_simulation service call failed: {}".format(e))
 
     @staticmethod
     def discrete_observation(data, new_ranges):
@@ -112,6 +140,19 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         return coords
 
+    @staticmethod
+    def calculate_reward(error_1, error_2, error_3):
+
+        global center_image
+        alpha = 0
+        beta = 0
+        gamma = 1
+
+        d = np.true_divide(error_3, center_image)
+        reward = np.round(np.exp(-d), 4)
+
+        return reward
+
     def processed_image(self, img):
         """
         Convert img to HSV. Get the image processed. Get 3 lines from the image.
@@ -120,7 +161,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         :return: x, y, z: 3 coordinates
         """
 
-        print("\n----------\n {} \n--------\n".format(type(img)))
         img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
 
@@ -149,6 +189,29 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         return done
 
     @staticmethod
+    def calculate_error(points):
+
+        error_1 = abs(center_image - points[0])
+        error_2 = abs(center_image - points[1])
+        error_3 = abs(center_image - points[2])
+
+        return error_1, error_2, error_3
+
+    @staticmethod
+    def is_game_over(points):
+
+        done = False
+
+        if center_image - RANGES[2] < points[2] < center_image + RANGES[2]:
+            if center_image - RANGES[0] < points[0] < center_image + RANGES[0] or \
+                    center_image - RANGES[1] < points[1] < center_image + RANGES[1]:
+                pass  # In Line
+        else:
+            done = True
+
+        return done
+
+    @staticmethod
     def get_center_of_laser(data):
 
         laser_len = len(data.ranges)
@@ -163,32 +226,45 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def step(self, action):
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            self.unpause()
-        except rospy.ServiceException as e:
-            print(e)
-            print("/gazebo/unpause_physics service call failed")
+    def show_telemetry(self, img, point_1, point_2, point_3, action, reward):
+        # Puntos centrales de la imagen (verde)
+        cv2.line(img, (320, x_row[0]), (320, x_row[0]), (255, 255, 0), thickness=5)
+        cv2.line(img, (320, x_row[1]), (320, x_row[1]), (255, 255, 0), thickness=5)
+        cv2.line(img, (320, x_row[2]), (320, x_row[2]), (255, 255, 0), thickness=5)
+        # Linea diferencia entre punto central - error (blanco)
+        cv2.line(img, (center_image, x_row[0]), (point_1, x_row[0]), (255, 255, 255), thickness=2)
+        cv2.line(img, (center_image, x_row[1]), (point_2, x_row[1]), (255, 255, 255), thickness=2)
+        cv2.line(img, (center_image, x_row[2]), (point_3, x_row[2]), (255, 255, 255), thickness=2)
+        # Telemetry
+        cv2.putText(img, str("action: {}".format(action)), (18, 280), font, 0.4, (255, 255, 255), 1)
+        #cv2.putText(img, str("w ang: {}".format(w_angular)), (18, 300), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("reward: {}".format(reward)), (18, 320), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("err1: {}".format(center_image - point_1)), (18, 340), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("err2: {}".format(center_image - point_2)), (18, 360), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("err3: {}".format(center_image - point_3)), (18, 380), font, 0.4, (255, 255, 255), 1)
+        #cv2.putText(img, str("pose: {}".format(self.position)), (18, 400), font, 0.4, (255, 255, 255), 1)
 
+        cv2.imshow("Image window", img)
+        cv2.waitKey(3)
+
+    def step(self, action):
+
+        self._gazebo_unpause()
+
+        vel_cmd = Twist()
         if action == 0:  # FORWARD
-            vel_cmd = Twist()
             vel_cmd.linear.x = 3
             vel_cmd.angular.z = 0.0
-            self.vel_pub.publish(vel_cmd)
         elif action == 1:  # LEFT
-            vel_cmd = Twist()
             vel_cmd.linear.x = 3  # 0.05
             vel_cmd.angular.z = 1  # 0.3
-            self.vel_pub.publish(vel_cmd)
         elif action == 2:  # RIGHT
-            vel_cmd = Twist()
             vel_cmd.linear.x = 3  # 0.05
             vel_cmd.angular.z = -1  # -0.3
+        self.vel_pub.publish(vel_cmd)
 
         # Get camera info
         image_data = None
-        cv_image = None
         f1_image_camera = None
         while image_data is None:
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
@@ -198,73 +274,37 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         state = self.processed_image(f1_image_camera.data)
 
-        rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            # resp_pause = pause.call()
-            self.pause()
-        except rospy.ServiceException as e:
-            print("/gazebo/pause_physics service call failed: {}".format(e))
+        self._gazebo_pause()
 
-        done = False
-        if abs(state[3]) > 2:
-            done = True
-        # print("center: {}".format(center_detour))
+        done = self.is_game_over(state)
 
-        # 3 actions
-        # if not done:
-        #     if abs(center_detour) < 2:
-        #          reward = 1 / float(center_detour + 1)
-        #     else:  # L or R no looping
-        #          reward = 0.5 / float(center_detour + 1)
-        # else:
-        #     reward = -200
-
+        error_1, error_2, error_3 = self.calculate_error(state)
         if not done:
-            if action == 0:
-                reward = 5
-            else:
-                reward = 1
+            reward = self.calculate_reward(error_1, error_2, error_3)
         else:
             reward = -200
 
+        if telemetry:
+            self.show_telemetry(f1_image_camera.data, state[0], state[1], state[2], action, reward)
+
         return state, reward, done, {}
-
-
-
-
 
     def reset(self):
 
-        # Resets the state of the environment and returns an initial observation.
-        rospy.wait_for_service('/gazebo/reset_simulation')
-        try:
-            # reset_proxy.call()
-            self.reset_proxy()
-            self.unpause()
-        except rospy.ServiceException as e:
-            print("/gazebo/reset_simulation service call failed: {}".format(e))
-
-        # Unpause simulation to make observation
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            # resp_pause = pause.call()
-            self.unpause()
-        except rospy.ServiceException as e:
-            print("/gazebo/unpause_physics service call failed: {}".format(e))
+        self._gazebo_reset()
+        self._gazebo_unpause()
 
         # Get camera info
         image_data = None
-        while image_data is None:
+        while image_data is None  or success is False:
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
             # Transform the image data from ROS to CVMat
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             f1_image_camera = self.image_msg_to_image(image_data, cv_image)
+            if f1_image_camera:
+                success = True
 
-        rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            # resp_pause = pause.call()
-            self.pause()
-        except rospy.ServiceException as e:
-            print("/gazebo/pause_physics service call failed: {}".format(e))
-        state = self.processed_image(image_data)
+        state = self.processed_image(f1_image_camera.data)
+
+        self._gazebo_pause()
         return state
