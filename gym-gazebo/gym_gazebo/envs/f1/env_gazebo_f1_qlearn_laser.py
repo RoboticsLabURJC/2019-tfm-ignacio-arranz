@@ -15,6 +15,8 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
 from sensor_msgs.msg import LaserScan
 
+from agents.f1.settings import actions_medium
+
 
 # POSES
 positions = [(0, 53.462, -41.988, 0.004, 0, 0, 1.57, -1.57),
@@ -141,24 +143,8 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         self._gazebo_unpause()
 
         vel_cmd = Twist()
-        if action == 0:  # FORWARD 1
-            vel_cmd.linear.x = 3
-            vel_cmd.angular.z = 0.0
-        if action == 1:  # FORWARD 2
-            vel_cmd.linear.x = 6
-            vel_cmd.angular.z = 0.0
-        elif action == 2:  # LEFT 1
-            vel_cmd.linear.x = 3  # 0.05
-            vel_cmd.angular.z = 1  # 0.3
-        elif action == 3:  # RIGHT 1
-            vel_cmd.linear.x = 3  # 0.05
-            vel_cmd.angular.z = -1  # -0.3
-        elif action == 4:  # LEFT 2
-            vel_cmd.linear.x = 4  # 0.05
-            vel_cmd.angular.z = 4  # 0.3
-        elif action == 5:  # RIGHT 2
-            vel_cmd.linear.x = 4  # 0.05
-            vel_cmd.angular.z = -4  # -0.3
+        vel_cmd.linear.x = actions_medium[action][0]
+        vel_cmd.angular.z = actions_medium[action][1]
         self.vel_pub.publish(vel_cmd)
 
         laser_data = None
@@ -183,9 +169,6 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
             done = True
         # print("center: {}".format(center_detour))
 
-        #############
-        # 3 actions
-        #############
         if not done:
             if abs(center_detour) < 4:
                  reward = 5
@@ -196,21 +179,18 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         else:
             reward = -200
 
-
         return state, reward, done, {}
 
     def reset(self):
 
-        # ========
-        # = POSE =
-        # ========
+        # === POSE ===
         # pos = random.choice(list(enumerate(positions)))[0]
         # print(self.position)
 
         self._gazebo_reset()
         self._gazebo_unpause()
 
-        # read laser data
+        # Read laser data
         laser_data = None
         success = False
         while laser_data is None or not success:

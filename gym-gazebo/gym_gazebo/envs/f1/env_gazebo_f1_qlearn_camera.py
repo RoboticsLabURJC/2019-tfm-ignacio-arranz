@@ -18,6 +18,7 @@ from sensor_msgs.msg import Image, LaserScan
 
 from gym.utils import seeding
 from agents.f1.settings import telemetry
+from agents.f1.settings import actions_simple
 
 
 # Images size
@@ -96,29 +97,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             print("/gazebo/reset_simulation service call failed: {}".format(e))
 
     @staticmethod
-    def discrete_observation(data, new_ranges):
-
-        discretized_ranges = []
-        min_range = 0.05
-        done = False
-        mod = len(data.ranges)/new_ranges
-        new_data = data.ranges[10:-10]
-        for i, item in enumerate(new_data):
-            if i % mod == 0:
-                if data.ranges[i] == float('Inf') or np.isinf(data.ranges[i]):
-                    discretized_ranges.append(6)
-                elif np.isnan(data.ranges[i]):
-                    discretized_ranges.append(0)
-                else:
-                    discretized_ranges.append(int(data.ranges[i]))
-            if min_range > data.ranges[i] > 0:
-                # print("Data ranges: {}".format(data.ranges[i]))
-                done = True
-                break
-
-        return discretized_ranges, done
-
-    @staticmethod
     def image_msg_to_image(img, cv_image):
 
         image = ImageF1()
@@ -141,14 +119,14 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         return coords
 
     @staticmethod
-    def calculate_reward(error_1, error_2, error_3):
+    def calculate_reward(error):
 
         global center_image
         alpha = 0
         beta = 0
         gamma = 1
 
-        d = np.true_divide(error_3, center_image)
+        d = np.true_divide(error, center_image)
         reward = np.round(np.exp(-d), 4)
 
         return reward
@@ -176,7 +154,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         central_3 = self.get_center(line_3)
 
         # print(central_1, central_2, central_3)
-
         return [central_1, central_2, central_3]
 
     @staticmethod
@@ -241,7 +218,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         cv2.putText(img, str("reward: {}".format(reward)), (18, 320), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("err1: {}".format(center_image - point_1)), (18, 340), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("err2: {}".format(center_image - point_2)), (18, 360), font, 0.4, (255, 255, 255), 1)
-        cv2.putText(img, str("err3: {}".format(center_image - point_3)), (18, 380), font, 0.4, (255, 255, 255), 1)
+        cv2.putText(img, str("err3: {}".format(center_image - point_3)), (18, 380), font, 0.4, (0, 0, 255), 1)
         #cv2.putText(img, str("pose: {}".format(self.position)), (18, 400), font, 0.4, (255, 255, 255), 1)
 
         cv2.imshow("Image window", img)
@@ -252,15 +229,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self._gazebo_unpause()
 
         vel_cmd = Twist()
-        if action == 0:  # FORWARD
-            vel_cmd.linear.x = 3
-            vel_cmd.angular.z = 0.0
-        elif action == 1:  # LEFT
-            vel_cmd.linear.x = 3  # 0.05
-            vel_cmd.angular.z = 1  # 0.3
-        elif action == 2:  # RIGHT
-            vel_cmd.linear.x = 3  # 0.05
-            vel_cmd.angular.z = -1  # -0.3
+        vel_cmd.linear.x = actions_simple[action][0]
+        vel_cmd.angular.z = actions_simple[action][1]
         self.vel_pub.publish(vel_cmd)
 
         # Get camera info
@@ -277,26 +247,37 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self._gazebo_pause()
 
         done = self.is_game_over(state)
+        _, _, error_3 = self.calculate_error(state)
 
-        error_1, error_2, error_3 = self.calculate_error(state)
+        reward = 0
         if not done:
-            reward = self.calculate_reward(error_1, error_2, error_3)
+            #reward = self.calculate_reward(error_3)
+            if abs(error_3) < 100:
+                reward = 5
+            elif abs(error_3) < 50:
+                reward = 10
+            elif 100 < abs(error_3) < 200:
+                reward = 2
         else:
-            reward = -200
+            reward = -100
 
         if telemetry:
             self.show_telemetry(f1_image_camera.data, state[0], state[1], state[2], action, reward)
 
+        state = [action, state[2]]
         return state, reward, done, {}
 
     def reset(self):
 
         self._gazebo_reset()
+        time.sleep(0.5)
         self._gazebo_unpause()
 
         # Get camera info
         image_data = None
-        while image_data is None  or success is False:
+        f1_image_camera = None
+        success = False
+        while image_data is None or success is False:
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
             # Transform the image data from ROS to CVMat
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
@@ -305,6 +286,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
                 success = True
 
         state = self.processed_image(f1_image_camera.data)
+        state = [0, state[2]]
 
         self._gazebo_pause()
         return state

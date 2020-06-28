@@ -192,7 +192,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         cv2.putText(img, str("err2: {}".format(center_image - point_2)), (18, 360), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("err3: {}".format(center_image - point_3)), (18, 380), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("pose: {}".format(self.position)), (18, 400), font, 0.4, (255, 255, 255), 1)
-                
+
         cv2.imshow("Image window", img)
         cv2.waitKey(3)
 
@@ -253,8 +253,6 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         :return: x, y, z: 3 coordinates
         """
 
-        print("\n----------\n {} \n--------\n".format(type(img)))
-
         img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
 
@@ -300,7 +298,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         #   print(e)
 
     @staticmethod
-    def calculate_error(self, point_1, point_2, point_3):
+    def calculate_error(point_1, point_2, point_3):
 
         error_1 = abs(center_image - point_1)
         error_2 = abs(center_image - point_2)
@@ -379,7 +377,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         while image_data is None or success is False:
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
             # Transform the image data from ROS to CVMat
-            cv_imagecv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+            cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             f1_image_camera = self.image_msg_to_image(image_data, cv_image)
 
             if f1_image_camera:
@@ -478,11 +476,8 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
             # Transform the image data from ROS to CVMat
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             f1_image_camera = self.image_msg_to_image(image_data, cv_image)
-            
             if f1_image_camera:
                 success = True
-            else:
-                pass
 
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
