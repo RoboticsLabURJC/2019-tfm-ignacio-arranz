@@ -15,21 +15,16 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
 from sensor_msgs.msg import LaserScan
 
-from agents.f1.settings import actions_medium
+from agents.f1.settings import actions_hard
+from agents.f1.settings import gazebo_positions
 
-
-# POSES
-positions = [(0, 53.462, -41.988, 0.004, 0, 0, 1.57, -1.57),
-             (1, 53.462, -8.734, 0.004, 0, 0, 1.57, -1.57),
-             (2, 39.712, -30.741, 0.004, 0, 0, 1.56, 1.56),
-             (3, -7.894, -39.051, 0.004, 0, 0.01, -2.021, 2.021),
-             (4, 20.043, 37.130, 0.003, 0, 0.103, -1.4383, -1.4383)]
 
 class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
         gazebo_env.GazeboEnv.__init__(self, "F1Lasercircuit_v0.launch")
+        #gazebo_env.GazeboEnv.__init__(self, "f1_1_nurburgrinlineROS_laser.launch")
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -68,22 +63,24 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         except rospy.ServiceException as e:
             print("/gazebo/reset_simulation service call failed: {}".format(e))
 
-    @staticmethod
-    def set_new_pose(new_pos):
+    def set_new_pose(self):
         """
         (pos_number, pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
         """
+        pos = random.choice(list(enumerate(positions)))[0]
+        self.position = pos
+
         pos_number = positions[0]
 
         state = ModelState()
-        state.model_name = "f1_renault"
-        state.pose.position.x = positions[new_pos][1]
-        state.pose.position.y = positions[new_pos][2]
-        state.pose.position.z = positions[new_pos][3]
-        state.pose.orientation.x = positions[new_pos][4]
-        state.pose.orientation.y = positions[new_pos][5]
-        state.pose.orientation.z = positions[new_pos][6]
-        state.pose.orientation.w = positions[new_pos][7]
+        state.model_name = "f1_renault_laser"
+        state.pose.position.x = gazebo_positions[pos][1]
+        state.pose.position.y = gazebo_positions[pos][2]
+        state.pose.position.z = gazebo_positions[pos][3]
+        state.pose.orientation.x = gazebo_positions[pos][4]
+        state.pose.orientation.y = gazebo_positions[pos][5]
+        state.pose.orientation.z = gazebo_positions[pos][6]
+        state.pose.orientation.w = gazebo_positions[pos][7]
 
         rospy.wait_for_service('/gazebo/set_model_state')
         try:
@@ -143,8 +140,8 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         self._gazebo_unpause()
 
         vel_cmd = Twist()
-        vel_cmd.linear.x = actions_medium[action][0]
-        vel_cmd.angular.z = actions_medium[action][1]
+        vel_cmd.linear.x = actions_hard[action][0]
+        vel_cmd.angular.z = actions_hard[action][1]
         self.vel_pub.publish(vel_cmd)
 
         laser_data = None
@@ -182,12 +179,13 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         return state, reward, done, {}
 
     def reset(self):
-
         # === POSE ===
-        # pos = random.choice(list(enumerate(positions)))[0]
-        # print(self.position)
+        self.set_new_pose()
+        print(self.position)
 
-        self._gazebo_reset()
+        time.sleep(0.05)
+
+        #self._gazebo_reset()
         self._gazebo_unpause()
 
         # Read laser data
