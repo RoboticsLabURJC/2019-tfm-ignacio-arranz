@@ -100,13 +100,11 @@ if __name__ == '__main__':
             observation, reward, done, info = env.step(action)
             cumulated_reward += reward
 
-
-
             if highest_reward < cumulated_reward:
                 highest_reward = cumulated_reward
 
             nextState = ''.join(map(str, observation))
-            print(nextState)
+
             qlearn.learn(state, action, reward, nextState)
 
             env._flush(force=True)
@@ -120,7 +118,7 @@ if __name__ == '__main__':
             # print("Obser: {} - Rew: {}".format(observation, reward))
 
         if episode % 100 == 0:
-            #plotter.plot(env)
+            plotter.plot(env)
             if settings.save_model:
                 print("\nSaving model . . .\n")
                 save_model()
