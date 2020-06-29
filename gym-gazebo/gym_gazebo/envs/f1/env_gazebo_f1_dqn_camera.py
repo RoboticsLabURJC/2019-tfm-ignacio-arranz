@@ -132,6 +132,32 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
     def render(self, mode='human'):
         pass
 
+    def _gazebo_pause(self):
+        rospy.wait_for_service('/gazebo/pause_physics')
+        try:
+            # resp_pause = pause.call()
+            self.pause()
+        except rospy.ServiceException as e:
+            print("/gazebo/pause_physics service call failed: {}".format(e))
+
+    def _gazebo_unpause(self):
+        rospy.wait_for_service('/gazebo/unpause_physics')
+        try:
+            self.unpause()
+        except rospy.ServiceException as e:
+            print(e)
+            print("/gazebo/unpause_physics service call failed")
+
+    def _gazebo_reset(self):
+        # Resets the state of the environment and returns an initial observation.
+        rospy.wait_for_service('/gazebo/reset_simulation')
+        try:
+            # reset_proxy.call()
+            self.reset_proxy()
+            self.unpause()
+        except rospy.ServiceException as e:
+            print("/gazebo/reset_simulation service call failed: {}".format(e))
+
     @staticmethod
     def _generate_simple_action_space():
         actions = 5
@@ -351,25 +377,16 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
 
     def step(self, action):
 
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            self.unpause()
-        except rospy.ServiceException as e:
-            print(e)
-            print ("/gazebo/unpause_physics service call failed")
+        self._gazebo_unpause()
 
-        # =============
-        # == ACTIONS == - 5 actions
-        # =============
+        # === ACTIONS === - 5 actions
         vel_cmd = Twist()
         vel_cmd.linear.x = 3  # self.action_space[action][0]
         vel_cmd.angular.z = self.action_space[action]  # [1]
         self.vel_pub.publish(vel_cmd)
         # print("Action: {} - V_Lineal: {} - W_Angular: {}".format(action, vel_cmd.linear.x, vel_cmd.angular.z))
 
-        # ===========
-        # == IMAGE == 
-        # ===========
+        # === IMAGE ===
         image_data = None
         success = False
         cv_image = None
@@ -388,12 +405,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         # DONE
         done = self.is_game_over(point_1, point_2, point_3)
 
-        rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            # resp_pause = pause.call()
-            self.pause()
-        except rospy.ServiceException as e:
-            print("/gazebo/pause_physics service call failed: {}".format(e))
+        self._gazebo_pause()
 
         self.last50actions.pop(0)  # remove oldest
         if action == 0:
@@ -403,22 +415,16 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
 
         # action_sum = sum(self.last50actions)
 
-        # =====================
         # == CALCULATE ERROR ==
-        # =====================
         error_1, error_2, error_3 = self.calculate_error(point_1, point_2, point_3)
 
-        # ============
         # == REWARD ==
-        # ============
         if not done:
             reward = self.calculate_reward(error_1, error_2, error_3)
         else:
             reward = -200
 
-        # ===============
         # == TELEMETRY ==
-        # ===============
         if telemetry:
             self.show_telemetry(f1_image_camera.data, point_1, point_2, point_3, action, reward)
 
@@ -427,7 +433,6 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         observation = cv_image.reshape(1, 1, cv_image.shape[0], cv_image.shape[1])
         
         # info = [vel_cmd.linear.x, vel_cmd.angular.z, error_1, error_2, error_3]
-        
         # OpenAI standard return: observation, reward, done, info
         return observation, reward, done, {}
 
@@ -440,33 +445,16 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
         
         self.last50actions = [0] * 50  # used for looping avoidance
 
-        # ========
-        # = POSE =
-        # ========
+        # === POSE ===
         pos = random.choice(list(enumerate(positions)))[0]
         self.position = pos
         self.set_new_pose(pos)
         
-        # =========
-        # = RESET =
-        # =========
+        # === RESET ===
         # Resets the state of the environment and returns an initial observation.
         time.sleep(0.05)
-        # rospy.wait_for_service('/gazebo/reset_simulation')
-        # try:
-        #     #reset_proxy.call()
-        #     # Reset environment. Return the robot to original position.
-        #     self.reset_proxy()
-        # except (rospy.ServiceException) as e:
-        #     print("/gazebo/reset_simulation service call failed")
-
-        # Unpause simulation to make observation
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            # resp_pause = pause.call()
-            self.unpause()
-        except rospy.ServiceException as e:
-            print("/gazebo/unpause_physics service call failed: {}".format(e))
+        # self._gazebo_reset()
+        self._gazebo_unpause()
 
         image_data = None
         cv_image = None
@@ -479,12 +467,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
             if f1_image_camera:
                 success = True
 
-        rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            # resp_pause = pause.call()
-            self.pause()
-        except rospy.ServiceException as e:
-            print("/gazebo/pause_physics service call failed: {}".format(e))
+        self._gazebo_pause()
 
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
         cv_image = cv2.resize(cv_image, (self.img_rows, self.img_cols))
