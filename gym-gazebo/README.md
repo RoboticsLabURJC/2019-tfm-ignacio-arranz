@@ -60,6 +60,7 @@ ros-melodic-kdl-conversions              \
 ros-melodic-eigen-conversions            \
 ros-melodic-tf2-sensor-msgs              \
 ros-melodic-pcl-ros                      \
+ros-melodic-rosbash                      \
 ros-melodic-navigation                   \
 ros-melodic-sophus                       \
 python-rviz
