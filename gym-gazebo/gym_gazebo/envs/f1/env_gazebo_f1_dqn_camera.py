@@ -243,7 +243,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
 
         try:
             set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
-            # resp = set_state(state)
+            set_state(state)
         except rospy.ServiceException as e:
             print("Service call failed: {}".format(e))
 
