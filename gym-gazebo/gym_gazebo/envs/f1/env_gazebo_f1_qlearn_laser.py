@@ -1,15 +1,14 @@
-import gym
 import rospy
-import roslaunch
 import time
 import random
 import numpy as np
 
-from gym import utils, spaces
+from gym import spaces
 from gym.utils import seeding
+
 from gym_gazebo.envs import gazebo_env
 from gazebo_msgs.msg import ModelState
-from gazebo_msgs.srv import GetModelState, SetModelState
+from gazebo_msgs.srv import SetModelState
 
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
@@ -67,13 +66,13 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         """
         (pos_number, pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
         """
-        pos = random.choice(list(enumerate(positions)))[0]
+        pos = random.choice(list(enumerate(gazebo_positions)))[0]
         self.position = pos
 
-        pos_number = positions[0]
+        pos_number = gazebo_positions[0]
 
         state = ModelState()
-        state.model_name = "f1_renault_laser"
+        state.model_name = "f1_renault"
         state.pose.position.x = gazebo_positions[pos][1]
         state.pose.position.y = gazebo_positions[pos][2]
         state.pose.position.z = gazebo_positions[pos][3]
@@ -84,7 +83,8 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
 
         rospy.wait_for_service('/gazebo/set_model_state')
         try:
-            rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
+            set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
+            set_state(state)
         except rospy.ServiceException as e:
             print("Service call failed: {}".format(e))
         return pos_number
@@ -162,7 +162,7 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         center_detour = (right_sum - left_sum) / 5
 
         done = False
-        if abs(center_detour) > 4:
+        if abs(center_detour) > 2:
             done = True
         # print("center: {}".format(center_detour))
 
@@ -181,11 +181,9 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
     def reset(self):
         # === POSE ===
         self.set_new_pose()
-        print(self.position)
+        time.sleep(0.1)
 
-        time.sleep(0.05)
-
-        #self._gazebo_reset()
+        # self._gazebo_reset()
         self._gazebo_unpause()
 
         # Read laser data
