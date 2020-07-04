@@ -1,42 +1,25 @@
-import gym
 import rospy
-import roslaunch
 import time
 import numpy as np
+import random
 import cv2
 
-from gym import utils, spaces
-from cv_bridge import CvBridge, CvBridgeError
+from gym import spaces
+from cv_bridge import CvBridge
 
 from gym_gazebo.envs import gazebo_env
 from gazebo_msgs.msg import ModelState
-from gazebo_msgs.srv import GetModelState, SetModelState
+from gazebo_msgs.srv import SetModelState
 
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
-from sensor_msgs.msg import Image, LaserScan
+from sensor_msgs.msg import Image
 
 from gym.utils import seeding
-from agents.f1.settings import telemetry
-from agents.f1.settings import actions_simple
+from agents.f1.settings import telemetry, actions_simple, gazebo_positions, x_row, ranges, center_image
 
 
-# Images size
-witdh = 640
-center_image = witdh/2
-
-# Coord X ROW
-x_row = [260, 360, 450]
-# Maximum distance from the line
-RANGES = [300, 280, 250]  # Line 1, 2 and 3
-
-RESET_RANGE = [-40, 40]
 font = cv2.FONT_HERSHEY_COMPLEX
-
-# Deprecated?
-space_reward = np.flip(np.linspace(0, 1, 300))
-
-last_center_line = 0
 
 
 class ImageF1:
@@ -65,6 +48,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
         self.action_space = spaces.Discrete(3)  # F,L,R
         self.reward_range = (-np.inf, np.inf)
+        self.position = None
         self._seed()
 
     def render(self, mode='human'):
@@ -96,6 +80,33 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         except rospy.ServiceException as e:
             print("/gazebo/reset_simulation service call failed: {}".format(e))
 
+    def set_new_pose(self):
+        """
+        (pos_number, pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
+        """
+        pos = random.choice(list(enumerate(gazebo_positions)))[0]
+        self.position = pos
+
+        pos_number = gazebo_positions[0]
+
+        state = ModelState()
+        state.model_name = "f1_renault"
+        state.pose.position.x = gazebo_positions[pos][1]
+        state.pose.position.y = gazebo_positions[pos][2]
+        state.pose.position.z = gazebo_positions[pos][3]
+        state.pose.orientation.x = gazebo_positions[pos][4]
+        state.pose.orientation.y = gazebo_positions[pos][5]
+        state.pose.orientation.z = gazebo_positions[pos][6]
+        state.pose.orientation.w = gazebo_positions[pos][7]
+
+        rospy.wait_for_service('/gazebo/set_model_state')
+        try:
+            set_state = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
+            set_state(state)
+        except rospy.ServiceException as e:
+            print("Service call failed: {}".format(e))
+        return pos_number
+
     @staticmethod
     def image_msg_to_image(img, cv_image):
 
@@ -121,7 +132,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
     @staticmethod
     def calculate_reward(error):
 
-        global center_image
         alpha = 0
         beta = 0
         gamma = 1
@@ -179,9 +189,9 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         done = False
 
-        if center_image - RANGES[2] < points[2] < center_image + RANGES[2]:
-            if center_image - RANGES[0] < points[0] < center_image + RANGES[0] or \
-                    center_image - RANGES[1] < points[1] < center_image + RANGES[1]:
+        if center_image - ranges[2] < points[2] < center_image + ranges[2]:
+            if center_image - ranges[0] < points[0] < center_image + ranges[0] or \
+                    center_image - ranges[1] < points[1] < center_image + ranges[1]:
                 pass  # In Line
         else:
             done = True
@@ -203,7 +213,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def show_telemetry(self, img, point_1, point_2, point_3, action, reward):
+    @staticmethod
+    def show_telemetry(img, point_1, point_2, point_3, action, reward):
         # Puntos centrales de la imagen (verde)
         cv2.line(img, (320, x_row[0]), (320, x_row[0]), (255, 255, 0), thickness=5)
         cv2.line(img, (320, x_row[1]), (320, x_row[1]), (255, 255, 0), thickness=5)
@@ -214,12 +225,12 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         cv2.line(img, (center_image, x_row[2]), (point_3, x_row[2]), (255, 255, 255), thickness=2)
         # Telemetry
         cv2.putText(img, str("action: {}".format(action)), (18, 280), font, 0.4, (255, 255, 255), 1)
-        #cv2.putText(img, str("w ang: {}".format(w_angular)), (18, 300), font, 0.4, (255, 255, 255), 1)
+        # cv2.putText(img, str("w ang: {}".format(w_angular)), (18, 300), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("reward: {}".format(reward)), (18, 320), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("err1: {}".format(center_image - point_1)), (18, 340), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("err2: {}".format(center_image - point_2)), (18, 360), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("err3: {}".format(center_image - point_3)), (18, 380), font, 0.4, (0, 0, 255), 1)
-        #cv2.putText(img, str("pose: {}".format(self.position)), (18, 400), font, 0.4, (255, 255, 255), 1)
+        # cv2.putText(img, str("pose: {}".format(self.position)), (18, 400), font, 0.4, (255, 255, 255), 1)
 
         cv2.imshow("Image window", img)
         cv2.waitKey(3)
@@ -251,7 +262,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         reward = 0
         if not done:
-            #reward = self.calculate_reward(error_3)
+            # reward = self.calculate_reward(error_3)
             if abs(error_3) < 100:
                 reward = 5
             elif abs(error_3) < 50:
@@ -268,9 +279,11 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         return state, reward, done, {}
 
     def reset(self):
+        # === POSE ===
+        self.set_new_pose()
+        time.sleep(0.1)
 
-        self._gazebo_reset()
-        time.sleep(0.5)
+        # self._gazebo_reset()
         self._gazebo_unpause()
 
         # Get camera info
