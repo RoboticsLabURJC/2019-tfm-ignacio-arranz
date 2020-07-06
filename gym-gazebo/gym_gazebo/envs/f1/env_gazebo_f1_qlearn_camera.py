@@ -16,7 +16,8 @@ from std_srvs.srv import Empty
 from sensor_msgs.msg import Image
 
 from gym.utils import seeding
-from agents.f1.settings import telemetry, actions_simple, gazebo_positions, x_row, ranges, center_image
+from agents.f1.settings import actions, gazebo_positions
+from agents.f1.settings import telemetry, x_row, ranges, center_image
 
 
 font = cv2.FONT_HERSHEY_COMPLEX
@@ -167,47 +168,18 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         return [central_1, central_2, central_3]
 
     @staticmethod
-    def calculate_observation(data):
-        min_range = 0.5  # Default: 0.21
-        done = False
-        for i, item in enumerate(data.ranges):
-            if min_range > data.ranges[i] > 0:
-                done = True
-        return done
+    def calculate_observation(points):
 
-    @staticmethod
-    def calculate_error(points):
+        done = False
 
         error_1 = abs(center_image - points[0])
         error_2 = abs(center_image - points[1])
         error_3 = abs(center_image - points[2])
 
-        return error_1, error_2, error_3
-
-    @staticmethod
-    def is_game_over(points):
-
-        done = False
-
-        if center_image - ranges[2] < points[2] < center_image + ranges[2]:
-            if center_image - ranges[0] < points[0] < center_image + ranges[0] or \
-                    center_image - ranges[1] < points[1] < center_image + ranges[1]:
-                pass  # In Line
-        else:
+        if error_3 > 180:
             done = True
 
-        return done
-
-    @staticmethod
-    def get_center_of_laser(data):
-
-        laser_len = len(data.ranges)
-        left_sum = sum(data.ranges[laser_len - (laser_len / 5):laser_len - (laser_len / 10)])  # 80-90
-        right_sum = sum(data.ranges[(laser_len / 10):(laser_len / 5)])  # 10-20
-
-        center_detour = (right_sum - left_sum) / 5
-
-        return center_detour
+        return error_1, error_2, error_3, done
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -240,8 +212,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self._gazebo_unpause()
 
         vel_cmd = Twist()
-        vel_cmd.linear.x = actions_simple[action][0]
-        vel_cmd.angular.z = actions_simple[action][1]
+        vel_cmd.linear.x = actions[action][0]
+        vel_cmd.angular.z = actions[action][1]
         self.vel_pub.publish(vel_cmd)
 
         # Get camera info
@@ -253,38 +225,40 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             f1_image_camera = self.image_msg_to_image(image_data, cv_image)
 
-        state = self.processed_image(f1_image_camera.data)
-
         self._gazebo_pause()
 
-        done = self.is_game_over(state)
-        _, _, error_3 = self.calculate_error(state)
+        state = self.processed_image(f1_image_camera.data)
 
-        reward = 0
+        _, _, error_3, done = self.calculate_observation(state)
+
         if not done:
             # reward = self.calculate_reward(error_3)
             if abs(error_3) < 100:
                 reward = 5
             elif abs(error_3) < 50:
                 reward = 10
-            elif 100 < abs(error_3) < 200:
+            elif 100 < abs(error_3) < 180:
                 reward = 2
+            else:
+                reward = -100
         else:
-            reward = -100
+            reward = -200
 
         if telemetry:
             self.show_telemetry(f1_image_camera.data, state[0], state[1], state[2], action, reward)
 
         state = [action, state[2]]
+
         return state, reward, done, {}
 
     def reset(self):
         # === POSE ===
-        self.set_new_pose()
-        time.sleep(0.1)
+        # self.set_new_pose()
 
-        # self._gazebo_reset()
+        self._gazebo_reset()
         self._gazebo_unpause()
+
+        time.sleep(0.1)
 
         # Get camera info
         image_data = None
@@ -299,7 +273,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
                 success = True
 
         state = self.processed_image(f1_image_camera.data)
-        state = [0, state[2]]
+        state = ([0, state[2]], False)
 
         self._gazebo_pause()
+
         return state
