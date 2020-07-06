@@ -14,7 +14,7 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
 from sensor_msgs.msg import LaserScan
 
-from agents.f1.settings import actions_hard
+from agents.f1.settings import actions
 from agents.f1.settings import gazebo_positions
 
 
@@ -23,12 +23,12 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
     def __init__(self):
         # Launch the simulation with the given launchfile name
         gazebo_env.GazeboEnv.__init__(self, "F1Lasercircuit_v0.launch")
-        #gazebo_env.GazeboEnv.__init__(self, "f1_1_nurburgrinlineROS_laser.launch")
+        # gazebo_env.GazeboEnv.__init__(self, "f1_1_nurburgrinlineROS_laser.launch")
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-        self.action_space = spaces.Discrete(5)  # F, L, R
+        self.action_space = actions  # spaces.Discrete(5)  # F, L, R
         self.reward_range = (-np.inf, np.inf)
         self.position = None
         self._seed()
@@ -96,16 +96,16 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         min_range = 0.05
         done = False
         mod = len(data.ranges) / new_ranges
-        new_data = data.ranges[10:-10]
-        for i, item in enumerate(new_data):
+        filter_data = data.ranges[10:-10]
+        for i, item in enumerate(filter_data):
             if i % mod == 0:
-                if data.ranges[i] == float('Inf') or np.isinf(data.ranges[i]):
+                if filter_data[i] == float('Inf') or np.isinf(filter_data[i]):
                     discrete_ranges.append(6)
-                elif np.isnan(data.ranges[i]):
+                elif np.isnan(filter_data[i]):
                     discrete_ranges.append(0)
                 else:
-                    discrete_ranges.append(int(data.ranges[i]))
-            if min_range > data.ranges[i] > 0:
+                    discrete_ranges.append(int(filter_data[i]))
+            if min_range > filter_data[i] > 0:
                 # print("Data ranges: {}".format(data.ranges[i]))
                 done = True
                 break
@@ -137,11 +137,12 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         return [seed]
 
     def step(self, action):
+
         self._gazebo_unpause()
 
         vel_cmd = Twist()
-        vel_cmd.linear.x = actions_hard[action][0]
-        vel_cmd.angular.z = actions_hard[action][1]
+        vel_cmd.linear.x = actions[action][0]
+        vel_cmd.angular.z = actions[action][1]
         self.vel_pub.publish(vel_cmd)
 
         laser_data = None
@@ -159,16 +160,20 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         laser_len = len(laser_data.ranges)
         left_sum = sum(laser_data.ranges[laser_len - (laser_len / 5):laser_len - (laser_len / 10)])  # 80-90
         right_sum = sum(laser_data.ranges[(laser_len / 10):(laser_len / 5)])  # 10-20
-        center_detour = (right_sum - left_sum) / 5
+        # center_detour = (right_sum - left_sum) / 5
+        left_boundary = left_sum / 5
+        right_boundary = right_sum / 5
+        center_detour = right_boundary - left_boundary
+        # print("LEFT: {} - RIGHT: {}".format(left_boundary, right_boundary))
 
         done = False
-        if abs(center_detour) > 2:
+        if abs(center_detour) > 2 or left_boundary < 2 or right_boundary < 2:
             done = True
         # print("center: {}".format(center_detour))
 
         if not done:
             if abs(center_detour) < 4:
-                 reward = 5
+                reward = 5
             elif abs(center_detour < 2) and action == 1:
                 reward = 10
             else:  # L or R no looping
