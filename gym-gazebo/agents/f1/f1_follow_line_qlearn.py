@@ -10,6 +10,7 @@ from gym import logger, wrappers
 from qlearn import QLearn
 
 import agents.f1.settings as settings
+from agents.f1.settings import actions_set
 
 
 def render():
@@ -30,7 +31,7 @@ def save_model():
     # matrix as a csv file. I have a quick implementation of this on my GitHub under Reinforcement Learning.
     date = datetime.datetime.now()
     format = date.strftime("%Y%m%d_%H%M%S")
-    file_name = "qlearn_model_e_{}_a_{}_g_{}".format(qlearn.epsilon, qlearn.alpha, qlearn.gamma)
+    file_name = "_qlearn_model_e_{}_a_{}_g_{}".format(qlearn.epsilon, qlearn.alpha, qlearn.gamma)
     file = open("logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
     pickle.dump(qlearn.q, file)
 
@@ -41,7 +42,7 @@ def save_model():
 # MAIN PROGRAM
 ####################################################################################################################
 if __name__ == '__main__':
-    current_env = "laser"
+    current_env = "camera"
     if current_env == "laser":
         env = gym.make('GazeboF1QlearnLaserEnv-v0')
     elif current_env == "camera":
@@ -73,7 +74,7 @@ if __name__ == '__main__':
         highest_reward = 0
         initial_epsilon = qlearn.epsilon
 
-    total_episodes = 200000
+    total_episodes = 20000
     epsilon_discount = 0.9986  # Default 0.9986
 
     start_time = time.time()
@@ -91,7 +92,7 @@ if __name__ == '__main__':
 
         state = ''.join(map(str, observation))
 
-        for step in range(1500000):
+        for step in range(20000):
 
             # Pick an action based on the current state
             action = qlearn.selectAction(state)
@@ -115,6 +116,9 @@ if __name__ == '__main__':
                 last_time_steps = np.append(last_time_steps, [int(step + 1)])
                 break
 
+            if step > 3000:
+                print("\n\nLAP COMPLETED!!\n\n")
+
             # print("Obser: {} - Rew: {}".format(observation, reward))
 
         if episode % 100 == 0:
@@ -125,11 +129,9 @@ if __name__ == '__main__':
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
-        print ("EP: " + str(episode + 1) + " - [alpha: " + str(round(qlearn.alpha, 2)) + " - gamma: " + str(
-            round(qlearn.gamma, 2)) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + "] - Reward: " + str(
+        print ("EP: " + str(episode + 1) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + "] - Reward: " + str(
             cumulated_reward) + " - Time: %d:%02d:%02d" % (h, m, s) + " - steps: " + str(step))
 
-        # Github table content
     print ("\n|" + str(total_episodes) + "|" + str(qlearn.alpha) + "|" + str(qlearn.gamma) + "|" + str(
         initial_epsilon) + "*" + str(epsilon_discount) + "|" + str(highest_reward) + "| PICTURE |")
 
