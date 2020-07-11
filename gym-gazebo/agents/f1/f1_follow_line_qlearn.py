@@ -105,6 +105,7 @@ if __name__ == '__main__':
                 highest_reward = cumulated_reward
 
             nextState = ''.join(map(str, observation))
+            print(nextState)
 
             qlearn.learn(state, action, reward, nextState)
 
