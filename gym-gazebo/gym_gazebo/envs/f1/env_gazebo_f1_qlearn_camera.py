@@ -121,14 +121,15 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         return image
 
     @staticmethod
-    def get_center(image_line):
-        try:
-            coords = np.divide(np.max(np.nonzero(image_line)) - np.min(np.nonzero(image_line)), 2)
-            coords = np.min(np.nonzero(image_line)) + coords
-        except:
-            coords = -1
+    def get_center(lines):
 
-        return coords
+        try:
+            points = np.divide(np.max(np.nonzero(lines)) - np.min(np.nonzero(lines)), 2)
+            points = np.min(np.nonzero(lines)) + points
+        except:
+            points = 9
+
+        return points
 
     @staticmethod
     def calculate_reward(error):
@@ -152,57 +153,41 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
-
         # gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
         _, mask = cv2.threshold(line_pre_proc, 240, 255, cv2.THRESH_BINARY)
 
-        line_1 = mask[x_row[0], :]
-        line_2 = mask[x_row[1], :]
-        line_3 = mask[x_row[2], :]
+        lines = [mask[x_row[idx], :] for idx, x in enumerate(x_row)]
+        centrals = map(self.get_center, lines)
 
-        central_1 = self.get_center(line_1)
-        central_2 = self.get_center(line_2)
-        central_3 = self.get_center(line_3)
-
-        # print(central_1, central_2, central_3)
-        return [central_1, central_2, central_3]
+        return centrals
 
     @staticmethod
-    def calculate_observation(points):
+    def calculate_observation(state):
 
         done = False
+        normalize = 40
+        points = [abs(center_image - x) / normalize for idx, x in enumerate(state)]
 
-        error_1 = abs(center_image - points[0])
-        error_2 = abs(center_image - points[1])
-        error_3 = abs(center_image - points[2])
-
-        if error_3 > 180:
+        if points[4] > 5:
             done = True
 
-        return error_1, error_2, error_3, done
+        return points, done
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
     @staticmethod
-    def show_telemetry(img, point_1, point_2, point_3, action, reward):
-        # Puntos centrales de la imagen (verde)
-        cv2.line(img, (320, x_row[0]), (320, x_row[0]), (255, 255, 0), thickness=5)
-        cv2.line(img, (320, x_row[1]), (320, x_row[1]), (255, 255, 0), thickness=5)
-        cv2.line(img, (320, x_row[2]), (320, x_row[2]), (255, 255, 0), thickness=5)
-        # Linea diferencia entre punto central - error (blanco)
-        cv2.line(img, (center_image, x_row[0]), (point_1, x_row[0]), (255, 255, 255), thickness=2)
-        cv2.line(img, (center_image, x_row[1]), (point_2, x_row[1]), (255, 255, 255), thickness=2)
-        cv2.line(img, (center_image, x_row[2]), (point_3, x_row[2]), (255, 255, 255), thickness=2)
-        # Telemetry
+    def show_telemetry(img, points, action, reward):
+        count = 0
+        for idx, _ in enumerate(points):
+            cv2.line(img, (320, x_row[idx]), (320, x_row[idx]), (255, 255, 0), thickness=5)
+            cv2.line(img, (center_image, x_row[idx]), (points[idx], x_row[idx]), (255, 255, 255), thickness=2)
+            cv2.putText(img, str("err1: {}".format(center_image - points[idx])), (18, 340 + count), font, 0.4,
+                        (255, 255, 255), 1)
+            count += 20
         cv2.putText(img, str("action: {}".format(action)), (18, 280), font, 0.4, (255, 255, 255), 1)
-        # cv2.putText(img, str("w ang: {}".format(w_angular)), (18, 300), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("reward: {}".format(reward)), (18, 320), font, 0.4, (255, 255, 255), 1)
-        cv2.putText(img, str("err1: {}".format(center_image - point_1)), (18, 340), font, 0.4, (255, 255, 255), 1)
-        cv2.putText(img, str("err2: {}".format(center_image - point_2)), (18, 360), font, 0.4, (255, 255, 255), 1)
-        cv2.putText(img, str("err3: {}".format(center_image - point_3)), (18, 380), font, 0.4, (0, 0, 255), 1)
-        # cv2.putText(img, str("pose: {}".format(self.position)), (18, 400), font, 0.4, (255, 255, 255), 1)
 
         cv2.imshow("Image window", img)
         cv2.waitKey(3)
@@ -227,17 +212,17 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         self._gazebo_pause()
 
-        state = self.processed_image(f1_image_camera.data)
+        points = self.processed_image(f1_image_camera.data)
 
-        _, _, error_3, done = self.calculate_observation(state)
+        state, done = self.calculate_observation(points)
 
         if not done:
             # reward = self.calculate_reward(error_3)
-            if abs(error_3) < 100:
+            if abs(state[4]) < 3:
                 reward = 5
-            elif abs(error_3) < 50:
+            elif abs(state[4]) < 2:
                 reward = 10
-            elif 100 < abs(error_3) < 180:
+            elif 2 < abs(state[4]) < 3:
                 reward = 2
             else:
                 reward = -100
@@ -245,9 +230,9 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             reward = -200
 
         if telemetry:
-            self.show_telemetry(f1_image_camera.data, state[0], state[1], state[2], action, reward)
+            self.show_telemetry(f1_image_camera.data, state, action, reward)
 
-        state = [action, state[2]]
+        #state = [action, state[4]]
 
         return state, reward, done, {}
 
