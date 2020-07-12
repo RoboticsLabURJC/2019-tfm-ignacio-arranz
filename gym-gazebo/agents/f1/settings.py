@@ -46,6 +46,12 @@ elif actions_set == "hard":
         6: (2, 5),
         7: (2, -5),
     }
+elif actions_set == "test":
+    actions = {
+        0: (0, 0),
+        1: (0, 0),
+        2: (0, 0),
+    }
 
 
 
