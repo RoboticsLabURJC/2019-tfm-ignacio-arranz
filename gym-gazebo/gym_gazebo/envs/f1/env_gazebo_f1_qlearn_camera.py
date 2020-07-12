@@ -124,12 +124,12 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
     def get_center(lines):
 
         try:
-            points = np.divide(np.max(np.nonzero(lines)) - np.min(np.nonzero(lines)), 2)
-            points = np.min(np.nonzero(lines)) + points
+            point = np.divide(np.max(np.nonzero(lines)) - np.min(np.nonzero(lines)), 2)
+            point = np.min(np.nonzero(lines)) + point
         except:
-            points = 9
+            point = 9
 
-        return points
+        return point
 
     @staticmethod
     def calculate_reward(error):
@@ -165,10 +165,15 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
     def calculate_observation(state):
 
         done = False
-        normalize = 40
-        points = [abs(center_image - x) / normalize for idx, x in enumerate(state)]
+        normalize = 30
 
-        if points[4] > 5:
+        #points = [abs(center_image - x) / normalize for _, x in enumerate(state)]
+        points = []
+        for _, x in enumerate(state):
+            points.append(abs((center_image - x) / normalize))
+
+        limit = 8
+        if points[4] >= limit:
             done = True
 
         return points, done
@@ -180,10 +185,10 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
     @staticmethod
     def show_telemetry(img, points, action, reward):
         count = 0
-        for idx, _ in enumerate(points):
+        for idx, point in enumerate(points):
             cv2.line(img, (320, x_row[idx]), (320, x_row[idx]), (255, 255, 0), thickness=5)
-            cv2.line(img, (center_image, x_row[idx]), (points[idx], x_row[idx]), (255, 255, 255), thickness=2)
-            cv2.putText(img, str("err1: {}".format(center_image - points[idx])), (18, 340 + count), font, 0.4,
+            cv2.line(img, (center_image, x_row[idx]), (point, x_row[idx]), (255, 255, 255), thickness=2)
+            cv2.putText(img, str("err1: {}".format(center_image - point)), (18, 340 + count), font, 0.4,
                         (255, 255, 255), 1)
             count += 20
         cv2.putText(img, str("action: {}".format(action)), (18, 280), font, 0.4, (255, 255, 255), 1)
@@ -213,7 +218,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self._gazebo_pause()
 
         points = self.processed_image(f1_image_camera.data)
-
         state, done = self.calculate_observation(points)
 
         if not done:
@@ -230,17 +234,15 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             reward = -200
 
         if telemetry:
-            self.show_telemetry(f1_image_camera.data, state, action, reward)
-
-        #state = [action, state[4]]
+            self.show_telemetry(f1_image_camera.data, points, action, reward)
 
         return state, reward, done, {}
 
     def reset(self):
         # === POSE ===
-        # self.set_new_pose()
+        self.set_new_pose()
+        # self._gazebo_reset()
 
-        self._gazebo_reset()
         self._gazebo_unpause()
 
         time.sleep(0.1)
@@ -257,9 +259,10 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             if f1_image_camera:
                 success = True
 
-        state = self.processed_image(f1_image_camera.data)
-        state = ([0, state[2]], False)
+        points = self.processed_image(f1_image_camera.data)
+        state, done = self.calculate_observation(points)
+        reset_state = (state, False)
 
         self._gazebo_pause()
 
-        return state
+        return reset_state
