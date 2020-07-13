@@ -47,7 +47,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-        self.action_space = spaces.Discrete(3)  # F,L,R
+        self.action_space = spaces.Discrete(len(actions))  # actions  # spaces.Discrete(3)  # F,L,R
         self.reward_range = (-np.inf, np.inf)
         self.position = None
         self._seed()
@@ -165,15 +165,15 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
     def calculate_observation(state):
 
         done = False
-        normalize = 30
+        normalize = 40
 
-        #points = [abs(center_image - x) / normalize for _, x in enumerate(state)]
+        # points = [abs((center_image - x) / normalize) for _, x in enumerate(state)]
         points = []
         for _, x in enumerate(state):
-            points.append(abs((center_image - x) / normalize))
+            points.append(abs((center_image - x) / normalize) + 1)
 
         limit = 8
-        if points[4] >= limit:
+        if points[2] >= limit:
             done = True
 
         return points, done
@@ -224,9 +224,9 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             # reward = self.calculate_reward(error_3)
             if abs(state[4]) < 3:
                 reward = 5
-            elif abs(state[4]) < 2:
+            elif abs(state[4]) <= 2:
                 reward = 10
-            elif 2 < abs(state[4]) < 3:
+            elif 2 < abs(state[4]) <= 3:
                 reward = 2
             else:
                 reward = -100
