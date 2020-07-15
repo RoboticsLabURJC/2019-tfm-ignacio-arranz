@@ -58,6 +58,7 @@ if __name__ == '__main__':
     last_time_steps = np.ndarray(0)
 
     actions = range(env.action_space.n)
+    print("ACTIONSSSSS: {}".format(actions))
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
@@ -92,6 +93,8 @@ if __name__ == '__main__':
 
         state = ''.join(map(str, observation))
 
+        # print("-------- RESET: {}".format(state))
+
         for step in range(20000):
 
             # Pick an action based on the current state
@@ -105,7 +108,7 @@ if __name__ == '__main__':
                 highest_reward = cumulated_reward
 
             nextState = ''.join(map(str, observation))
-            print(nextState)
+            # print("-------- {}".format(nextState))
 
             qlearn.learn(state, action, reward, nextState)
 

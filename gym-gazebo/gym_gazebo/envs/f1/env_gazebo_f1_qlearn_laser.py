@@ -28,7 +28,7 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-        self.action_space = actions  # spaces.Discrete(5)  # F, L, R
+        self.action_space = spaces.Discrete(3)  # actions  # spaces.Discrete(5)  # F, L, R
         self.reward_range = (-np.inf, np.inf)
         self.position = None
         self._seed()
@@ -160,7 +160,6 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         laser_len = len(laser_data.ranges)
         left_sum = sum(laser_data.ranges[laser_len - (laser_len / 5):laser_len - (laser_len / 10)])  # 80-90
         right_sum = sum(laser_data.ranges[(laser_len / 10):(laser_len / 5)])  # 10-20
-        # center_detour = (right_sum - left_sum) / 5
         left_boundary = left_sum / 5
         right_boundary = right_sum / 5
         center_detour = right_boundary - left_boundary
