@@ -106,20 +106,11 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
                 else:
                     discrete_ranges.append(int(filter_data[i]))
             if min_range > filter_data[i] > 0:
-                # print("Data ranges: {}".format(data.ranges[i]))
+                print("Data ranges: {}".format(data.ranges[i]))
                 done = True
                 break
 
         return discrete_ranges, done
-
-    @staticmethod
-    def calculate_observation(data):
-        min_range = 0.5  # Default: 0.21
-        done = False
-        for i, item in enumerate(data.ranges):
-            if min_range > data.ranges[i] > 0:
-                done = True
-        return done
 
     @staticmethod
     def get_center_of_laser(data):
@@ -163,12 +154,12 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         left_boundary = left_sum / 5
         right_boundary = right_sum / 5
         center_detour = right_boundary - left_boundary
-        # print("LEFT: {} - RIGHT: {}".format(left_boundary, right_boundary))
+        print("LEFT: {} - RIGHT: {}".format(left_boundary, right_boundary))
 
         done = False
         if abs(center_detour) > 2 or left_boundary < 2 or right_boundary < 2:
             done = True
-        # print("center: {}".format(center_detour))
+        print("center: {}".format(center_detour))
 
         if not done:
             if abs(center_detour) < 4:
@@ -184,10 +175,10 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
 
     def reset(self):
         # === POSE ===
-        self.set_new_pose()
+        # self.set_new_pose()
+        self._gazebo_reset()
         time.sleep(0.1)
 
-        # self._gazebo_reset()
         self._gazebo_unpause()
 
         # Read laser data
