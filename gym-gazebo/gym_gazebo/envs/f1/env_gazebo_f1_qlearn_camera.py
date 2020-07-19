@@ -172,11 +172,11 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         for _, x in enumerate(state):
             points.append(abs((center_image - x) / normalize) + 1)
 
-        limit = 8
-        if points[2] >= limit:
-            done = True
+        # limit = 8
+        # if points[2] >= limit:
+        #     done = True
 
-        return points, done
+        return points  # , done
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -187,8 +187,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         count = 0
         for idx, point in enumerate(points):
             cv2.line(img, (320, x_row[idx]), (320, x_row[idx]), (255, 255, 0), thickness=5)
-            cv2.line(img, (center_image, x_row[idx]), (point, x_row[idx]), (255, 255, 255), thickness=2)
-            cv2.putText(img, str("err1: {}".format(center_image - point)), (18, 340 + count), font, 0.4,
+            # cv2.line(img, (center_image, x_row[idx]), (point, x_row[idx]), (255, 255, 255), thickness=2)
+            cv2.putText(img, str("err{}: {}".format(idx+1, center_image - point)), (18, 340 + count), font, 0.4,
                         (255, 255, 255), 1)
             count += 20
         cv2.putText(img, str("action: {}".format(action)), (18, 280), font, 0.4, (255, 255, 255), 1)
@@ -218,15 +218,21 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self._gazebo_pause()
 
         points = self.processed_image(f1_image_camera.data)
-        state, done = self.calculate_observation(points)
+        state = self.calculate_observation(points)
 
+        print(points)
+
+        done = False
+        if points[4] > 150:
+            done = True
         if not done:
             # reward = self.calculate_reward(error_3)
-            if abs(state[4]) < 3:
+            # if abs(state[4]) < 3:
+            if abs(points[4]) < 100:
                 reward = 5
-            elif abs(state[4]) <= 2:
+            elif abs(points[4]) <= 60:
                 reward = 10
-            elif 2 < abs(state[4]) <= 3:
+            elif 60 < abs(points[4]) <= 100:
                 reward = 2
             else:
                 reward = -100
@@ -260,7 +266,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
                 success = True
 
         points = self.processed_image(f1_image_camera.data)
-        state, done = self.calculate_observation(points)
+        state = self.calculate_observation(points)
         reset_state = (state, False)
 
         self._gazebo_pause()
