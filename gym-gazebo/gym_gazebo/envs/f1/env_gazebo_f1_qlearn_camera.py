@@ -168,15 +168,15 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         normalize = 40
 
         # points = [abs((center_image - x) / normalize) for _, x in enumerate(state)]
-        points = []
+        final_state = []
         for _, x in enumerate(state):
-            points.append(abs((center_image - x) / normalize) + 1)
+            final_state.append(abs((center_image - x) / normalize) + 1)
 
         # limit = 8
         # if points[2] >= limit:
         #     done = True
 
-        return points  # , done
+        return final_state  # , done
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -228,11 +228,11 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         if not done:
             # reward = self.calculate_reward(error_3)
             # if abs(state[4]) < 3:
-            if abs(points[4]) < 100:
-                reward = 5
-            elif abs(points[4]) <= 60:
+            if abs(points[0]) < 100:
+                reward = 7
+            elif abs(points[0]) <= 60:
                 reward = 10
-            elif 60 < abs(points[4]) <= 100:
+            elif 60 < abs(points[0]) <= 100:
                 reward = 2
             else:
                 reward = -100
