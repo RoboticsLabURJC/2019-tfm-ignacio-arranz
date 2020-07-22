@@ -74,6 +74,7 @@ elif gazebo_positions_set == "nurburgring":
 # === CAMERA ===
 # Images size
 witdh = 640
+height = 480
 center_image = witdh/2
 
 # Coord X ROW

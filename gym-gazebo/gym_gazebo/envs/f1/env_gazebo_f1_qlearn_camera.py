@@ -17,7 +17,7 @@ from sensor_msgs.msg import Image
 
 from gym.utils import seeding
 from agents.f1.settings import actions, gazebo_positions
-from agents.f1.settings import telemetry, x_row, ranges, center_image
+from agents.f1.settings import telemetry, x_row, ranges, center_image, witdh, height
 
 
 font = cv2.FONT_HERSHEY_COMPLEX
@@ -159,6 +159,16 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         lines = [mask[x_row[idx], :] for idx, x in enumerate(x_row)]
         centrals = map(self.get_center, lines)
 
+        mask_points = np.zeros((height, witdh), dtype=int)
+        mask_points[x_row[0],centrals[0]] = 255
+        mask_points[x_row[1],centrals[1]] = 255
+        mask_points[x_row[2],centrals[2]] = 255
+        mask_points[x_row[3],centrals[3]] = 255
+        mask_points[x_row[4],centrals[4]] = 255
+
+        cv2.imshow("MASK", mask_points)
+        cv2.waitKey(3)
+
         return centrals
 
     @staticmethod
@@ -223,16 +233,16 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         print(points)
 
         done = False
-        if points[4] > 150:
+        if points[-1] > 150:
             done = True
         if not done:
             # reward = self.calculate_reward(error_3)
             # if abs(state[4]) < 3:
-            if abs(points[0]) < 100:
+            if abs(points[-1]) < 100:
                 reward = 7
-            elif abs(points[0]) <= 60:
+            elif abs(points[-1]) <= 60:
                 reward = 10
-            elif 60 < abs(points[0]) <= 100:
+            elif 60 < abs(points[-1]) <= 100:
                 reward = 2
             else:
                 reward = -100
@@ -246,8 +256,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def reset(self):
         # === POSE ===
-        self.set_new_pose()
-        # self._gazebo_reset()
+        # self.set_new_pose()
+        self._gazebo_reset()
 
         self._gazebo_unpause()
 
