@@ -159,7 +159,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         lines = [mask[x_row[idx], :] for idx, x in enumerate(x_row)]
         centrals = map(self.get_center, lines)
 
-        mask_points = np.zeros((witdh, height), dtype=int)
+        mask_points = np.zeros((height, witdh), dtype=np.uint8)
         mask_points[x_row[0], centrals[0]] = 255
         mask_points[x_row[1], centrals[1]] = 255
         mask_points[x_row[2], centrals[2]] = 255
@@ -233,8 +233,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         print(points)
 
         done = False
-        if points[-1] > 150:
-            done = True
+        # if points[-1] > 150:
+        #     done = True
         if not done:
             # reward = self.calculate_reward(error_3)
             # if abs(state[4]) < 3:
