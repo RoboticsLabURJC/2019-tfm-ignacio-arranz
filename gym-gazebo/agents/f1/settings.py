@@ -77,6 +77,8 @@ center_image = witdh/2
 
 # Coord X ROW
 x_row = [250, 300, 350, 400, 450]
+# x_row = [450]
+
 # Maximum distance from the line
 ranges = [300, 280, 250]  # Line 1, 2 and 3
 reset_range = [-40, 40]
