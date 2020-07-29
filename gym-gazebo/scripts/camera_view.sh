@@ -2,7 +2,9 @@
 
 TOPIC=""
 
-if [ "$1" == "f1" ]; then
+if [ "$1" == ""]; then
+    TOPIC="/F1ROS/cameraL/image_raw"
+elif [ "$1" == "f1" ]; then
     TOPIC="/F1ROS/cameraL/image_raw"
 elif [ "$1" == "turtlebot" ]; then
     TOPIC="/camera/rgb/image_raw"
