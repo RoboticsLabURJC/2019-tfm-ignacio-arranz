@@ -94,6 +94,7 @@ if __name__ == '__main__':
         state = ''.join(map(str, observation))
 
         # print("-------- RESET: {}".format(state))
+        print("DICCIONARIO ----> {}".format(len(qlearn.q)))
 
         for step in range(20000):
 
