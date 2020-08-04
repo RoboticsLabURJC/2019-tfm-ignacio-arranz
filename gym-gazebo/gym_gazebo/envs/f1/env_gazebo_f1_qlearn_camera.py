@@ -227,22 +227,22 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-        print(points)
+        center = abs(float(center_image - points[-1]) / float(witdh))
+        # print(state)
 
         def all_same(items):
             return all(x == items[0] for x in items)
 
         done = False
-        if points[-1] > 150 or all_same(points):
+        if center > 1 or all_same(points):
             done = True
         if not done:
             # reward = self.calculate_reward(error_3)
-            # if abs(state[4]) < 3:
-            if abs(points[-1]) < 100:
-                reward = 7
-            elif abs(points[-1]) <= 60:
+            if center < 0.2:
                 reward = 10
-            elif 60 < abs(points[-1]) <= 100:
+            elif 0.2 <= center <= 0.4:
+                reward = 7
+            elif 0.4 <= center <= 1:
                 reward = 2
             else:
                 reward = -100
@@ -277,8 +277,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
-        reset_state = (state, False)
+        # reset_state = (state, False)
 
         self._gazebo_pause()
 
-        return reset_state
+        return state
