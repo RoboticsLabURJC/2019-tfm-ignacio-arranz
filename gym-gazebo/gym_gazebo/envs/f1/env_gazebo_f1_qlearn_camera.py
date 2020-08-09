@@ -71,6 +71,10 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             print(e)
             print("/gazebo/unpause_physics service call failed")
 
+    @staticmethod
+    def all_same(items):
+        return all(x == items[0] for x in items)
+
     def _gazebo_reset(self):
         # Resets the state of the environment and returns an initial observation.
         rospy.wait_for_service('/gazebo/reset_simulation')
@@ -227,27 +231,30 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-        center = abs(float(center_image - points[-1]) / float(witdh))
-        # print(state)
 
-        def all_same(items):
-            return all(x == items[0] for x in items)
+        # print(points)
+        # print(state)
+        center = float(center_image - points[-1]) / float(witdh)
+
 
         done = False
-        if center > 1 or all_same(points):
+        center = abs(center)
+        if state[-1] >= 8 or self.all_same(points):
             done = True
         if not done:
             # reward = self.calculate_reward(error_3)
             if center < 0.2:
-                reward = 10
+                reward = 100
             elif 0.2 <= center <= 0.4:
                 reward = 7
             elif 0.4 <= center <= 1:
                 reward = 2
             else:
-                reward = -100
+                reward = 1
         else:
             reward = -200
+
+        print("center: {} - actions: {} - reward: {}".format(center, action, reward))
 
         if telemetry:
             self.show_telemetry(f1_image_camera.data, points, action, reward)
