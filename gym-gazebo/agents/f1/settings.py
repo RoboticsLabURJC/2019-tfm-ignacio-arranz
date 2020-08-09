@@ -2,23 +2,21 @@
 
 import numpy as np
 
-from environs import Env
 
+debug_level = 0
+telemetry = True
+plotter_graphic = False
+my_board = True
+save_model = False
+load_model = False
 
-env = Env()
-env.read_env()
-
-debug_level = env.int("DEBUG_LEVEL")
-telemetry = env.bool("TELEMETRY", True)
-my_board = env.bool("MY_BOARD", False)
-save_model = env.bool("SAVE_MODEL", False)
-load_model = env.bool("LOAD_MODEL", False)
+actions_set = "simple" # test, simple, medium, hard
+gazebo_positions_set = "pista_simple"
 
 # === ACTIONS SET ===
 # Deprecated?
 space_reward = np.flip(np.linspace(0, 1, 300))
 
-actions_set = env.str("ACTION_SET", "simple")
 # action: (lineal, angular)
 if actions_set == "simple":
     actions = {
@@ -54,7 +52,6 @@ elif actions_set == "test":
     }
 
 # === POSES ===
-gazebo_positions_set = env.str("GAZEBO_POSITIONS", "pista_simple")
 if gazebo_positions_set == "pista_simple":
     gazebo_positions = [(0, 53.462, -41.988, 0.004, 0, 0, 1.57, -1.57),
                         (1, 53.462, -8.734,  0.004, 0, 0, 1.57, -1.57),
