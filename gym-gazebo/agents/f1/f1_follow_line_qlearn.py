@@ -94,7 +94,7 @@ if __name__ == '__main__':
         state = ''.join(map(str, observation))
 
         # print("-------- RESET: {}".format(state))
-        print("DICCIONARIO ----> {}".format(len(qlearn.q)))
+        # print("DICCIONARIO ----> {}".format(len(qlearn.q)))
 
         for step in range(20000):
 
@@ -121,20 +121,21 @@ if __name__ == '__main__':
                 last_time_steps = np.append(last_time_steps, [int(step + 1)])
                 break
 
-            if step > 3000:
-                print("\n\nLAP COMPLETED!!\n\n")
+            if step > 4000:
+
+                print("LAP COMPLETED!!")
 
             # print("Obser: {} - Rew: {}".format(observation, reward))
 
-        if episode % 100 == 0:
-            plotter.plot(env)
+            if settings.plotter_graphic:
+                plotter.plot(env)
             if settings.save_model:
                 print("\nSaving model . . .\n")
                 save_model()
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
-        print ("EP: " + str(episode + 1) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + "] - Reward: " + str(
+        print ("EP: " + str(episode + 1) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + " - Reward: " + str(
             cumulated_reward) + " - Time: %d:%02d:%02d" % (h, m, s) + " - steps: " + str(step))
 
     print ("\n|" + str(total_episodes) + "|" + str(qlearn.alpha) + "|" + str(qlearn.gamma) + "|" + str(

@@ -17,7 +17,7 @@ from sensor_msgs.msg import Image
 
 from gym.utils import seeding
 from agents.f1.settings import actions, gazebo_positions
-from agents.f1.settings import telemetry, x_row, ranges, center_image, witdh, height
+from agents.f1.settings import telemetry, x_row, ranges, center_image, witdh, height, telemetry_mask
 
 
 font = cv2.FONT_HERSHEY_COMPLEX
@@ -163,12 +163,17 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         lines = [mask[x_row[idx], :] for idx, x in enumerate(x_row)]
         centrals = map(self.get_center, lines)
 
-        # mask_points = np.zeros((height, witdh), dtype=np.uint8)
-        # for idx, num in enumerate(x_row):
-        #     mask_points[x_row[idx], centrals[idx]] = 255
-        #
-        # cv2.imshow("MASK", mask_points)
-        # cv2.waitKey(3)
+        # if centrals[-1] == 9:
+        #     centrals[-1] = center_image
+
+        if telemetry_mask:
+            mask_points = np.zeros((height, witdh), dtype=np.uint8)
+            for idx, point in enumerate(centrals):
+                # mask_points[x_row[idx], centrals[idx]] = 255
+                cv2.line(mask_points, (point, x_row[idx]), (point, x_row[idx]), (255, 255, 255), thickness=3)
+
+            cv2.imshow("MASK", mask_points[240:])
+            cv2.waitKey(3)
 
         return centrals
 
@@ -205,7 +210,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         cv2.putText(img, str("action: {}".format(action)), (18, 280), font, 0.4, (255, 255, 255), 1)
         cv2.putText(img, str("reward: {}".format(reward)), (18, 320), font, 0.4, (255, 255, 255), 1)
 
-        cv2.imshow("Image window", img)
+        cv2.imshow("Image window", img[240:])
         cv2.waitKey(3)
 
     def step(self, action):
@@ -231,30 +236,29 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-
-        # print(points)
-        # print(state)
-        center = float(center_image - points[-1]) / float(witdh)
-
+        # print("Points: {} - State: {}".format(points, state))
+        center = float(center_image - points[-1]) / (float(witdh) // 2)
 
         done = False
         center = abs(center)
-        if state[-1] >= 8 or self.all_same(points):
+        # if center >= 1 or self.all_same(points):
+        #     done = True
+        if center > 0.6:
             done = True
         if not done:
             # reward = self.calculate_reward(error_3)
-            if center < 0.2:
-                reward = 100
-            elif 0.2 <= center <= 0.4:
-                reward = 7
-            elif 0.4 <= center <= 1:
-                reward = 2
+            if center <= 0.3:
+                reward = 10
+            # elif 0.2 < center <= 0.4:
+            #     reward = 5
+            # elif 0.4 < center <= 0.6:
+            #     reward = 2
             else:
                 reward = 1
         else:
             reward = -200
 
-        print("center: {} - actions: {} - reward: {}".format(center, action, reward))
+        # print("center: {} - actions: {} - reward: {}".format(center, action, reward))
 
         if telemetry:
             self.show_telemetry(f1_image_camera.data, points, action, reward)
@@ -263,8 +267,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def reset(self):
         # === POSE ===
-        # self.set_new_pose()
-        self._gazebo_reset()
+        self.set_new_pose()
+        # self._gazebo_reset()
 
         self._gazebo_unpause()
 

@@ -2,7 +2,7 @@
 
 TOPIC=""
 
-if [ "$1" == ""]; then
+if [ -z "$1"]; then
     TOPIC="/F1ROS/cameraL/image_raw"
 elif [ "$1" == "f1" ]; then
     TOPIC="/F1ROS/cameraL/image_raw"
