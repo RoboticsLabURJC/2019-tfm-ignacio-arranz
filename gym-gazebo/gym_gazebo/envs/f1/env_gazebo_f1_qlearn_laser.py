@@ -154,22 +154,26 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
         left_boundary = left_sum / 5
         right_boundary = right_sum / 5
         center_detour = right_boundary - left_boundary
-        print("LEFT: {} - RIGHT: {}".format(left_boundary, right_boundary))
+
+        # print("LEFT: {} - RIGHT: {}".format(left_boundary, right_boundary))
+        # print(state)
 
         done = False
         if abs(center_detour) > 2 or left_boundary < 2 or right_boundary < 2:
             done = True
-        print("center: {}".format(center_detour))
+        # print("center: {} - Action: {}".format(center_detour, action))
 
         if not done:
-            if abs(center_detour) < 4:
+            if 0.2 < abs(center_detour) < 0.4:
                 reward = 5
-            elif abs(center_detour < 2) and action == 1:
+            elif abs(center_detour) < 0.2 and action == 0:
                 reward = 10
             else:  # L or R no looping
                 reward = 2
         else:
             reward = -200
+
+        print("center: {} - actions: {} - reward: {}".format(center_detour, action, reward))
 
         return state, reward, done, {}
 
