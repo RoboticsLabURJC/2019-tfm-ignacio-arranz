@@ -4,7 +4,8 @@ import numpy as np
 
 
 debug_level = 0
-telemetry = True
+telemetry = False
+telemetry_mask = False
 plotter_graphic = False
 my_board = True
 save_model = False
@@ -73,8 +74,9 @@ height = 480
 center_image = witdh/2
 
 # Coord X ROW
-x_row = [250, 300, 350, 400, 450]
-# x_row = [450]
+# x_row = [250, 300, 350, 400, 450]
+# x_row = [250, 450]
+x_row = [300]
 
 # Maximum distance from the line
 ranges = [300, 280, 250]  # Line 1, 2 and 3
