@@ -15,7 +15,7 @@ tags:
 - logbook
 - project
 - summer advances
-- behaviors_studio
+- behavior_studio
 - gym_gazebo
 
 author: NachoAz
