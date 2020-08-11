@@ -247,16 +247,14 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             done = True
         if not done:
             # reward = self.calculate_reward(error_3)
-            if center <= 0.3:
+            if 0 <= center <= 0.2:
                 reward = 10
-            # elif 0.2 < center <= 0.4:
-            #     reward = 5
-            # elif 0.4 < center <= 0.6:
-            #     reward = 2
+            elif 0.2 < center <= 0.4:
+                reward = 2
             else:
                 reward = 1
         else:
-            reward = -200
+            reward = -100
 
         # print("center: {} - actions: {} - reward: {}".format(center, action, reward))
 
@@ -271,8 +269,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         # self._gazebo_reset()
 
         self._gazebo_unpause()
-
-        time.sleep(0.1)
 
         # Get camera info
         image_data = None
