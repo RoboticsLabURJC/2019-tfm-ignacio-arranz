@@ -17,7 +17,7 @@ from sensor_msgs.msg import Image
 
 from gym.utils import seeding
 from agents.f1.settings import actions, gazebo_positions
-from agents.f1.settings import telemetry, x_row, ranges, center_image, witdh, height, telemetry_mask
+from agents.f1.settings import telemetry, x_row, ranges, center_image, width, height, telemetry_mask
 
 
 font = cv2.FONT_HERSHEY_COMPLEX
@@ -138,10 +138,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
     @staticmethod
     def calculate_reward(error):
 
-        alpha = 0
-        beta = 0
-        gamma = 1
-
         d = np.true_divide(error, center_image)
         reward = np.round(np.exp(-d), 4)
 
@@ -167,7 +163,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         #     centrals[-1] = center_image
 
         if telemetry_mask:
-            mask_points = np.zeros((height, witdh), dtype=np.uint8)
+            mask_points = np.zeros((height, width), dtype=np.uint8)
             for idx, point in enumerate(centrals):
                 # mask_points[x_row[idx], centrals[idx]] = 255
                 cv2.line(mask_points, (point, x_row[idx]), (point, x_row[idx]), (255, 255, 255), thickness=3)
@@ -180,19 +176,13 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
     @staticmethod
     def calculate_observation(state):
 
-        done = False
         normalize = 40
 
-        # points = [abs((center_image - x) / normalize) for _, x in enumerate(state)]
         final_state = []
         for _, x in enumerate(state):
             final_state.append(abs((center_image - x) / normalize) + 1)
 
-        # limit = 8
-        # if points[2] >= limit:
-        #     done = True
-
-        return final_state  # , done
+        return final_state
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -236,17 +226,14 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-        # print("Points: {} - State: {}".format(points, state))
-        center = float(center_image - points[-1]) / (float(witdh) // 2)
+        center = float(center_image - points[-1]) / (float(width) // 2)
 
         done = False
         center = abs(center)
-        # if center >= 1 or self.all_same(points):
-        #     done = True
-        if center > 0.6:
+
+        if center > 0.8:
             done = True
         if not done:
-            # reward = self.calculate_reward(error_3)
             if 0 <= center <= 0.2:
                 reward = 10
             elif 0.2 < center <= 0.4:
@@ -256,10 +243,9 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         else:
             reward = -100
 
-        # print("center: {} - actions: {} - reward: {}".format(center, action, reward))
-
         if telemetry:
-            self.show_telemetry(f1_image_camera.data, points, action, reward)
+            print("center: {} - actions: {} - reward: {}".format(center, action, reward))
+            # self.show_telemetry(f1_image_camera.data, points, action, reward)
 
         return state, reward, done, {}
 
@@ -276,7 +262,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         success = False
         while image_data is None or success is False:
             image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
-            # Transform the image data from ROS to CVMat
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             f1_image_camera = self.image_msg_to_image(image_data, cv_image)
             if f1_image_camera:
