@@ -4,14 +4,14 @@ import numpy as np
 
 
 debug_level = 0
-telemetry = False
+telemetry = True
 telemetry_mask = False
-plotter_graphic = False
+plotter_graphic = True
 my_board = True
-save_model = False
+save_model = True
 load_model = False
 
-actions_set = "simple" # test, simple, medium, hard
+actions_set = "simple"  # test, simple, medium, hard
 gazebo_positions_set = "pista_simple"
 
 # === ACTIONS SET ===
@@ -31,8 +31,8 @@ elif actions_set == "medium":
         1: (6, 0),
         2: (3, 1),
         3: (3, -1),
-        4: (4, 4),
-        5: (4, -4),
+        4: (4, 2),
+        5: (4, -2),
     }
 elif actions_set == "hard":
     actions = {
@@ -69,9 +69,9 @@ elif gazebo_positions_set == "nurburgring":
 
 # === CAMERA ===
 # Images size
-witdh = 640
+width = 640
 height = 480
-center_image = witdh/2
+center_image = width/2
 
 # Coord X ROW
 # x_row = [250, 300, 350, 400, 450]
