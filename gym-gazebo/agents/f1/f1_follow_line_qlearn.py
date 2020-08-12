@@ -127,11 +127,12 @@ if __name__ == '__main__':
 
             # print("Obser: {} - Rew: {}".format(observation, reward))
 
-            if settings.plotter_graphic:
-                plotter.plot(env)
-            if settings.save_model:
-                print("\nSaving model . . .\n")
-                save_model()
+        if episode % 100 == 0 and settings.plotter_graphic:
+            plotter.plot(env)
+
+        if episode % 1000 == 0 and settings.save_model:
+            print("\nSaving model . . .\n")
+            save_model()
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
