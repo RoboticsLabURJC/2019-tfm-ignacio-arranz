@@ -4,7 +4,7 @@ import numpy as np
 
 
 debug_level = 0
-telemetry = True
+telemetry = False
 telemetry_mask = False
 plotter_graphic = True
 my_board = True
