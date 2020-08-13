@@ -51,6 +51,7 @@ if __name__ == '__main__':
         print("NO correct env selected")
 
     outdir = './logs/f1_qlearn_gym_experiments/'
+    stats = {}  # epoch: steps
 
     env = gym.wrappers.Monitor(env, outdir, force=True)
     plotter = liveplot.LivePlot(outdir)
@@ -58,6 +59,9 @@ if __name__ == '__main__':
     last_time_steps = np.ndarray(0)
 
     actions = range(env.action_space.n)
+
+    stimate_step_per_lap = 4000
+    lap_completed = False
 
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
@@ -82,6 +86,8 @@ if __name__ == '__main__':
     for episode in range(total_episodes):
 
         done = False
+        lap_completed = False
+
         cumulated_reward = 0  # Should going forward give more reward then L/R z?
         
         observation = env.reset()
@@ -119,16 +125,19 @@ if __name__ == '__main__':
                 state = nextState
             else:
                 last_time_steps = np.append(last_time_steps, [int(step + 1)])
+                stats[episode] = step
                 break
 
-            if step > 4000:
-
+             if stimate_step_per_lap > 4000 and not lap_completed:
                 print("LAP COMPLETED!!")
+                lap_completed = True
 
             # print("Obser: {} - Rew: {}".format(observation, reward))
 
         if episode % 100 == 0 and settings.plotter_graphic:
-            plotter.plot(env)
+            # plotter.plot(env)
+            plotter.plot_steps_vs_epoch(stats)
+            # plotter.full_plot(env, stats, 2)  # optional parameter = mode (0, 1, 2)
 
         if episode % 1000 == 0 and settings.save_model:
             print("\nSaving model . . .\n")
