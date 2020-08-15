@@ -24,7 +24,6 @@ def render():
             (render_episodes < episode):
         env.render(close=True)
 
-
 def save_model():
     # Tabular RL: Tabular Q-learning basically stores the policy (Q-values) of  the agent into a matrix of shape
     # (S x A), where s are all states, a are all the possible actions. After the environment is solved, just save this
@@ -35,13 +34,15 @@ def save_model():
     file = open("logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
     pickle.dump(qlearn.q, file)
 
-    print(qlearn.q)
-
 
 ####################################################################################################################
 # MAIN PROGRAM
 ####################################################################################################################
 if __name__ == '__main__':
+
+    print(settings.title)
+    print(settings.description)
+
     current_env = "camera"
     if current_env == "laser":
         env = gym.make('GazeboF1QlearnLaserEnv-v0')
@@ -83,13 +84,16 @@ if __name__ == '__main__':
     epsilon_discount = 0.9986  # Default 0.9986
 
     start_time = time.time()
+
+    print(settings.lets_go)
+
     for episode in range(total_episodes):
 
         done = False
         lap_completed = False
 
         cumulated_reward = 0  # Should going forward give more reward then L/R z?
-        
+
         observation = env.reset()
 
         if qlearn.epsilon > 0.05:
@@ -128,7 +132,7 @@ if __name__ == '__main__':
                 stats[episode] = step
                 break
 
-             if stimate_step_per_lap > 4000 and not lap_completed:
+            if stimate_step_per_lap > 4000 and not lap_completed:
                 print("LAP COMPLETED!!")
                 lap_completed = True
 
