@@ -1,5 +1,6 @@
-# Global variables
-
+###########################
+# Global variables file
+###########################
 import numpy as np
 
 
@@ -11,12 +12,11 @@ my_board = True
 save_model = True
 load_model = False
 
-actions_set = "simple"  # test, simple, medium, hard
-gazebo_positions_set = "pista_simple"
+actions_set = "hard"  # test, simple, medium, hard
+gazebo_positions_set = "nurburgring"
 
 # === ACTIONS SET ===
-# Deprecated?
-space_reward = np.flip(np.linspace(0, 1, 300))
+space_reward = np.flip(np.linspace(0, 1, 300))  # Deprecated
 
 # action: (lineal, angular)
 if actions_set == "simple":
@@ -27,23 +27,21 @@ if actions_set == "simple":
     }
 elif actions_set == "medium":
     actions = {
-        0: (3, 0),
-        1: (6, 0),
-        2: (3, 1),
-        3: (3, -1),
-        4: (4, 2),
-        5: (4, -2),
+        0: (6, 0),
+        1: (3, 1),
+        2: (3, -1),
+        3: (4, 2),
+        4: (4, -2),
     }
 elif actions_set == "hard":
     actions = {
-        0: (3, 0),
-        1: (6, 0),
-        2: (3, 1),
-        3: (3, -1),
-        4: (4, 4),
-        5: (4, -4),
-        6: (2, 5),
-        7: (2, -5),
+        0: (6, 0),
+        1: (3, 1),
+        2: (3, -1),
+        3: (4, 2),
+        4: (4, -2),
+        5: (2, 3),
+        6: (2, -3),
     }
 elif actions_set == "test":
     actions = {
@@ -76,9 +74,37 @@ center_image = width/2
 # Coord X ROW
 # x_row = [250, 300, 350, 400, 450]
 # x_row = [250, 450]
-x_row = [300]
+x_row = [350]
 
 # Maximum distance from the line
 ranges = [300, 280, 250]  # Line 1, 2 and 3
 reset_range = [-40, 40]
 last_center_line = 0
+
+
+lets_go = '''
+   ______      __
+  / ____/___  / /
+ / / __/ __ \/ / 
+/ /_/ / /_/ /_/  
+\____/\____(_)   
+'''
+
+description = '''
+   ___  _                                  ____                               
+  / _ \| | ___  __ _ _ __ _ __            / ___|__ _ _ __ ___   ___ _ __ __ _ 
+ | | | | |/ _ \/ _` | '__| '_ \   _____  | |   / _` | '_ ` _ \ / _ \ '__/ _` |
+ | |_| | |  __/ (_| | |  | | | | |_____| | |__| (_| | | | | | |  __/ | | (_| |
+  \__\_\_|\___|\__,_|_|  |_| |_|          \____\__,_|_| |_| |_|\___|_|  \__,_|
+                                                                             
+'''
+
+title = '''
+   ___     _     ______      _           _   
+  |_  |   | |    | ___ \    | |         | |  
+    | | __| | ___| |_/ /___ | |__   ___ | |_ 
+    | |/ _` |/ _ \    // _ \| '_ \ / _ \| __|
+/\__/ / (_| |  __/ |\ \ (_) | |_) | (_) | |_ 
+\____/ \__,_|\___\_| \_\___/|_.__/ \___/ \__|
+                                             
+'''
