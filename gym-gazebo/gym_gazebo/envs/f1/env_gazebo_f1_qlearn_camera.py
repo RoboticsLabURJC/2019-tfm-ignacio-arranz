@@ -42,7 +42,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        gazebo_env.GazeboEnv.__init__(self, "F1Cameracircuit_v0.launch")
+        # gazebo_env.GazeboEnv.__init__(self, "F1Cameracircuit_v0.launch")
+        gazebo_env.GazeboEnv.__init__(self, "f1_1_nurburgrinlineROS.launch")
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
