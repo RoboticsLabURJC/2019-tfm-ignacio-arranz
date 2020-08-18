@@ -5,11 +5,12 @@
       <uri>model://sun</uri>
     </include>
     <include>
-      <uri>model://nurburgrinLine</uri>
+        <uri>model://nurburgrinLine</uri>
       <pose>0 0 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://f1_renault</uri>
+        <uri>model://f1_renault</uri>
+        <!-- <uri>model://f1ROS</uri> --> <!-- NO FUNCIONA --> 
       <pose>-59.25 28.6 0 0 0 -0.55</pose>
     </include>
     <light name='light1' type='directional'>
