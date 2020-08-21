@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<sdf version="1.4">
+<sdf version="1.5">
   <world name="default">
     <include>
       <uri>model://sun</uri>
@@ -24,9 +24,9 @@
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <cast_shadows>1</cast_shadows>
+      <cast_shadows>0</cast_shadows>
     </light>
-    <light name='light2' type='directional'>
+    <!-- <light name='light2' type='directional'>
       <pose frame=''>-33.8751 1.73502 1 0 -0 0</pose>
       <diffuse>0.5 0.5 0.5 1</diffuse>
       <specular>0.1 0.1 0.1 1</specular>
@@ -37,7 +37,7 @@
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <cast_shadows>1</cast_shadows>
+      <cast_shadows>0</cast_shadows>
     </light>
     <light name='light3' type='directional'>
       <pose frame=''>-30.1579 4.34083 1 0 -0 0</pose>
@@ -50,7 +50,7 @@
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <cast_shadows>1</cast_shadows>
+      <cast_shadows>0</cast_shadows>
     </light>
     <light name='light4' type='directional'>
       <pose frame=''>-39.5494 4.16567 1 0 -0 0</pose>
@@ -63,7 +63,17 @@
         <linear>0.01</linear>
         <quadratic>0.001</quadratic>
       </attenuation>
-      <cast_shadows>1</cast_shadows>
-    </light>
+      <cast_shadows>0</cast_shadows>
+    </light> -->
+    <scene>
+    <sky>
+      <clouds>
+        <speed>12</speed>
+      </clouds>
+    </sky>
+    <ambient>0 0 0 1</ambient>
+    <shadows>false</shadows>
+    <grid>false</grid>
+  </scene>
   </world>
 </sdf>
