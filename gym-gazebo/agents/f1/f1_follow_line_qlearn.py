@@ -24,13 +24,16 @@ def render():
             (render_episodes < episode):
         env.render(close=True)
 
-def save_model():
+def save_model(epoch):
     # Tabular RL: Tabular Q-learning basically stores the policy (Q-values) of  the agent into a matrix of shape
     # (S x A), where s are all states, a are all the possible actions. After the environment is solved, just save this
     # matrix as a csv file. I have a quick implementation of this on my GitHub under Reinforcement Learning.
     date = datetime.datetime.now()
     format = date.strftime("%Y%m%d_%H%M%S")
-    file_name = "_qlearn_model_e_{}_a_{}_g_{}".format(qlearn.epsilon, qlearn.alpha, qlearn.gamma)
+    file_name = "_qlearn_circuit_{}_act_set_{}_e_{}_epoch_{}".format(settings.gazebo_positions_set,
+                                                                     settings.actions_set,
+                                                                     round(qlearn.epsilon, 2),
+                                                                     epoch)
     file = open("logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
     pickle.dump(qlearn.q, file)
 
@@ -81,7 +84,7 @@ if __name__ == '__main__':
         initial_epsilon = qlearn.epsilon
 
     total_episodes = 20000
-    epsilon_discount = 0.9986  # Default 0.9986
+    epsilon_discount = 0.999  # Default 0.9986
 
     start_time = time.time()
 
@@ -143,9 +146,9 @@ if __name__ == '__main__':
             plotter.plot_steps_vs_epoch(stats)
             # plotter.full_plot(env, stats, 2)  # optional parameter = mode (0, 1, 2)
 
-        if episode % 1000 == 0 and settings.save_model:
+        if episode % 1000 == 0 and settings.save_model and episode > 1:
             print("\nSaving model . . .\n")
-            save_model()
+            save_model(episode)
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
