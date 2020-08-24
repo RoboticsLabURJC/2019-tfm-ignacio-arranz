@@ -10,9 +10,9 @@ telemetry_mask = False
 plotter_graphic = True
 my_board = True
 save_model = True
-load_model = False
+load_model = True
 
-actions_set = "hard"  # test, simple, medium, hard
+actions_set = "medium"  # test, simple, medium, hard
 gazebo_positions_set = "nurburgring"
 
 # === ACTIONS SET ===
@@ -27,11 +27,11 @@ if actions_set == "simple":
     }
 elif actions_set == "medium":
     actions = {
-        0: (6, 0),
-        1: (3, 1),
-        2: (3, -1),
-        3: (4, 2),
-        4: (4, -2),
+        0: (3, 0),
+        1: (2, 1),
+        2: (2, -1),
+        3: (2, 3),
+        4: (2, -3),
     }
 elif actions_set == "hard":
     actions = {
@@ -74,7 +74,7 @@ center_image = width/2
 # Coord X ROW
 # x_row = [250, 300, 350, 400, 450]
 # x_row = [250, 450]
-x_row = [350]
+x_row = [300]
 
 # Maximum distance from the line
 ranges = [300, 280, 250]  # Line 1, 2 and 3
