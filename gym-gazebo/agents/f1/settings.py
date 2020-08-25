@@ -15,6 +15,13 @@ load_model = True
 actions_set = "medium"  # test, simple, medium, hard
 gazebo_positions_set = "nurburgring"
 
+# === PARAMS ===
+config = {"alpha": 0.2,
+          "gamma": 0.9,
+          "epsilon": 0.6,
+          "highest_reward": 4000
+          }
+
 # === ACTIONS SET ===
 space_reward = np.flip(np.linspace(0, 1, 300))  # Deprecated
 
