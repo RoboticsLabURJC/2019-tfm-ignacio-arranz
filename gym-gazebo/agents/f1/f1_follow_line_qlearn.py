@@ -24,6 +24,21 @@ def render():
             (render_episodes < episode):
         env.render(close=True)
 
+
+def load_model(qlearn, file_name):
+
+    qlearn_file = open("logs/qlearn_models/" + file_name)
+    model = pickle.load(qlearn_file)
+
+    qlearn.q = model
+    qlearn.alpha = settings.config["alpha"]
+    qlearn.gamma = settings.config["gamma"]
+    qlearn.epsilon = settings.config["epsilon"]
+    highest_reward = settings.config["highest_reward"]
+
+    print("MODEL LOADED. Number of (action, state): {}".format(len(model)))
+
+
 def save_model(epoch):
     # Tabular RL: Tabular Q-learning basically stores the policy (Q-values) of  the agent into a matrix of shape
     # (S x A), where s are all states, a are all the possible actions. After the environment is solved, just save this
@@ -70,15 +85,9 @@ if __name__ == '__main__':
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
-        exit(1)
-        qlearn_file = open('logs/qlearn_models/20200628_LASER_5ACTS_155827qlearn_model_e_0.243550191511_a_0.2_g_0.9.pkl', 'rb')
-        model = pickle.load(qlearn_file)
-        print("Number of (action, state): {}".format(len(model)))
-        qlearn.q = model
-        qlearn.alpha = 0.2
-        qlearn.gamma = 0.9
-        qlearn.epsilon = 0.6
-        highest_reward = 4000
+        file_name = '20200824_204057_qlearn_circuit_nurburgring_act_set_medium_e_0.13_epoch_2000.pkl'
+        load_model(qlearn, file_name)
+        highest_reward = settings.config["highest_reward"]
     else:
         highest_reward = 0
         initial_epsilon = qlearn.epsilon
