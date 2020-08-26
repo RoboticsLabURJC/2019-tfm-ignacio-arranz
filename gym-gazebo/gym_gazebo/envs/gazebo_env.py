@@ -20,8 +20,8 @@ class GazeboEnv(gym.Env):
     def __init__(self, launchfile):
 
         self.last_clock_msg = Clock()
-        self.port = "11311" #str(random_number) #os.environ["ROS_PORT_SIM"]
-        self.port_gazebo = "11345"#str(random_number+1) #os.environ["ROS_PORT_SIM"]
+        self.port = "11311"  # str(random_number) #os.environ["ROS_PORT_SIM"]
+        self.port_gazebo = "11345"  # str(random_number+1) #os.environ["ROS_PORT_SIM"]
         # self.ros_master_uri = os.environ["ROS_MASTER_URI"];        
 
         print("\nROS_MASTER_URI = http://localhost:" + self.port + "\n")
@@ -36,7 +36,6 @@ class GazeboEnv(gym.Env):
         # self._roscore = subprocess.Popen([sys.executable, os.path.join(ros_path, b"roscore"), "-p", self.port])
         # time.sleep(1)
         # print ("Roscore launched!")
-
 
         if launchfile.startswith("/"):
             fullpath = launchfile
