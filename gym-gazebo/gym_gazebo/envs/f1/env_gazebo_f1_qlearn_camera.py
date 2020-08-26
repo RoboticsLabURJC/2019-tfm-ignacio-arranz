@@ -3,6 +3,7 @@ import time
 import numpy as np
 import random
 import cv2
+import json
 
 from gym import spaces
 from cv_bridge import CvBridge
@@ -16,7 +17,7 @@ from std_srvs.srv import Empty
 from sensor_msgs.msg import Image
 
 from gym.utils import seeding
-from agents.f1.settings import actions, gazebo_positions
+from agents.f1.settings import actions, envs_params
 from agents.f1.settings import telemetry, x_row, ranges, center_image, width, height, telemetry_mask
 
 
@@ -42,8 +43,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        # gazebo_env.GazeboEnv.__init__(self, "F1Cameracircuit_v0.launch")
-        gazebo_env.GazeboEnv.__init__(self, "f1_1_nurburgrinlineROS.launch")
+        self.circuit = envs_params["simple"]
+        gazebo_env.GazeboEnv.__init__(self, self.circuit["launch"])
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
@@ -90,20 +91,20 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         """
         (pos_number, pose_x, pose_y, pose_z, or_x, or_y, or_z, or_z)
         """
-        pos = random.choice(list(enumerate(gazebo_positions)))[0]
+        pos = random.choice(list(enumerate(self.circuit["gaz_pos"])))[0]
         self.position = pos
 
-        pos_number = gazebo_positions[0]
+        pos_number = self.circuit["gaz_pos"][0]
 
         state = ModelState()
         state.model_name = "f1_renault"
-        state.pose.position.x = gazebo_positions[pos][1]
-        state.pose.position.y = gazebo_positions[pos][2]
-        state.pose.position.z = gazebo_positions[pos][3]
-        state.pose.orientation.x = gazebo_positions[pos][4]
-        state.pose.orientation.y = gazebo_positions[pos][5]
-        state.pose.orientation.z = gazebo_positions[pos][6]
-        state.pose.orientation.w = gazebo_positions[pos][7]
+        state.pose.position.x = self.circuit["gaz_pos"][pos][1]
+        state.pose.position.y = self.circuit["gaz_pos"][pos][2]
+        state.pose.position.z = self.circuit["gaz_pos"][pos][3]
+        state.pose.orientation.x = self.circuit["gaz_pos"][pos][4]
+        state.pose.orientation.y = self.circuit["gaz_pos"][pos][5]
+        state.pose.orientation.z = self.circuit["gaz_pos"][pos][6]
+        state.pose.orientation.w = self.circuit["gaz_pos"][pos][7]
 
         rospy.wait_for_service('/gazebo/set_model_state')
         try:
@@ -252,8 +253,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def reset(self):
         # === POSE ===
-        self.set_new_pose()
-        # self._gazebo_reset()
+        # self.set_new_pose()
+        self._gazebo_reset()
 
         self._gazebo_unpause()
 

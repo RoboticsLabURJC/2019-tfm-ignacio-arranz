@@ -4,6 +4,7 @@ import sys
 import time
 
 import cv2
+import json
 import gym
 import numpy as np
 import roslaunch
@@ -24,7 +25,7 @@ from skimage.viewer import ImageViewer
 from std_srvs.srv import Empty
 
 from gym_gazebo.envs import gazebo_env
-from agents.f1.settings import telemetry
+from agents.f1.settings import telemetry, envs_params
 
 # Images size
 witdh = 640
@@ -111,7 +112,7 @@ class GazeboF1CameraEnvDQN(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        gazebo_env.GazeboEnv.__init__(self, "F1Cameracircuit_v0.launch")
+        gazebo_env.GazeboEnv.__init__(self, json.loads(envs_params.simple.launch))
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
