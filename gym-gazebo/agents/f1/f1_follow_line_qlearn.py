@@ -31,12 +31,13 @@ def load_model(qlearn, file_name):
     model = pickle.load(qlearn_file)
 
     qlearn.q = model
-    qlearn.alpha = settings.config["alpha"]
-    qlearn.gamma = settings.config["gamma"]
-    qlearn.epsilon = settings.config["epsilon"]
-    highest_reward = settings.config["highest_reward"]
+    qlearn.alpha = settings.algorithm_params["alpha"]
+    qlearn.gamma = settings.algorithm_params["gamma"]
+    qlearn.epsilon = settings.algorithm_params["epsilon"]
+    # highest_reward = settings.algorithm_params["highest_reward"]
 
-    print("MODEL LOADED. Number of (action, state): {}".format(len(model)))
+    print("\n\nMODEL LOADED. Number of (action, state): {}\n\n".format(len(model)))
+    print("    - Len: {}".format(len(qlearn.q)))
 
 
 def save_model(epoch):
@@ -45,7 +46,7 @@ def save_model(epoch):
     # matrix as a csv file. I have a quick implementation of this on my GitHub under Reinforcement Learning.
     date = datetime.datetime.now()
     format = date.strftime("%Y%m%d_%H%M%S")
-    file_name = "_qlearn_circuit_{}_act_set_{}_e_{}_epoch_{}".format(settings.gazebo_positions_set,
+    file_name = "_qlearn_circuit_{}_act_set_{}_e_{}_epoch_{}".format(environment["gaz_pos"],
                                                                      settings.actions_set,
                                                                      round(qlearn.epsilon, 2),
                                                                      epoch)
@@ -61,13 +62,8 @@ if __name__ == '__main__':
     print(settings.title)
     print(settings.description)
 
-    current_env = "camera"
-    if current_env == "laser":
-        env = gym.make('GazeboF1QlearnLaserEnv-v0')
-    elif current_env == "camera":
-        env = gym.make('GazeboF1QlearnCameraEnv-v0')
-    else:
-        print("NO correct env selected")
+    environment = settings.envs_params["simple"]
+    env = gym.make(environment["env"])
 
     outdir = './logs/f1_qlearn_gym_experiments/'
     stats = {}  # epoch: steps
@@ -85,9 +81,11 @@ if __name__ == '__main__':
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
+        solution = "qlearn_camera_resuelto/20200814_191734_qlearn_model_e_0.9801_a_0.2_g_0.9.pkl"
         file_name = '20200824_204057_qlearn_circuit_nurburgring_act_set_medium_e_0.13_epoch_2000.pkl'
-        load_model(qlearn, file_name)
-        highest_reward = settings.config["highest_reward"]
+        load_model(qlearn, solution)
+
+        highest_reward = max(qlearn.q.values(), key=stats.get)
     else:
         highest_reward = 0
         initial_epsilon = qlearn.epsilon
