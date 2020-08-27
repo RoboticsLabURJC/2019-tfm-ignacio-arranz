@@ -27,20 +27,20 @@ def render():
 
 def load_model(qlearn, file_name):
 
-    qlearn_file = open("logs/qlearn_models/" + file_name)
+    qlearn_file = open("./logs/qlearn_models/" + file_name)
     model = pickle.load(qlearn_file)
-
+    print("----------->>> {}".format(model))
     qlearn.q = model
     qlearn.alpha = settings.algorithm_params["alpha"]
     qlearn.gamma = settings.algorithm_params["gamma"]
     qlearn.epsilon = settings.algorithm_params["epsilon"]
     # highest_reward = settings.algorithm_params["highest_reward"]
 
-    print("\n\nMODEL LOADED. Number of (action, state): {}\n\n".format(len(model)))
+    print("\n\nMODEL LOADED. Number of (action, state): {}\n".format(len(model)))
     print("    - Len: {}".format(len(qlearn.q)))
 
 
-def save_model(environmen, epoch):
+def save_model(environment, epoch, states_set):
     # Tabular RL: Tabular Q-learning basically stores the policy (Q-values) of  the agent into a matrix of shape
     # (S x A), where s are all states, a are all the possible actions. After the environment is solved, just save this
     # matrix as a csv file. I have a quick implementation of this on my GitHub under Reinforcement Learning.
@@ -50,9 +50,15 @@ def save_model(environmen, epoch):
                                                                      settings.actions_set,
                                                                      round(qlearn.epsilon, 2),
                                                                      epoch)
-    file = open("logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
-    pickle.dump(qlearn.q, file)
+    file_dump = open("./logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
 
+    print("Model size: {}".format(len(qlearn.q)))
+    pickle.dump(qlearn.q, file_dump)
+
+    # Ssve states. Dictionary. key = states, value = count
+    file_name = file_name + "_states_dictionary"
+    file_dump = open("./logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
+    pickle.dump(states_set, file_dump)
 
 ####################################################################################################################
 # MAIN PROGRAM
@@ -67,6 +73,7 @@ if __name__ == '__main__':
 
     outdir = './logs/f1_qlearn_gym_experiments/'
     stats = {}  # epoch: steps
+    states_set = {}
 
     env = gym.wrappers.Monitor(env, outdir, force=True)
     plotter = liveplot.LivePlot(outdir)
@@ -81,9 +88,8 @@ if __name__ == '__main__':
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
-        solution = "qlearn_camera_resuelto/20200814_191734_qlearn_model_e_0.9801_a_0.2_g_0.9.pkl"
-        file_name = '20200824_204057_qlearn_circuit_nurburgring_act_set_medium_e_0.13_epoch_2000.pkl'
-        load_model(qlearn, solution)
+        file_name = '20200827_1301_qlearn_circuit_simple_act_set_simple_e_0.36_epoch_1000.pkl'
+        load_model(qlearn, file_name)
 
         highest_reward = max(qlearn.q.values(), key=stats.get)
     else:
@@ -130,6 +136,10 @@ if __name__ == '__main__':
 
             nextState = ''.join(map(str, observation))
             # print("-------- {}".format(nextState))
+            try:
+                states_set[nextState] += 1
+            except KeyError:
+                states_set[nextState] = 1
 
             qlearn.learn(state, action, reward, nextState)
 
@@ -153,9 +163,9 @@ if __name__ == '__main__':
             plotter.plot_steps_vs_epoch(stats)
             # plotter.full_plot(env, stats, 2)  # optional parameter = mode (0, 1, 2)
 
-        if episode % 500 == 0 and settings.save_model and episode > 1:
+        if episode % 250 == 0 and settings.save_model and episode > 1:
             print("\nSaving model . . .\n")
-            save_model(environment, episode)
+            save_model(environment, episode, states_set)
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
