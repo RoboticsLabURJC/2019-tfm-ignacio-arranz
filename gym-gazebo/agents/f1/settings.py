@@ -112,9 +112,9 @@ height = 480
 center_image = width/2
 
 # Coord X ROW
-# x_row = [250, 300, 350, 400, 450]
+x_row = [250, 300, 350, 400, 450]
 # x_row = [250, 450]
-x_row = [350]
+# #x_row = [350]
 
 # Maximum distance from the line
 ranges = [300, 280, 250]  # Line 1, 2 and 3
