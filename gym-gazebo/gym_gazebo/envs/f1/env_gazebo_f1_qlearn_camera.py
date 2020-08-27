@@ -228,12 +228,12 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-        center = float(center_image - points[-1]) / (float(width) // 2)
+        center = float(center_image - points[2]) / (float(width) // 2)
 
         done = False
         center = abs(center)
 
-        if center > 0.8:
+        if center > 0.9:
             done = True
         if not done:
             if 0 <= center <= 0.2:
@@ -253,8 +253,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def reset(self):
         # === POSE ===
-        # self.set_new_pose()
-        self._gazebo_reset()
+        self.set_new_pose()
+        # self._gazebo_reset()
 
         self._gazebo_unpause()
 
