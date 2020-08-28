@@ -1,9 +1,7 @@
 import rospy
-import time
 import numpy as np
 import random
 import cv2
-import json
 
 from gym import spaces
 from cv_bridge import CvBridge
