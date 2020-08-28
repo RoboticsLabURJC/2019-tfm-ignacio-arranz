@@ -79,6 +79,7 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "F1Cameracircuit_v0.launch",
         "gaz_pos": simple_gazebo_positions,
+        "alternate_pose": True,
         "sensor": "camera"
     },
     "nurburgring": {
@@ -86,6 +87,7 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "f1_1_nurburgrinlineROS.launch",
         "gaz_pos": nurburgring_gazebo_positions,
+        "alternate_pose": True,
         "sensor": "camera"
     },
     "lemans": {
@@ -93,6 +95,7 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "f1_lemans_camera.launch",
         "gaz_pos": "",
+        "alternate_pose": False,
         "sensor": "camera"
     },
     "simple_laser": {
@@ -100,6 +103,7 @@ envs_params = {
         "env": "GazeboF1QlearnLaserEnv-v0",
         "launch": "F1Lasercircuit_v0.launch",
         "gaz_pos": "",
+        "alternate_pose": False,
         "sensor": "laser"
     }
 }
