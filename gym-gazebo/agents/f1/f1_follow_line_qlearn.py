@@ -68,7 +68,7 @@ if __name__ == '__main__':
     print(settings.title)
     print(settings.description)
 
-    environment = settings.envs_params["simple"]
+    environment = settings.envs_params["curves"]
     env = gym.make(environment["env"])
 
     outdir = './logs/f1_qlearn_gym_experiments/'
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
-        file_name = '20200827_1301_qlearn_circuit_simple_act_set_simple_e_0.36_epoch_1000.pkl'
+        file_name = '20200828_0023_qlearn_circuit_simple_act_set_simple_e_0.05_epoch_4000.pkl'
         load_model(qlearn, file_name)
 
         highest_reward = max(qlearn.q.values(), key=stats.get)

@@ -10,7 +10,7 @@ telemetry = False
 telemetry_mask = False
 plotter_graphic = True
 my_board = True
-save_model = True
+save_model = False
 load_model = False
 
 
@@ -23,32 +23,32 @@ algorithm_params = {"alpha": 0.2,
 
 
 # === ACTIONS SET ===
-actions_set = "simple"  # test, simple, medium, hard
+actions_set = "medium"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":
     actions = {
         0: (3, 0),
-        1: (3, 1),
-        2: (3, -1)
+        1: (2, 1),
+        2: (2, -1)
     }
 elif actions_set == "medium":
     actions = {
         0: (3, 0),
         1: (2, 1),
         2: (2, -1),
-        3: (2, 3),
-        4: (2, -3),
+        3: (1, 3),
+        4: (1, -3),
     }
 elif actions_set == "hard":
     actions = {
-        0: (6, 0),
-        1: (3, 1),
-        2: (3, -1),
-        3: (4, 2),
-        4: (4, -2),
-        5: (2, 3),
-        6: (2, -3),
+        0: (4, 0),
+        1: (2, 1),
+        2: (2, -1),
+        3: (2, 2),
+        4: (2, -2),
+        5: (1, 3),
+        6: (1, -3),
     }
 elif actions_set == "test":
     actions = {
@@ -90,10 +90,10 @@ envs_params = {
         "alternate_pose": True,
         "sensor": "camera"
     },
-    "lemans": {
-        "circuit_name": "lemans",
+    "curves": {
+        "circuit_name": "curves",
         "env": "GazeboF1QlearnCameraEnv-v0",
-        "launch": "f1_lemans_camera.launch",
+        "launch": "f1_curves_camera.launch",
         "gaz_pos": "",
         "alternate_pose": False,
         "sensor": "camera"
