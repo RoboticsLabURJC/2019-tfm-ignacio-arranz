@@ -29,15 +29,17 @@ def load_model(qlearn, file_name):
 
     qlearn_file = open("./logs/qlearn_models/" + file_name)
     model = pickle.load(qlearn_file)
-    print("----------->>> {}".format(model))
+
     qlearn.q = model
     qlearn.alpha = settings.algorithm_params["alpha"]
     qlearn.gamma = settings.algorithm_params["gamma"]
     qlearn.epsilon = settings.algorithm_params["epsilon"]
     # highest_reward = settings.algorithm_params["highest_reward"]
 
-    print("\n\nMODEL LOADED. Number of (action, state): {}\n".format(len(model)))
-    print("    - Len: {}".format(len(qlearn.q)))
+    print("\n\nMODEL LOADED. Number of (action, state): {}".format(len(model)))
+    print("    - Model size: {}".format(len(qlearn.q)))
+    print("    - Action set: {}".format(settings.actions_set))
+    print("    - Epsilon:    {}".format(qlearn.epsilon))
 
 
 def save_model(environment, epoch, states_set):
@@ -68,7 +70,7 @@ if __name__ == '__main__':
     print(settings.title)
     print(settings.description)
 
-    environment = settings.envs_params["curves"]
+    environment = settings.envs_params["simple"]
     env = gym.make(environment["env"])
 
     outdir = './logs/f1_qlearn_gym_experiments/'
@@ -84,11 +86,14 @@ if __name__ == '__main__':
 
     stimate_step_per_lap = 4000
     lap_completed = False
+    total_episodes = 20000
+    epsilon_discount = 0.9986  # Default 0.9986
+    start_time = time.time()
 
-    qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.99)
+    qlearn = QLearn(actions=actions, alpha=0.05, gamma=0.9, epsilon=0.99)  # Alpha default 0.2
 
     if settings.load_model:
-        file_name = '20200828_0023_qlearn_circuit_simple_act_set_simple_e_0.05_epoch_4000.pkl'
+        file_name = '6_10_hours_20200902_1508_qlearn_circuit_simple_act_set_medium_e_0.05_epoch_3750.pkl'
         load_model(qlearn, file_name)
 
         highest_reward = max(qlearn.q.values(), key=stats.get)
@@ -97,7 +102,7 @@ if __name__ == '__main__':
         initial_epsilon = qlearn.epsilon
 
     total_episodes = 20000
-    epsilon_discount = 0.999  # Default 0.9986
+    epsilon_discount = 0.9986  # Default 0.9986
 
     start_time = time.time()
 
