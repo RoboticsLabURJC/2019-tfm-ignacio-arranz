@@ -17,7 +17,7 @@ load_model = False
 # === PARAMS ===
 algorithm_params = {"alpha": 0.2,
                     "gamma": 0.9,
-                    "epsilon": 0.6,
+                    "epsilon": 0.2,
                     "highest_reward": 4000
                     }
 
@@ -118,7 +118,7 @@ center_image = width/2
 # Coord X ROW
 x_row = [250, 300, 350, 400, 450]
 # x_row = [250, 450]
-# #x_row = [350]
+# x_row = [300]
 
 # Maximum distance from the line
 ranges = [300, 280, 250]  # Line 1, 2 and 3
