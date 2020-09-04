@@ -10,7 +10,7 @@ telemetry = False
 telemetry_mask = False
 plotter_graphic = True
 my_board = True
-save_model = False
+save_model = True
 load_model = False
 
 
@@ -37,8 +37,8 @@ elif actions_set == "medium":
         0: (3, 0),
         1: (2, 1),
         2: (2, -1),
-        3: (1, 3),
-        4: (1, -3),
+        3: (0.5, 1.5),
+        4: (0.5, -1.5),
     }
 elif actions_set == "hard":
     actions = {
@@ -116,8 +116,8 @@ height = 480
 center_image = width/2
 
 # Coord X ROW
-x_row = [250, 300, 350, 400, 450]
-# x_row = [250, 450]
+# x_row = [250, 300, 350, 400, 450]
+x_row = [250, 300, 400]
 # x_row = [300]
 
 # Maximum distance from the line

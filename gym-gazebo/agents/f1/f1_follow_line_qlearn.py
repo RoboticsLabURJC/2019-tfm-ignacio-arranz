@@ -90,10 +90,10 @@ if __name__ == '__main__':
     epsilon_discount = 0.9986  # Default 0.9986
     start_time = time.time()
 
-    qlearn = QLearn(actions=actions, alpha=0.05, gamma=0.9, epsilon=0.99)  # Alpha default 0.2
+    qlearn = QLearn(actions=actions, alpha=0.8, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
-        file_name = '6_10_hours_20200902_1508_qlearn_circuit_simple_act_set_medium_e_0.05_epoch_3750.pkl'
+        file_name = '10_00_hours_20200902_2224_qlearn_circuit_simple_act_set_medium_e_0.05_epoch_8050_states_dictionary.pkl'
         load_model(qlearn, file_name)
 
         highest_reward = max(qlearn.q.values(), key=stats.get)
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         initial_epsilon = qlearn.epsilon
 
     total_episodes = 20000
-    epsilon_discount = 0.9986  # Default 0.9986
+    epsilon_discount = 0.9986
 
     start_time = time.time()
 

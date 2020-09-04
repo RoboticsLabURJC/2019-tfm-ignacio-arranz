@@ -213,13 +213,16 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.vel_pub.publish(vel_cmd)
 
         # Get camera info
-        image_data = None
-        f1_image_camera = None
-        while image_data is None:
-            image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
-            # Transform the image data from ROS to CVMat
-            cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-            f1_image_camera = self.image_msg_to_image(image_data, cv_image)
+        # image_data = None
+        # f1_image_camera = None
+        # while image_data is None:
+        #     image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+        #     # Transform the image data from ROS to CVMat
+        #     cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+        #     f1_image_camera = self.image_msg_to_image(image_data, cv_image)
+        image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+        cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+        f1_image_camera = self.image_msg_to_image(image_data, cv_image)
 
         self._gazebo_pause()
 
