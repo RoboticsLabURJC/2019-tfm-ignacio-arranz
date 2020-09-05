@@ -93,16 +93,13 @@ if __name__ == '__main__':
     qlearn = QLearn(actions=actions, alpha=0.8, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
-        file_name = '10_00_hours_20200902_2224_qlearn_circuit_simple_act_set_medium_e_0.05_epoch_8050_states_dictionary.pkl'
+        file_name = '20200905_1245_qlearn_circuit_simple_act_set_medium_e_0.7_epoch_250.pkl'
         load_model(qlearn, file_name)
 
         highest_reward = max(qlearn.q.values(), key=stats.get)
     else:
         highest_reward = 0
         initial_epsilon = qlearn.epsilon
-
-    total_episodes = 20000
-    epsilon_discount = 0.9986
 
     start_time = time.time()
 
@@ -157,7 +154,7 @@ if __name__ == '__main__':
                 stats[episode] = step
                 break
 
-            if stimate_step_per_lap > 4000 and not lap_completed:
+            if step > stimate_step_per_lap and not lap_completed:
                 print("LAP COMPLETED!!")
                 lap_completed = True
 

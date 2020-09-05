@@ -10,7 +10,7 @@ telemetry = False
 telemetry_mask = False
 plotter_graphic = True
 my_board = True
-save_model = True
+save_model = False
 load_model = False
 
 
@@ -23,7 +23,7 @@ algorithm_params = {"alpha": 0.2,
 
 
 # === ACTIONS SET ===
-actions_set = "medium"  # test, simple, medium, hard
+actions_set = "hard"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":
@@ -45,10 +45,10 @@ elif actions_set == "hard":
         0: (4, 0),
         1: (2, 1),
         2: (2, -1),
-        3: (2, 2),
-        4: (2, -2),
-        5: (1, 3),
-        6: (1, -3),
+        3: (0.8, 1),
+        4: (0.8, -1),
+        5: (0.4, 1.5),
+        6: (0.4, -1.5),
     }
 elif actions_set == "test":
     actions = {

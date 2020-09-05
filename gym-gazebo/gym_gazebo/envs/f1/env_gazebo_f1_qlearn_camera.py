@@ -180,7 +180,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
         final_state = []
         for _, x in enumerate(state):
-            final_state.append(abs((center_image - x) / normalize) + 1)
+            final_state.append(int((center_image - x) / normalize) + 1)
 
         return final_state
 
