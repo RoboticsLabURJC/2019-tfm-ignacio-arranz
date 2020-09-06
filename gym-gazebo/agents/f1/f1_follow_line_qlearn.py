@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     stimate_step_per_lap = 4000
     lap_completed = False
-    total_episodes = 20000
+    total_episodes = 1000
     epsilon_discount = 0.9986  # Default 0.9986
     start_time = time.time()
 
@@ -155,12 +155,13 @@ if __name__ == '__main__':
                 break
 
             if step > stimate_step_per_lap and not lap_completed:
-                print("LAP COMPLETED!!")
                 lap_completed = True
+                plotter.plot_steps_vs_epoch(stats, save=True)
+                print("LAP COMPLETED!!")
 
             # print("Obser: {} - Rew: {}".format(observation, reward))
 
-        if episode % 100 == 0 and settings.plotter_graphic:
+        if episode % 1 == 0 and settings.plotter_graphic:
             # plotter.plot(env)
             plotter.plot_steps_vs_epoch(stats)
             # plotter.full_plot(env, stats, 2)  # optional parameter = mode (0, 1, 2)
@@ -183,5 +184,7 @@ if __name__ == '__main__':
     # print("Parameters: a="+str)
     print("Overall score: {:0.2f}".format(last_time_steps.mean()))
     print("Best 100 score: {:0.2f}".format(reduce(lambda x, y: x + y, l[-100:]) / len(l[-100:])))
+
+    plotter.plot_steps_vs_epoch(stats, save=True)
 
     env.close()
