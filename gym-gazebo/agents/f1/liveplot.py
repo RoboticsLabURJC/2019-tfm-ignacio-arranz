@@ -2,6 +2,7 @@
 import matplotlib
 import matplotlib.pyplot as plt
 import gym
+import settings
 
 rewards_key = 'episode_rewards'
 
@@ -37,10 +38,15 @@ class LivePlot(object):
         # may want to figure out matplotlib animation or use a different library in the future
         plt.pause(0.000001)
 
-    def plot_steps_vs_epoch(self, data):
+    def plot_steps_vs_epoch(self, data, save=False):
         plt.ylabel("Steps")
         plt.xlabel("Epoch")
         plt.plot(list(data.keys()), list(data.values()), color=self.line_color)
+        if save:
+            plt.savefig(settings.output_dir +
+                        "points_" + str(len(settings.x_row)) +
+                        "_actions_" + settings.actions_set +
+                        '.png', dpi=100, bbox_inches='tight')
         plt.pause(0.000001)
 
     def full_plot(self, env, data2, mode):

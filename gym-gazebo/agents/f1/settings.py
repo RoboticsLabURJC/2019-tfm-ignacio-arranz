@@ -21,9 +21,10 @@ algorithm_params = {"alpha": 0.2,
                     "highest_reward": 4000
                     }
 
-
+# === OUTPUT DIR ===
+output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
 # === ACTIONS SET ===
-actions_set = "hard"  # test, simple, medium, hard
+actions_set = "simple"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":
@@ -117,8 +118,8 @@ center_image = width/2
 
 # Coord X ROW
 # x_row = [250, 300, 350, 400, 450]
-x_row = [250, 300, 400]
-# x_row = [300]
+# x_row = [250, 300, 400]
+x_row = [300]
 
 # Maximum distance from the line
 ranges = [300, 280, 250]  # Line 1, 2 and 3
