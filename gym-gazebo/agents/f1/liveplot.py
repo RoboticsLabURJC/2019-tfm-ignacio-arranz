@@ -42,12 +42,12 @@ class LivePlot(object):
         plt.ylabel("Steps")
         plt.xlabel("Epoch")
         plt.plot(list(data.keys()), list(data.values()), color=self.line_color)
+        plt.pause(0.000001)
         if save:
             plt.savefig(settings.output_dir +
                         "points_" + str(len(settings.x_row)) +
                         "_actions_" + settings.actions_set +
                         '.png', dpi=100, bbox_inches='tight')
-        plt.pause(0.000001)
 
     def full_plot(self, env, data2, mode):
         fig, (ax1, ax2) = plt.subplots(2)

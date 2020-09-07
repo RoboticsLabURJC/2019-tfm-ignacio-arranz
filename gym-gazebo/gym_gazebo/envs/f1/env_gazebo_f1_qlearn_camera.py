@@ -220,7 +220,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         #     # Transform the image data from ROS to CVMat
         #     cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
         #     f1_image_camera = self.image_msg_to_image(image_data, cv_image)
-        image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+        image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=1)
         cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
         f1_image_camera = self.image_msg_to_image(image_data, cv_image)
 
@@ -229,7 +229,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-        center = float(center_image - points[0]) / (float(width) // 2)
+        center = float(center_image - points[2]) / (float(width) // 2)
 
         done = False
         center = abs(center)

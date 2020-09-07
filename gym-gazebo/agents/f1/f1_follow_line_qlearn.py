@@ -84,6 +84,7 @@ if __name__ == '__main__':
 
     actions = range(env.action_space.n)
 
+    counter = 0
     stimate_step_per_lap = 4000
     lap_completed = False
     total_episodes = 1000
@@ -106,7 +107,7 @@ if __name__ == '__main__':
     print(settings.lets_go)
 
     for episode in range(total_episodes):
-
+        counter = 0
         done = False
         lap_completed = False
 
@@ -125,6 +126,8 @@ if __name__ == '__main__':
         # print("DICCIONARIO ----> {}".format(len(qlearn.q)))
 
         for step in range(20000):
+
+            counter += 1
 
             # Pick an action based on the current state
             action = qlearn.selectAction(state)
@@ -151,13 +154,18 @@ if __name__ == '__main__':
                 state = nextState
             else:
                 last_time_steps = np.append(last_time_steps, [int(step + 1)])
-                stats[episode] = step
+                stats[int(episode)] = step
                 break
 
             if step > stimate_step_per_lap and not lap_completed:
                 lap_completed = True
                 plotter.plot_steps_vs_epoch(stats, save=True)
+                save_model(environment, episode, states_set)
                 print("LAP COMPLETED!!")
+
+            if counter > 1000:
+                plotter.plot_steps_vs_epoch(stats, save=True)
+                counter = 0
 
             # print("Obser: {} - Rew: {}".format(observation, reward))
 
