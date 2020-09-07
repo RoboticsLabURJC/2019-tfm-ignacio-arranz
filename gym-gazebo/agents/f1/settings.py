@@ -10,19 +10,24 @@ telemetry = False
 telemetry_mask = False
 plotter_graphic = True
 my_board = True
-save_model = False
+save_model = True
 load_model = False
-
-
-# === PARAMS ===
-algorithm_params = {"alpha": 0.2,
-                    "gamma": 0.9,
-                    "epsilon": 0.2,
-                    "highest_reward": 4000
-                    }
 
 # === OUTPUT DIR ===
 output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
+
+# ==== Points of intereset (POI) =====
+poi = 3
+if poi == 1:
+    x_row = [300]
+elif poi == 3:
+    x_row = [241, 250, 300, 400, 479]  # The first and last element is not used. Just for metrics
+elif poi == 5:
+    x_row = [241, 250, 300, 350, 400, 450, 479]
+
+# === PARAMS ===
+algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.2, "highest_reward": 4000}
+
 # === ACTIONS SET ===
 actions_set = "simple"  # test, simple, medium, hard
 
@@ -115,11 +120,6 @@ envs_params = {
 width = 640
 height = 480
 center_image = width/2
-
-# Coord X ROW
-# x_row = [250, 300, 350, 400, 450]
-# x_row = [250, 300, 400]
-x_row = [300]
 
 # Maximum distance from the line
 ranges = [300, 280, 250]  # Line 1, 2 and 3
