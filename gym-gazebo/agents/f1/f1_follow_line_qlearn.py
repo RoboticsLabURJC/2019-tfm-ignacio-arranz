@@ -87,7 +87,7 @@ if __name__ == '__main__':
     counter = 0
     stimate_step_per_lap = 4000
     lap_completed = False
-    total_episodes = 1000
+    total_episodes = 20000
     epsilon_discount = 0.9986  # Default 0.9986
     start_time = time.time()
 

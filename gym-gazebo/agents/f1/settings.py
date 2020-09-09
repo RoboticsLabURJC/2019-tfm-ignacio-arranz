@@ -17,13 +17,13 @@ load_model = False
 output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
 
 # ==== Points of intereset (POI) =====
-poi = 3
+poi = 5
 if poi == 1:
     x_row = [300]
 elif poi == 3:
-    x_row = [241, 250, 300, 400, 479]  # The first and last element is not used. Just for metrics
+    x_row = [250, 300, 400]  # The first and last element is not used. Just for metrics
 elif poi == 5:
-    x_row = [241, 250, 300, 350, 400, 450, 479]
+    x_row = [250, 300, 350, 400, 450]
 
 # === PARAMS ===
 algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.2, "highest_reward": 4000}
