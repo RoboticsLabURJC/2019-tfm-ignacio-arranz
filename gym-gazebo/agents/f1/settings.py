@@ -17,7 +17,7 @@ load_model = False
 output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
 
 # ==== Points of intereset (POI) =====
-poi = 5
+poi = 1
 if poi == 1:
     x_row = [300]
 elif poi == 3:
@@ -48,13 +48,13 @@ elif actions_set == "medium":
     }
 elif actions_set == "hard":
     actions = {
-        0: (4, 0),
+        0: (3, 0),
         1: (2, 1),
         2: (2, -1),
         3: (0.8, 1),
         4: (0.8, -1),
-        5: (0.4, 1.5),
-        6: (0.4, -1.5),
+        5: (0.2, 1.5),
+        6: (0.2, -1.5),
     }
 elif actions_set == "test":
     actions = {

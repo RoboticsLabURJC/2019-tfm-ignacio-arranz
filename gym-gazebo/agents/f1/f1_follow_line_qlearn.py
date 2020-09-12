@@ -125,7 +125,7 @@ if __name__ == '__main__':
         # print("-------- RESET: {}".format(state))
         # print("DICCIONARIO ----> {}".format(len(qlearn.q)))
 
-        for step in range(20000):
+        for step in range(500000):
 
             counter += 1
 
@@ -140,7 +140,7 @@ if __name__ == '__main__':
                 highest_reward = cumulated_reward
 
             nextState = ''.join(map(str, observation))
-            # print("-------- {}".format(nextState))
+
             try:
                 states_set[nextState] += 1
             except KeyError:
@@ -161,10 +161,14 @@ if __name__ == '__main__':
                 lap_completed = True
                 plotter.plot_steps_vs_epoch(stats, save=True)
                 save_model(environment, episode, states_set)
-                print("LAP COMPLETED!!")
+                print("[TRAINING] - LAP COMPLETED!!")
 
             if counter > 1000:
+                print("[TRAINING] - Reducing epsilon. 1000 steps")
                 plotter.plot_steps_vs_epoch(stats, save=True)
+                qlearn.epsilon *= epsilon_discount
+                print("[INFO] - epsilon: {} - cumulated_reward: {} - dict_size: {} - time: {} - steps: {}".format(
+                    qlearn.epsilon, cumulated_reward, len(qlearn.q), datetime.datetime.now(), step))
                 counter = 0
 
             # print("Obser: {} - Rew: {}".format(observation, reward))
@@ -177,11 +181,13 @@ if __name__ == '__main__':
         if episode % 250 == 0 and settings.save_model and episode > 1:
             print("\nSaving model . . .\n")
             save_model(environment, episode, states_set)
+        import datetime
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
-        print ("EP: " + str(episode + 1) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + " - Reward: " + str(
-            cumulated_reward) + " - Time: %d:%02d:%02d" % (h, m, s) + " - steps: " + str(step))
+
+        print ("\nEP: " + str(episode + 1) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + " - Reward: " + str(
+            cumulated_reward) + " - Time: %d:%02d:%02d" % (h, m, s) + " - steps: " + str(step) + "\n")
 
     print ("\n|" + str(total_episodes) + "|" + str(qlearn.alpha) + "|" + str(qlearn.gamma) + "|" + str(
         initial_epsilon) + "*" + str(epsilon_discount) + "|" + str(highest_reward) + "| PICTURE |")
