@@ -5,7 +5,7 @@
       <uri>model://sun</uri>
     </include>
     <include>
-        <uri>model://nurburgrinLine</uri>
+        <uri>model://nurburgring_line</uri>
       <pose>0 0 0 0 0 0</pose>
     </include>
     <include>
