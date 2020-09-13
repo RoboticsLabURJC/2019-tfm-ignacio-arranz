@@ -42,7 +42,7 @@ def load_model(qlearn, file_name):
     print("    - Epsilon:    {}".format(qlearn.epsilon))
 
 
-def save_model(environment, epoch, states_set):
+def save_model(environment, epoch, states_set, states_rewards):
     # Tabular RL: Tabular Q-learning basically stores the policy (Q-values) of  the agent into a matrix of shape
     # (S x A), where s are all states, a are all the possible actions. After the environment is solved, just save this
     # matrix as a csv file. I have a quick implementation of this on my GitHub under Reinforcement Learning.
@@ -57,10 +57,14 @@ def save_model(environment, epoch, states_set):
     print("Model size: {}".format(len(qlearn.q)))
     pickle.dump(qlearn.q, file_dump)
 
-    # Ssve states. Dictionary. key = states, value = count
+    # Save states. Dictionary. key = states, value = count
     file_name = file_name + "_states_dictionary"
     file_dump = open("./logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
     pickle.dump(states_set, file_dump)
+
+    file_name = file_name + "_states_rewards"
+    file_dump = open("./logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
+    pickle.dump(states_rewards, file_dump)
 
 ####################################################################################################################
 # MAIN PROGRAM
@@ -76,6 +80,7 @@ if __name__ == '__main__':
     outdir = './logs/f1_qlearn_gym_experiments/'
     stats = {}  # epoch: steps
     states_set = {}
+    states_reward = {}
 
     env = gym.wrappers.Monitor(env, outdir, force=True)
     plotter = liveplot.LivePlot(outdir)
@@ -155,18 +160,20 @@ if __name__ == '__main__':
             else:
                 last_time_steps = np.append(last_time_steps, [int(step + 1)])
                 stats[int(episode)] = step
+                states_reward[int(episode)] = cumulated_reward
                 break
 
             if step > stimate_step_per_lap and not lap_completed:
                 lap_completed = True
                 plotter.plot_steps_vs_epoch(stats, save=True)
-                save_model(environment, episode, states_set)
+                save_model(environment, episode, states_set, states_reward)
                 print("[TRAINING] - LAP COMPLETED!!")
 
             if counter > 1000:
                 print("[TRAINING] - Reducing epsilon. 1000 steps")
                 plotter.plot_steps_vs_epoch(stats, save=True)
                 qlearn.epsilon *= epsilon_discount
+                save_model(environment, episode, states_set, states_reward)
                 print("[INFO] - epsilon: {} - cumulated_reward: {} - dict_size: {} - time: {} - steps: {}".format(
                     qlearn.epsilon, cumulated_reward, len(qlearn.q), datetime.datetime.now(), step))
                 counter = 0
@@ -180,8 +187,7 @@ if __name__ == '__main__':
 
         if episode % 250 == 0 and settings.save_model and episode > 1:
             print("\nSaving model . . .\n")
-            save_model(environment, episode, states_set)
-        import datetime
+            save_model(environment, episode, states_set, states_reward)
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)

@@ -29,7 +29,7 @@ elif poi == 5:
 algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.2, "highest_reward": 4000}
 
 # === ACTIONS SET ===
-actions_set = "simple"  # test, simple, medium, hard
+actions_set = "hard"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":
