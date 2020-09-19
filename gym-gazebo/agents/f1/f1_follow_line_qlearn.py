@@ -44,28 +44,22 @@ def load_model(qlearn, file_name):
     print("    - Start:      {}".format(datetime.datetime.now()))
 
 
-def save_model(environment, epoch, states_set, states_rewards):
+def save_model(current_time, epoch, states_counter, states_rewards):
     # Tabular RL: Tabular Q-learning basically stores the policy (Q-values) of  the agent into a matrix of shape
     # (S x A), where s are all states, a are all the possible actions. After the environment is solved, just save this
     # matrix as a csv file. I have a quick implementation of this on my GitHub under Reinforcement Learning.
-    date = datetime.datetime.now()
-    format = date.strftime("%Y%m%d_%H%M")
-    file_name = "_qlearn_circuit_{}_act_set_{}_e_{}_epoch_{}".format(environment["circuit_name"],
-                                                                     settings.actions_set,
-                                                                     round(qlearn.epsilon, 2),
-                                                                     epoch)
-    file_dump = open("./logs/qlearn_models/1_" + format + file_name + '.pkl', 'wb')
 
-    print("Model size: {}".format(len(qlearn.q)))
+    base_file_name = "_act_set_{}".format(settings.actions_set)
+    file_dump = open("./logs/qlearn_models/1_" + current_time + base_file_name + '_STATS.pkl', 'wb')
     pickle.dump(qlearn.q, file_dump)
 
     # Save states. Dictionary. key = states, value = count
-    file_name = file_name + "_states_dictionary"
-    file_dump = open("./logs/qlearn_models/2_" + format + file_name + '.pkl', 'wb')
-    pickle.dump(states_set, file_dump)
+    states_counter_file_name = base_file_name + "_STATES_COUNTER.pkl"
+    file_dump = open("./logs/qlearn_models/2_" + current_time + states_counter_file_name, 'wb')
+    pickle.dump(states_counter, file_dump)
 
-    file_name = file_name + "_states_rewards"
-    file_dump = open("./logs/qlearn_models/3_" + format + file_name + '.pkl', 'wb')
+    states_cum_reward_file_name = base_file_name + "_STATES_CUM_REWARD.pkl"
+    file_dump = open("./logs/qlearn_models/3_" + current_time + states_cum_reward_file_name, 'wb')
     pickle.dump(states_rewards, file_dump)
 
 ####################################################################################################################
@@ -82,7 +76,7 @@ if __name__ == '__main__':
 
     outdir = './logs/f1_qlearn_gym_experiments/'
     stats = {}  # epoch: steps
-    states_set = {}
+    states_counter = {}
     states_reward = {}
 
     env = gym.wrappers.Monitor(env, outdir, force=True)
@@ -110,7 +104,9 @@ if __name__ == '__main__':
         highest_reward = 0
         initial_epsilon = qlearn.epsilon
 
-    start_time = time.time()
+    telemetry_start_time = time.time()
+    start_time = datetime.datetime.now()
+    start_time_format = start_time.strftime("%Y%m%d_%H%M")
 
     print(settings.lets_go)
 
@@ -146,9 +142,9 @@ if __name__ == '__main__':
             nextState = ''.join(map(str, observation))
 
             try:
-                states_set[nextState] += 1
+                states_counter[nextState] += 1
             except KeyError:
-                states_set[nextState] = 1
+                states_counter[nextState] = 1
 
             qlearn.learn(state, action, reward, nextState)
 
@@ -164,19 +160,25 @@ if __name__ == '__main__':
 
             if step > stimate_step_per_lap and not lap_completed:
                 lap_completed = True
-                plotter.plot_steps_vs_epoch(stats, save=True)
-                save_model(environment, episode, states_set, states_reward)
-                print("[TRAINING] - LAP COMPLETED!!")
+                if settings.plotter_graphic:
+                    plotter.plot_steps_vs_epoch(stats, save=True)
+                save_model(start_time_format, episode, states_counter, states_reward)
+                print("\n\n[TRAINING] - LAP COMPLETED!!\n\n")
 
             if counter > 1000:
-                print("[TRAINING] - Reducing epsilon. 1000 steps")
-                plotter.plot_steps_vs_epoch(stats, save=True)
+                if settings.plotter_graphic:
+                    plotter.plot_steps_vs_epoch(stats, save=True)
                 qlearn.epsilon *= epsilon_discount
-                save_model(environment, episode, states_set, states_reward)
+                save_model(start_time_format, episode, states_counter, states_reward)
                 print("[INFO] - epsilon: {} - cumulated_reward: {} - dict_size: {} - time: {} - steps: {}".format(
                     qlearn.epsilon, cumulated_reward, len(qlearn.q), datetime.datetime.now(), step))
                 counter = 0
 
+            if datetime.datetime.now() - datetime.timedelta(hours=1) > start_time:
+                print(settings.eop)
+                save_model(start_time_format, episode, states_counter, states_reward)
+                env.close()
+                exit(0)
             # print("Obser: {} - Rew: {}".format(observation, reward))
 
         if episode % 1 == 0 and settings.plotter_graphic:
@@ -186,12 +188,12 @@ if __name__ == '__main__':
 
         if episode % 250 == 0 and settings.save_model and episode > 1:
             print("\nSaving model . . .\n")
-            save_model(environment, episode, states_set, states_reward)
+            save_model(start_time_format, episode, states_counter, states_reward)
 
-        m, s = divmod(int(time.time() - start_time), 60)
+        m, s = divmod(int(time.time() - telemetry_start_time), 60)
         h, m = divmod(m, 60)
 
-        print ("\nEP: " + str(episode + 1) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + " - Reward: " + str(
+        print ("EP: " + str(episode + 1) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + " - Reward: " + str(
             cumulated_reward) + " - Time: %d:%02d:%02d" % (h, m, s) + " - steps: " + str(step) + "\n")
 
     print ("\n|" + str(total_episodes) + "|" + str(qlearn.alpha) + "|" + str(qlearn.gamma) + "|" + str(
