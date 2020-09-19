@@ -1,8 +1,6 @@
 ###########################
 # Global variables file
 ###########################
-import numpy as np
-
 
 # === BASIC CONFIG ===
 debug_level = 0
@@ -11,7 +9,7 @@ telemetry_mask = False
 plotter_graphic = True
 my_board = True
 save_model = True
-load_model = False
+load_model = True
 
 # === OUTPUT DIR ===
 output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
@@ -26,10 +24,10 @@ elif poi == 5:
     x_row = [250, 300, 350, 400, 450]
 
 # === PARAMS ===
-algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.2, "highest_reward": 4000}
+algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.92, "highest_reward": 4000}
 
 # === ACTIONS SET ===
-actions_set = "hard"  # test, simple, medium, hard
+actions_set = "medium"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":

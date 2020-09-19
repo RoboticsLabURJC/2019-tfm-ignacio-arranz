@@ -37,9 +37,11 @@ def load_model(qlearn, file_name):
     # highest_reward = settings.algorithm_params["highest_reward"]
 
     print("\n\nMODEL LOADED. Number of (action, state): {}".format(len(model)))
+    print("    - Loading:    {}".format(file_name))
     print("    - Model size: {}".format(len(qlearn.q)))
     print("    - Action set: {}".format(settings.actions_set))
     print("    - Epsilon:    {}".format(qlearn.epsilon))
+    print("    - Start:      {}".format(datetime.datetime.now()))
 
 
 def save_model(environment, epoch, states_set, states_rewards):
@@ -52,18 +54,18 @@ def save_model(environment, epoch, states_set, states_rewards):
                                                                      settings.actions_set,
                                                                      round(qlearn.epsilon, 2),
                                                                      epoch)
-    file_dump = open("./logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
+    file_dump = open("./logs/qlearn_models/1_" + format + file_name + '.pkl', 'wb')
 
     print("Model size: {}".format(len(qlearn.q)))
     pickle.dump(qlearn.q, file_dump)
 
     # Save states. Dictionary. key = states, value = count
     file_name = file_name + "_states_dictionary"
-    file_dump = open("./logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
+    file_dump = open("./logs/qlearn_models/2_" + format + file_name + '.pkl', 'wb')
     pickle.dump(states_set, file_dump)
 
     file_name = file_name + "_states_rewards"
-    file_dump = open("./logs/qlearn_models/" + format + file_name + '.pkl', 'wb')
+    file_dump = open("./logs/qlearn_models/3_" + format + file_name + '.pkl', 'wb')
     pickle.dump(states_rewards, file_dump)
 
 ####################################################################################################################
@@ -73,6 +75,7 @@ if __name__ == '__main__':
 
     print(settings.title)
     print(settings.description)
+    print("    - Start hour: {}".format(datetime.datetime.now()))
 
     environment = settings.envs_params["simple"]
     env = gym.make(environment["env"])
@@ -99,7 +102,7 @@ if __name__ == '__main__':
     qlearn = QLearn(actions=actions, alpha=0.8, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
-        file_name = '20200905_1245_qlearn_circuit_simple_act_set_medium_e_0.7_epoch_250.pkl'
+        file_name = 'qlearn_camera_solved/points_1_actions_simple__simple_circuit/5/20200912_1654_qlearn_circuit_simple_act_set_simple_e_0.92_epoch_4.pkl'
         load_model(qlearn, file_name)
 
         highest_reward = max(qlearn.q.values(), key=stats.get)
@@ -124,11 +127,7 @@ if __name__ == '__main__':
             qlearn.epsilon *= epsilon_discount
 
         # render()  # defined above, not env.render()
-
         state = ''.join(map(str, observation))
-
-        # print("-------- RESET: {}".format(state))
-        # print("DICCIONARIO ----> {}".format(len(qlearn.q)))
 
         for step in range(500000):
 
