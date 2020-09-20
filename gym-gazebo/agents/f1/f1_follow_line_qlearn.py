@@ -49,7 +49,7 @@ def save_model(current_time, epoch, states_counter, states_rewards):
     # (S x A), where s are all states, a are all the possible actions. After the environment is solved, just save this
     # matrix as a csv file. I have a quick implementation of this on my GitHub under Reinforcement Learning.
 
-    base_file_name = "_act_set_{}".format(settings.actions_set)
+    base_file_name = "_act_set_{}_epsilon_{}".format(settings.actions_set, round(qlearn.epsilon, 2))
     file_dump = open("./logs/qlearn_models/1_" + current_time + base_file_name + '_STATS.pkl', 'wb')
     pickle.dump(qlearn.q, file_dump)
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         highest_reward = max(qlearn.q.values(), key=stats.get)
     else:
         highest_reward = 0
-        initial_epsilon = qlearn.epsilon
+    initial_epsilon = qlearn.epsilon
 
     telemetry_start_time = time.time()
     start_time = datetime.datetime.now()
@@ -163,20 +163,31 @@ if __name__ == '__main__':
                 if settings.plotter_graphic:
                     plotter.plot_steps_vs_epoch(stats, save=True)
                 save_model(start_time_format, episode, states_counter, states_reward)
-                print("\n\n[TRAINING] - LAP COMPLETED!!\n\n")
+                print("\n\n[TRAINING] - LAP COMPLETED in: {} - Epoch: {} - Cum. Reward: {}\n\n".format(
+                        datetime.datetime.now() - start_time,
+                        episode,
+                        cumulated_reward
+                    )
+                )
 
             if counter > 1000:
                 if settings.plotter_graphic:
                     plotter.plot_steps_vs_epoch(stats, save=True)
                 qlearn.epsilon *= epsilon_discount
                 save_model(start_time_format, episode, states_counter, states_reward)
-                print("[INFO] - epsilon: {} - cumulated_reward: {} - dict_size: {} - time: {} - steps: {}".format(
-                    qlearn.epsilon, cumulated_reward, len(qlearn.q), datetime.datetime.now(), step))
+                print("\t- epsilon: {}\n\t- cum reward: {}\n\t- dict_size: {}\n\t- time: {}\n\t- steps: {}\n".format(
+                    round(qlearn.epsilon, 2), cumulated_reward, len(qlearn.q), datetime.datetime.now()-start_time, step))
                 counter = 0
 
-            if datetime.datetime.now() - datetime.timedelta(hours=1) > start_time:
+            if datetime.datetime.now() - datetime.timedelta(hours=2) > start_time:
                 print(settings.eop)
                 save_model(start_time_format, episode, states_counter, states_reward)
+                print("    - N epoch:     {}".format(episode))
+                print("    - Model size:  {}".format(len(qlearn.q)))
+                print("    - Action set:  {}".format(settings.actions_set))
+                print("    - Epsilon:     {}".format(round(qlearn.epsilon, 2)))
+                print("    - Cum. reward: {}".format(cumulated_reward))
+
                 env.close()
                 exit(0)
             # print("Obser: {} - Rew: {}".format(observation, reward))
@@ -193,11 +204,22 @@ if __name__ == '__main__':
         m, s = divmod(int(time.time() - telemetry_start_time), 60)
         h, m = divmod(m, 60)
 
-        print ("EP: " + str(episode + 1) + " - epsilon: " + str(round(qlearn.epsilon, 2)) + " - Reward: " + str(
-            cumulated_reward) + " - Time: %d:%02d:%02d" % (h, m, s) + " - steps: " + str(step) + "\n")
+        print("\nEP: {} - epsilon: {} - Reward: {} - Time: {} - Steps: {}\n".format(
+                episode + 1,
+                round(qlearn.epsilon, 2),
+                cumulated_reward,
+                start_time_format,
+                step
+            )
+        )
 
-    print ("\n|" + str(total_episodes) + "|" + str(qlearn.alpha) + "|" + str(qlearn.gamma) + "|" + str(
-        initial_epsilon) + "*" + str(epsilon_discount) + "|" + str(highest_reward) + "| PICTURE |")
+    print("Total EP: {} - epsilon: {} - ep. discount: {} - Highest Reward: {}".format(
+            total_episodes,
+            initial_epsilon,
+            epsilon_discount,
+            highest_reward
+        )
+    )
 
     l = last_time_steps.tolist()
     l.sort()
