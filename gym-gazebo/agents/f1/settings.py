@@ -6,10 +6,10 @@
 debug_level = 0
 telemetry = False
 telemetry_mask = False
-plotter_graphic = True
+plotter_graphic = False
 my_board = True
 save_model = True
-load_model = True
+load_model = False
 
 # === OUTPUT DIR ===
 output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
@@ -27,7 +27,7 @@ elif poi == 5:
 algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.92, "highest_reward": 4000}
 
 # === ACTIONS SET ===
-actions_set = "medium"  # test, simple, medium, hard
+actions_set = "simple"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":
@@ -62,18 +62,24 @@ elif actions_set == "test":
     }
 
 
-# === GAZEBO POSITIONS ===
-simple_gazebo_positions = [(0, 53.462, -41.988, 0.004, 0, 0, 1.57, -1.57),
-                           (1, 53.462, -8.734,  0.004, 0, 0, 1.57, -1.57),
-                           (2, 39.712, -30.741, 0.004, 0, 0, 1.56, 1.56),
-                           (3, -6.861,  -36.481, 0.004, 0, 0.01, -0.858, 0.613),
-                           (4, 20.043, 37.130, 0.003, 0, 0.103, -1.4383, -1.4383)]
+# === GAZEBO POSITIONS === x, y, z, roll, pith, ???. yaw
+simple_gazebo_positions = [(0,  53.462, -41.988, 0.004, 0, 0,      1.57,   -1.57),
+                           (1,  53.462, -8.734,  0.004, 0, 0,      1.57,   -1.57),
+                           (2,  39.712, -30.741, 0.004, 0, 0,      1.56,    1.56),
+                           (3, -6.861,  -36.481, 0.004, 0, 0.01,  -0.858,   0.613),
+                           (4,  20.043,  37.130, 0.003, 0, 0.103, -1.4383, -1.4383)]
 
-nurburgring_gazebo_positions = [(0, -23.0937, -2.9703, 0, 0.0050, 0.0013, -0.9628, 0.2699),
-                                (1, -32.3188, 12.2921, 0, 0.0014, 0.0049, -0.2727, 0.9620),
-                                (2, -17.4155, -24.1243, 0, 0.0001, 0.0051, -0.0192, 1),
-                                (3, 31.3967, -4.6166, 0, 0.0030, 0.0041, 0.6011, 0.7991),
-                                (4, -56.1261, 4.1047, 0, 0.0043, -0.0027, -0.8517, -0.5240)]
+nurburgring_gazebo_positions = [(0, -23.0937, -2.9703,  0, 0.0050,  0.0013, -0.9628,  0.2699),
+                                (1, -32.3188,  12.2921, 0, 0.0014,  0.0049, -0.2727,  0.9620),
+                                (2, -17.4155, -24.1243, 0, 0.0001,  0.0051, -0.0192,  1),
+                                (3,  31.3967, -4.6166,  0, 0.0030,  0.0041,  0.6011,  0.7991),
+                                (4, -56.1261,  4.1047,  0, 0.0043, -0.0027, -0.8517, -0.5240)]
+
+montreal_gazebo_positions = [(0, -201.88,  -91.02,   0, 0.00,    0.001,   0.98, -0.15),
+                             (1, -278.71,  -95.50,   0, 0.00,    0.001,   1,     0.03),
+                             (2, -272.93,  -17.70,   0, 0.0001,  0.001,   0.48,  0.87),
+                             (3, -132.73,   55.82,   0, 0.0030,  0.0041, -0.02,  0.9991),
+                             (4,  294.99,   91.54,   0, 0.0043, -0.0027,  0.14,  0.99)]
 
 
 # === CIRCUIT ===
@@ -91,6 +97,14 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "f1_1_nurburgrinlineROS.launch",
         "gaz_pos": nurburgring_gazebo_positions,
+        "alternate_pose": True,
+        "sensor": "camera"
+    },
+    "montreal": {
+        "circuit_name": "montreal",
+        "env": "GazeboF1QlearnCameraEnv-v0",
+        "launch": "f1_montreal.launch",
+        "gaz_pos": montreal_gazebo_positions,
         "alternate_pose": True,
         "sensor": "camera"
     },
@@ -150,4 +164,14 @@ title = '''
 /\__/ / (_| |  __/ |\ \ (_) | |_) | (_) | |_ 
 \____/ \__,_|\___\_| \_\___/|_.__/ \___/ \__|
                                              
+'''
+
+eop = '''
+
+  _____          _       _                                         _      _           _ 
+ |_   _| __ __ _(_)_ __ (_)_ __   __ _    ___ ___  _ __ ___  _ __ | | ___| |_ ___  __| |
+   | || '__/ _` | | '_ \| | '_ \ / _` |  / __/ _ \| '_ ` _ \| '_ \| |/ _ \ __/ _ \/ _` |
+   | || | | (_| | | | | | | | | | (_| | | (_| (_) | | | | | | |_) | |  __/ ||  __/ (_| |
+   |_||_|  \__,_|_|_| |_|_|_| |_|\__, |  \___\___/|_| |_| |_| .__/|_|\___|\__\___|\__,_|
+                                 |___/                      |_|                         
 '''
