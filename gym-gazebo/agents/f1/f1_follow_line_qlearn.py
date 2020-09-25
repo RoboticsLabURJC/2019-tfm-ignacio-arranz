@@ -105,7 +105,8 @@ if __name__ == '__main__':
     qlearn = QLearn(actions=actions, alpha=0.8, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
-        file_name = 'qlearn_camera_solved/points_1_actions_simple__simple_circuit/5/20200912_1654_qlearn_circuit_simple_act_set_simple_e_0.92_epoch_4.pkl'
+        file_name = 'qlearn_camera_solved/2_point_1_actions_simple__simple_circuit/5/1_20200922_0802_act_set_simple_epsilon_0.85_QTABLE.pkl'
+
         load_model(qlearn, file_name)
 
         highest_reward = max(qlearn.q.values(), key=stats.get)

@@ -229,7 +229,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-        center = float(center_image - points[0]) / (float(width) // 2)
+        center = float(center_image - points[1]) / (float(width) // 2)
 
         done = False
         center = abs(center)

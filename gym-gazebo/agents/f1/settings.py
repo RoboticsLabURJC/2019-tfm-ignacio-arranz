@@ -15,7 +15,7 @@ load_model = False
 output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
 
 # ==== Points of intereset (POI) =====
-poi = 1
+poi = 3
 if poi == 1:
     x_row = [300]
 elif poi == 3:
@@ -27,7 +27,7 @@ elif poi == 5:
 algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.92, "highest_reward": 4000}
 
 # === ACTIONS SET ===
-actions_set = "simple"  # test, simple, medium, hard
+actions_set = "medium"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":
