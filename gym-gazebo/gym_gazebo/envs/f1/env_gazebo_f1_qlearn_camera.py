@@ -8,7 +8,7 @@ from cv_bridge import CvBridge
 
 from gym_gazebo.envs import gazebo_env
 from gazebo_msgs.msg import ModelState
-from gazebo_msgs.srv import SetModelState
+from gazebo_msgs.srv import SetModelState, GetModelState
 
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
@@ -41,7 +41,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        self.circuit = envs_params["simple"]
+        self.circuit = envs_params["montreal"]
         gazebo_env.GazeboEnv.__init__(self, self.circuit["launch"])
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
@@ -49,11 +49,19 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
         self.action_space = spaces.Discrete(len(actions))  # actions  # spaces.Discrete(3)  # F,L,R
         self.reward_range = (-np.inf, np.inf)
+        self.model_coordinates = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
         self.position = None
         self._seed()
 
     def render(self, mode='human'):
         pass
+
+    def get_position(self):
+        object_coordinates = self.model_coordinates("f1_renault", "")
+        x_position = round(object_coordinates.pose.position.x, 2)
+        y_position = round(object_coordinates.pose.position.y, 2)
+
+        return x_position, y_position
 
     def _gazebo_pause(self):
         rospy.wait_for_service('/gazebo/pause_physics')
@@ -152,7 +160,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         """
 
         img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-        line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 200))
+        line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 255))  # default: 0, 30, 30 - 0, 255, 200
         # gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
         _, mask = cv2.threshold(line_pre_proc, 240, 255, cv2.THRESH_BINARY)
 
@@ -213,23 +221,23 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.vel_pub.publish(vel_cmd)
 
         # Get camera info
-        # image_data = None
-        # f1_image_camera = None
-        # while image_data is None:
-        #     image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
-        #     # Transform the image data from ROS to CVMat
-        #     cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-        #     f1_image_camera = self.image_msg_to_image(image_data, cv_image)
-        image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=1)
-        cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-        f1_image_camera = self.image_msg_to_image(image_data, cv_image)
+        image_data = None
+        f1_image_camera = None
+        while image_data is None:
+            image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+            # Transform the image data from ROS to CVMat
+            cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+            f1_image_camera = self.image_msg_to_image(image_data, cv_image)
+        # image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=1)
+        # cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+        # f1_image_camera = self.image_msg_to_image(image_data, cv_image)
 
         self._gazebo_pause()
 
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-        center = float(center_image - points[1]) / (float(width) // 2)
+        center = float(center_image - points[0]) / (float(width) // 2)
 
         done = False
         center = abs(center)
@@ -245,6 +253,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
                 reward = 1
         else:
             reward = -100
+
 
         if telemetry:
             print("center: {} - actions: {} - reward: {}".format(center, action, reward))
@@ -279,3 +288,30 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self._gazebo_pause()
 
         return state
+
+    def inference(self, action):
+        self._gazebo_unpause()
+
+        vel_cmd = Twist()
+        vel_cmd.linear.x = actions[action][0]
+        vel_cmd.angular.z = actions[action][1]
+        self.vel_pub.publish(vel_cmd)
+
+        image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=1)
+        cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
+        f1_image_camera = self.image_msg_to_image(image_data, cv_image)
+
+        self._gazebo_pause()
+
+        points = self.processed_image(f1_image_camera.data)
+        state = self.calculate_observation(points)
+
+        center = float(center_image - points[0]) / (float(width) // 2)
+
+        done = False
+        center = abs(center)
+
+        if center > 0.9:
+            done = True
+
+        return state, done
