@@ -6,11 +6,10 @@ import gym
 import liveplot
 import gym_gazebo
 import numpy as np
-from gym import logger, wrappers
+from gym import wrappers
 from qlearn import QLearn
 
 import agents.f1.settings as settings
-from agents.f1.settings import actions_set
 
 
 def render():
@@ -70,6 +69,11 @@ def save_model(current_time, states, states_counter, states_rewards):
     pickle.dump(states, file_dump)
 
 
+def save_times(checkpoints):
+    file_name = "actions_"
+    file_dump = open("./logs/" + file_name + settings.actions_set + '_checkpoints.pkl', 'wb')
+    pickle.dump(checkpoints, file_dump)
+
 
 ####################################################################################################################
 # MAIN PROGRAM
@@ -100,15 +104,12 @@ if __name__ == '__main__':
     lap_completed = False
     total_episodes = 20000
     epsilon_discount = 0.9986  # Default 0.9986
-    start_time = time.time()
 
     qlearn = QLearn(actions=actions, alpha=0.8, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
-        file_name = 'qlearn_camera_solved/2_point_1_actions_simple__simple_circuit/5/1_20200922_0802_act_set_simple_epsilon_0.85_QTABLE.pkl'
-
+        file_name = 'qlearn_camera_solved/nurburgring/1/1_20200928_1904_act_set_simple_epsilon_0.85_QTABLE.pkl'
         load_model(qlearn, file_name)
-
         highest_reward = max(qlearn.q.values(), key=stats.get)
     else:
         highest_reward = 0
@@ -119,6 +120,11 @@ if __name__ == '__main__':
     start_time_format = start_time.strftime("%Y%m%d_%H%M")
 
     print(settings.lets_go)
+
+
+    previous = datetime.datetime.now()
+    checkpoints = []  # "ID" - x, y - time
+
 
     for episode in range(total_episodes):
         counter = 0
@@ -159,6 +165,19 @@ if __name__ == '__main__':
             qlearn.learn(state, action, reward, nextState)
 
             env._flush(force=True)
+
+            if settings.save_positions:
+                now = datetime.datetime.now()
+                if now - datetime.timedelta(seconds=3) > previous:
+                    previous = datetime.datetime.now()
+                    x, y = env.get_position()
+                    checkpoints.append([len(checkpoints), (x, y), datetime.datetime.now().strftime('%M:%S.%f')[-4]])
+
+                if datetime.datetime.now() - datetime.timedelta(minutes=3, seconds=12) > start_time:
+                    print("Finish. Saving parameters . . .")
+                    save_times(checkpoints)
+                    env.close()
+                    exit(0)
 
             if not done:
                 state = nextState
