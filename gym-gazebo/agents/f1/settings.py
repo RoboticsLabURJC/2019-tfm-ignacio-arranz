@@ -5,9 +5,10 @@
 # === BASIC CONFIG ===
 debug_level = 0
 telemetry = False
-telemetry_mask = False
+telemetry_mask = True
 plotter_graphic = False
 my_board = True
+save_positions = False
 save_model = True
 load_model = False
 
@@ -15,7 +16,7 @@ load_model = False
 output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
 
 # ==== Points of intereset (POI) =====
-poi = 3
+poi = 1
 if poi == 1:
     x_row = [300]
 elif poi == 3:
@@ -24,10 +25,10 @@ elif poi == 5:
     x_row = [250, 300, 350, 400, 450]
 
 # === PARAMS ===
-algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.92, "highest_reward": 4000}
+algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.85, "highest_reward": 4000}
 
 # === ACTIONS SET ===
-actions_set = "hard"  # test, simple, medium, hard
+actions_set = "simple"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":
@@ -69,11 +70,11 @@ simple_gazebo_positions = [(0,  53.462, -41.988, 0.004, 0, 0,      1.57,   -1.57
                            (3, -6.861,  -36.481, 0.004, 0, 0.01,  -0.858,   0.613),
                            (4,  20.043,  37.130, 0.003, 0, 0.103, -1.4383, -1.4383)]
 
-nurburgring_gazebo_positions = [(0, -23.0937, -2.9703,  0, 0.0050,  0.0013, -0.9628,  0.2699),
-                                (1, -32.3188,  12.2921, 0, 0.0014,  0.0049, -0.2727,  0.9620),
-                                (2, -17.4155, -24.1243, 0, 0.0001,  0.0051, -0.0192,  1),
-                                (3,  31.3967, -4.6166,  0, 0.0030,  0.0041,  0.6011,  0.7991),
-                                (4, -56.1261,  4.1047,  0, 0.0043, -0.0027, -0.8517, -0.5240)]
+nurburgring_gazebo_positions = [(0, -32.3188,  12.2921, 0, 0.0014,  0.0049, -0.2727,  0.9620),
+                                (1, -30.6566, -21.4929, 0, 0.0014,  0.0049, -0.4727,  0.8720),
+                                (2,  28.0352, -17.7923, 0, 0.0001,  0.0051, -0.028,   1),
+                                (3,  88.7408, -31.7120, 0, 0.0030,  0.0041, -0.1683,  0.98),
+                                (4, -73.2172,  11.8508, 0, 0.0043, -0.0027,  0.8517,  0.5173)]
 
 montreal_gazebo_positions = [(0, -201.88,  -91.02,   0, 0.00,    0.001,   0.98, -0.15),
                              (1, -278.71,  -95.50,   0, 0.00,    0.001,   1,     0.03),
@@ -89,7 +90,7 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "F1Cameracircuit_v0.launch",
         "gaz_pos": simple_gazebo_positions,
-        "alternate_pose": True,
+        "alternate_pose": False,
         "sensor": "camera"
     },
     "nurburgring": {
