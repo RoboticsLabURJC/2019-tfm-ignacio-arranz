@@ -37,6 +37,13 @@ class GazeboF1QlearnLaserEnv(gazebo_env.GazeboEnv):
     def render(self, mode='human'):
         pass
 
+    def get_position(self):
+        object_coordinates = self.model_coordinates("f1_renault", "")
+        x_position = round(object_coordinates.pose.position.x, 2)
+        y_position = round(object_coordinates.pose.position.y, 2)
+
+        return x_position, y_position
+
     def _gazebo_pause(self):
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
