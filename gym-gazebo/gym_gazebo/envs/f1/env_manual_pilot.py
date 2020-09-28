@@ -80,12 +80,12 @@ class GazeboF1ManualCameraEnv(gazebo_env.GazeboEnv):
         self.position = None
         self._seed()
 
-    def store_position(self):
-        self.object_coordinates = self.model_coordinates("f1_renault", "")
-        x_position = round(self.object_coordinates.pose.position.x, 2)
-        y_position = round(self.object_coordinates.pose.position.y, 2)
+    def get_position(self):
+        object_coordinates = self.model_coordinates("f1_renault", "")
+        x_position = round(object_coordinates.pose.position.x, 2)
+        y_position = round(object_coordinates.pose.position.y, 2)
 
-        print(x_position, y_position)
+        return x_position, y_position
 
     def _gazebo_pause(self):
         rospy.wait_for_service('/gazebo/pause_physics')
