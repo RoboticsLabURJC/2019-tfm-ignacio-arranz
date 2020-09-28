@@ -6,6 +6,12 @@ logger = logging.getLogger(__name__)
 # Gazebo
 # ----------------------------------------
 
+# F1 manual
+register(
+    id='GazeboF1ManualCameraEnv-v0',
+    entry_point='gym_gazebo.envs.f1:GazeboF1ManualCameraEnv',
+    # More arguments here
+)
 # F1 envs
 register(
     id='GazeboF1QlearnCameraEnv-v0',
