@@ -52,17 +52,14 @@ def save_model(current_time, states, states_counter, states_rewards):
     base_file_name = "_act_set_{}_epsilon_{}".format(settings.actions_set, round(qlearn.epsilon, 2))
     file_dump = open("./logs/qlearn_models/1_" + current_time + base_file_name + '_QTABLE.pkl', 'wb')
     pickle.dump(qlearn.q, file_dump)
-
     # STATES COUNTER
     states_counter_file_name = base_file_name + "_STATES_COUNTER.pkl"
     file_dump = open("./logs/qlearn_models/2_" + current_time + states_counter_file_name, 'wb')
     pickle.dump(states_counter, file_dump)
-
     # STATES CUMULATED REWARD
     states_cum_reward_file_name = base_file_name + "_STATES_CUM_REWARD.pkl"
     file_dump = open("./logs/qlearn_models/3_" + current_time + states_cum_reward_file_name, 'wb')
     pickle.dump(states_rewards, file_dump)
-
     # STATES
     steps = base_file_name + "_STATES_STEPS.pkl"
     file_dump = open("./logs/qlearn_models/4_" + current_time + steps, 'wb')
@@ -84,7 +81,7 @@ if __name__ == '__main__':
     print(settings.description)
     print("    - Start hour: {}".format(datetime.datetime.now()))
 
-    environment = settings.envs_params["simple"]
+    environment = settings.envs_params["nurburgring"]
     env = gym.make(environment["env"])
 
     outdir = './logs/f1_qlearn_gym_experiments/'
@@ -108,7 +105,8 @@ if __name__ == '__main__':
     qlearn = QLearn(actions=actions, alpha=0.8, gamma=0.9, epsilon=0.99)
 
     if settings.load_model:
-        file_name = 'qlearn_camera_solved/nurburgring/1/1_20200928_1904_act_set_simple_epsilon_0.85_QTABLE.pkl'
+        # file_name = 'qlearn_camera_solved/montreal/2/1_20200928_2303_act_set_simple_epsilon_0.87_QTABLE.pkl'
+        file_name = 'qlearn_camera_solved/points_1_actions_simple__simple_circuit/4/1_20200921_2024_act_set_simple_epsilon_0.83_QTABLE.pkl'
         load_model(qlearn, file_name)
         highest_reward = max(qlearn.q.values(), key=stats.get)
     else:
@@ -121,24 +119,22 @@ if __name__ == '__main__':
 
     print(settings.lets_go)
 
-
     previous = datetime.datetime.now()
     checkpoints = []  # "ID" - x, y - time
 
-
+    # START ############################################################################################################
     for episode in range(total_episodes):
+
         counter = 0
         done = False
         lap_completed = False
 
-        cumulated_reward = 0  # Should going forward give more reward then L/R z?
-
+        cumulated_reward = 0
         observation = env.reset()
 
         if qlearn.epsilon > 0.05:
             qlearn.epsilon *= epsilon_discount
 
-        # render()  # defined above, not env.render()
         state = ''.join(map(str, observation))
 
         for step in range(500000):
