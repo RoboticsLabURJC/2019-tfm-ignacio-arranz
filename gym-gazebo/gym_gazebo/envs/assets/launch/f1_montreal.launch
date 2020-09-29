@@ -5,7 +5,7 @@
     <arg name="world_name" value="$(env GYM_GAZEBO_WORLD_CIRCUIT_F1_MONTREAL)"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
-    <arg name="gui" value="true"/>
+    <arg name="gui" value="false"/>
     <arg name="headless" value="false"/>
     <arg name="debug" value="false"/>
     <arg name="verbose" default="true"/>
