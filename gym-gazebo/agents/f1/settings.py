@@ -5,7 +5,7 @@
 # === BASIC CONFIG ===
 debug_level = 0
 telemetry = False
-telemetry_mask = True
+telemetry_mask = False
 plotter_graphic = False
 my_board = True
 save_positions = False
@@ -25,7 +25,7 @@ elif poi == 5:
     x_row = [250, 300, 350, 400, 450]
 
 # === PARAMS ===
-algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.85, "highest_reward": 4000}
+algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.05, "highest_reward": 4000}
 
 # === ACTIONS SET ===
 actions_set = "simple"  # test, simple, medium, hard
@@ -106,7 +106,7 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "f1_montreal.launch",
         "gaz_pos": montreal_gazebo_positions,
-        "alternate_pose": True,
+        "alternate_pose": False,
         "sensor": "camera"
     },
     "curves": {
@@ -176,11 +176,21 @@ title = '''
 '''
 
 eop = '''
-
   _____          _       _                                         _      _           _ 
  |_   _| __ __ _(_)_ __ (_)_ __   __ _    ___ ___  _ __ ___  _ __ | | ___| |_ ___  __| |
    | || '__/ _` | | '_ \| | '_ \ / _` |  / __/ _ \| '_ ` _ \| '_ \| |/ _ \ __/ _ \/ _` |
    | || | | (_| | | | | | | | | | (_| | | (_| (_) | | | | | | |_) | |  __/ ||  __/ (_| |
    |_||_|  \__,_|_|_| |_|_|_| |_|\__, |  \___\___/|_| |_| |_| .__/|_|\___|\__\___|\__,_|
                                  |___/                      |_|                         
+'''
+
+race_completed = '''
+______                                           _      _           _ 
+| ___ \                                         | |    | |         | |
+| |_/ /__ _  ___ ___    ___ ___  _ __ ___  _ __ | | ___| |_ ___  __| |
+|    // _` |/ __/ _ \  / __/ _ \| '_ ` _ \| '_ \| |/ _ \ __/ _ \/ _` |
+| |\ \ (_| | (_|  __/ | (_| (_) | | | | | | |_) | |  __/ ||  __/ (_| |
+\_| \_\__,_|\___\___|  \___\___/|_| |_| |_| .__/|_|\___|\__\___|\__,_|
+                                          | |                         
+                                          |_|                         
 '''
