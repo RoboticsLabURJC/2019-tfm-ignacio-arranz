@@ -16,7 +16,7 @@ load_model = False
 output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
 
 # ==== Points of intereset (POI) =====
-poi = 1
+poi = 3
 if poi == 1:
     x_row = [300]
 elif poi == 3:
@@ -42,18 +42,18 @@ elif actions_set == "medium":
         0: (3, 0),
         1: (2, 1),
         2: (2, -1),
-        3: (0.5, 1.5),
-        4: (0.5, -1.5),
+        3: (1, 1.5),
+        4: (1, -1.5),
     }
 elif actions_set == "hard":
     actions = {
         0: (3, 0),
         1: (2, 1),
         2: (2, -1),
-        3: (0.8, 1),
-        4: (0.8, -1),
-        5: (0.2, 1.5),
-        6: (0.2, -1.5),
+        3: (1.5, 1),
+        4: (1.5, -1),
+        5: (1, 1.5),
+        6: (1, -1.5),
     }
 elif actions_set == "test":
     actions = {
@@ -91,6 +91,7 @@ envs_params = {
         "launch": "F1Cameracircuit_v0.launch",
         "gaz_pos": simple_gazebo_positions,
         "alternate_pose": False,
+        "estimated_steps": 4000,
         "sensor": "camera"
     },
     "nurburgring": {
@@ -99,6 +100,7 @@ envs_params = {
         "launch": "f1_1_nurburgrinlineROS.launch",
         "gaz_pos": nurburgring_gazebo_positions,
         "alternate_pose": True,
+        "estimated_steps": 3500,
         "sensor": "camera"
     },
     "montreal": {
@@ -126,11 +128,12 @@ envs_params = {
         "sensor": "laser"
     },
     "manual": {
-        "circuit_name": "simple",
+        "circuit_name": "nurburgring",
         "env": "GazeboF1ManualCameraEnv-v0",
         "launch": "F1Cameracircuit_v0.launch",
         "gaz_pos": simple_gazebo_positions[0],
         "alternate_pose": False,
+        "estimated_steps": 3000,
         "sensor": "camera"
     },
 }

@@ -13,7 +13,8 @@ from gym import wrappers
 import agents.f1.settings as settings
 from gym_gazebo.envs.f1.env_manual_pilot import title
 
-total_episodes = 20000
+total_episodes = 200000
+
 
 def save_times(checkpoints):
     file_name = "manual_pilot_checkpoints"
@@ -44,7 +45,7 @@ if __name__ == '__main__':
             x, y = env.get_position()
             checkpoints.append([len(checkpoints), (x, y), datetime.datetime.now().strftime('%M:%S.%f')[-4]])
 
-        if datetime.datetime.now() - datetime.timedelta(minutes=2, seconds=32) > start_time:
+        if datetime.datetime.now() - datetime.timedelta(minutes=4, seconds=32) > start_time:
             print("Finish. Saving parameters . . .")
             save_times(checkpoints)
             env.close()
@@ -52,6 +53,5 @@ if __name__ == '__main__':
 
         env.execute()
 
-
-
-
+        if episode % 500 == 0:
+            print(episode)

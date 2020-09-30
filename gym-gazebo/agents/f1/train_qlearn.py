@@ -97,7 +97,7 @@ if __name__ == '__main__':
     actions = range(env.action_space.n)
 
     counter = 0
-    stimate_step_per_lap = 4000
+    estimate_step_per_lap = environment["estimated_steps"]
     lap_completed = False
     total_episodes = 20000
     epsilon_discount = 0.9986  # Default 0.9986
@@ -183,12 +183,12 @@ if __name__ == '__main__':
                 states_reward[int(episode)] = cumulated_reward
                 break
 
-            if step > stimate_step_per_lap and not lap_completed:
+            if step > estimate_step_per_lap and not lap_completed:
                 lap_completed = True
                 if settings.plotter_graphic:
                     plotter.plot_steps_vs_epoch(stats, save=True)
                 save_model(start_time_format, stats, states_counter, states_reward)
-                print("\n\n[TRAINING] - LAP COMPLETED in: {} - Epoch: {} - Cum. Reward: {}\n\n".format(
+                print("\n\n====> LAP COMPLETED in: {} - Epoch: {} - Cum. Reward: {} <====\n\n".format(
                         datetime.datetime.now() - start_time,
                         episode,
                         cumulated_reward
