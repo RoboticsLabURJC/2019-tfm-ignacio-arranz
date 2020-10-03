@@ -16,11 +16,13 @@ load_model = False
 output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
 
 # ==== Points of intereset (POI) =====
-poi = 3
+# The original pixel row is: 250, 300, 350, 400 and 450 but we work only with the half of the image
+poi = 1
+
 if poi == 1:
-    x_row = [300]
+    x_row = [60]
 elif poi == 3:
-    x_row = [250, 300, 400]  # The first and last element is not used. Just for metrics
+    x_row = [10, 60, 110]  # The first and last element is not used. Just for metrics
 elif poi == 5:
     x_row = [250, 300, 350, 400, 450]
 
@@ -28,7 +30,7 @@ elif poi == 5:
 algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.05, "highest_reward": 4000}
 
 # === ACTIONS SET ===
-actions_set = "simple"  # test, simple, medium, hard
+actions_set = "hard"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":
@@ -128,11 +130,11 @@ envs_params = {
         "sensor": "laser"
     },
     "manual": {
-        "circuit_name": "nurburgring",
+        "circuit_name": "montreal",
         "env": "GazeboF1ManualCameraEnv-v0",
-        "launch": "F1Cameracircuit_v0.launch",
-        "gaz_pos": simple_gazebo_positions[0],
-        "alternate_pose": False,
+        "launch": "f1_montreal.launch",
+        "gaz_pos": montreal_gazebo_positions[1],
+        "alternate_pose": True,
         "estimated_steps": 3000,
         "sensor": "camera"
     },
