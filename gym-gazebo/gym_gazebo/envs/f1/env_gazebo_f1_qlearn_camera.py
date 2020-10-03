@@ -159,7 +159,8 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         :return: x, y, z: 3 coordinates
         """
 
-        img_proc = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        img_sliced = img[240:]
+        img_proc = cv2.cvtColor(img_sliced, cv2.COLOR_BGR2HSV)
         line_pre_proc = cv2.inRange(img_proc, (0, 30, 30), (0, 255, 255))  # default: 0, 30, 30 - 0, 255, 200
         # gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
         _, mask = cv2.threshold(line_pre_proc, 240, 255, cv2.THRESH_BINARY)
@@ -237,7 +238,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-        center = float(center_image - points[1]) / (float(width) // 2)
+        center = float(center_image - points[0]) / (float(width) // 2)
 
         done = False
         center = abs(center)
