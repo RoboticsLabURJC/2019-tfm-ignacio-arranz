@@ -12,15 +12,29 @@ from qlearn import QLearn
 import agents.f1.settings as settings
 
 
-def load_model(actions, input_dir, experiment, number, filename):
+def save_poses(checkpoints, completed, output_dir, experiment, circuit, number, start_time):
+    lap_time = str(datetime.datetime.now() - start_time)
+    if completed:
+        file_name = "5_checkpoints_" + experiment + "_" + number + "_time_" + lap_time + '.pkl'
+    else:
+        file_name = "5_NO_COMPLETED_" + experiment + "_" + number + "_time_" + lap_time + '.pkl'
+    file_dump = open(os.path.join(output_dir, circuit, experiment, number) + "/" + file_name, 'wb')
+    pickle.dump(checkpoints, file_dump)
 
-    qlearn_file = open(os.path.join(input_dir, experiment, number, filename))
+
+def load_model(actions, input_dir, circuit, experiment, number):
+
+    path = os.path.join(input_dir, circuit, experiment, number)
+    q_table_path_file = os.path.join(path, sorted(os.listdir(path))[0])
+
+    qlearn_file = open(os.path.join(q_table_path_file))
     model = pickle.load(qlearn_file)
 
-    qlearn = QLearn(actions=actions, alpha=0.8, gamma=0.9, epsilon=0.05)
+    qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.05)
     qlearn.q = model
 
-    print("-----------------------\nMODEL LOADED\n-----------------------")
+    print("\n\n-----------------------\nMODEL LOADED: {}\n-----------------------\n\n".format(path))
+
     return qlearn
 
 ####################################################################################################################
@@ -36,9 +50,9 @@ if __name__ == '__main__':
     env = gym.make(environment["env"])
 
     input_dir = './logs/qlearn_models/qlearn_camera_solved'
-    experiment = 'points_1_actions_simple__simple_circuit'
-    number = '4'
-    filename = "1_20200921_2024_act_set_simple_epsilon_0.83_QTABLE.pkl"
+    circuit = 'nurburgring'
+    experiment = 'points_1_actions_simple'
+    number = '1'
 
     actions = range(env.action_space.n)
 
@@ -50,11 +64,14 @@ if __name__ == '__main__':
     lap_completed = False
     total_episodes = 5
 
-    qlearn = load_model(actions, input_dir, experiment, number, filename)
+    qlearn = load_model(actions, input_dir, circuit, experiment, number)
 
     telemetry_start_time = time.time()
     start_time = datetime.datetime.now()
     start_time_format = start_time.strftime("%Y%m%d_%H%M")
+
+    completed = False
+    checkpoints = []
 
     print(settings.lets_go)
 
@@ -86,32 +103,35 @@ if __name__ == '__main__':
             # qlearn.learn(state, action, reward, nextState)
             # env._flush(force=True)
 
+            now = datetime.datetime.now()
             if not done:
                 state = nextState
+
+                previous = datetime.datetime.now()
+                x, y = env.get_position()
+                checkpoints.append([len(checkpoints), (x, y), datetime.datetime.now().strftime('%M:%S.%f')[-4]])
             else:
-                print("\n\n\n ---> Try: {}/{}".format(episode+1, total_episodes))
+                print("\n ---> Try: {}/{}\n".format(episode+1, total_episodes))
                 last_time_steps = np.append(last_time_steps, [int(step + 1)])
                 break
 
-            if counter > 1000:
-                qlearn.epsilon *= epsilon_discount
-                time = datetime.datetime.now() - start_time
-                print("Checkpoint")
-                print("\t- cum reward: {}\n\t- time: {}\n\t- steps: {}\n".format(cumulated_reward, time, step))
-                counter = 0
-
-            if datetime.datetime.now() - datetime.timedelta(minutes=20) > start_time:
+            if env.finish_line() and datetime.datetime.now() - datetime.timedelta(seconds=10) > start_time:
+                completed = True
                 print(settings.race_completed)
+                save_poses(checkpoints, completed, input_dir, experiment, circuit, number, start_time)
                 print("    - N epoch:     {}".format(episode))
                 print("    - Model size:  {}".format(len(qlearn.q)))
                 print("    - Action set:  {}".format(settings.actions_set))
                 print("    - Epsilon:     {}".format(round(qlearn.epsilon, 2)))
                 print("    - Cum. reward: {}".format(cumulated_reward))
+                print("    - Time:        {}".format(datetime.datetime.now() - start_time))
 
                 env.close()
                 exit(0)
 
     print("TOO MANY ATTEMPTS. NO SUCCESS")
+
+    save_poses(checkpoints, completed, input_dir, experiment, circuit, number, start_time)
 
     env.close()
     exit(0)
