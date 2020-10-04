@@ -16,7 +16,7 @@ from sensor_msgs.msg import Image
 
 from gym.utils import seeding
 from agents.f1.settings import actions, envs_params
-from agents.f1.settings import telemetry, x_row, ranges, center_image, width, height, telemetry_mask
+from agents.f1.settings import telemetry, x_row, ranges, center_image, width, height, telemetry_mask, max_distance
 
 
 font = cv2.FONT_HERSHEY_COMPLEX
@@ -41,7 +41,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        self.circuit = envs_params["nurburgring"]
+        self.circuit = envs_params["simple"]
         gazebo_env.GazeboEnv.__init__(self, self.circuit["launch"])
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
@@ -51,6 +51,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         self.reward_range = (-np.inf, np.inf)
         self.model_coordinates = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
         self.position = None
+        self.start_pose = np.array(self.circuit["start_pose"])
         self._seed()
 
     def render(self, mode='human'):
@@ -316,3 +317,15 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
             done = True
 
         return state, done
+
+
+    def finish_line(self):
+        x, y = self.get_position()
+        current_point = np.array([x, y])
+
+        dist = (self.start_pose - current_point) ** 2
+        dist = np.sum(dist, axis=0)
+        dist = np.sqrt(dist)
+        if dist < max_distance:
+            return True
+        return False
