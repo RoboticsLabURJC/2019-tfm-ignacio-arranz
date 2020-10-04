@@ -34,7 +34,7 @@ if __name__ == '__main__':
     previous = datetime.datetime.now()
 
     checkpoints = []  # "ID" - x, y - time
-    time.sleep(5)
+    time.sleep(7)
 
     start_time = datetime.datetime.now()
     for episode in range(total_episodes):
