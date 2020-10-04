@@ -92,6 +92,7 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "F1Cameracircuit_v0.launch",
         "gaz_pos": simple_gazebo_positions,
+        "start_pose": [simple_gazebo_positions[1][1], simple_gazebo_positions[1][2]],
         "alternate_pose": False,
         "estimated_steps": 4000,
         "sensor": "camera"
@@ -101,6 +102,7 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "f1_1_nurburgrinlineROS.launch",
         "gaz_pos": nurburgring_gazebo_positions,
+        "start_pose": [nurburgring_gazebo_positions[0][1], nurburgring_gazebo_positions[0][2]],
         "alternate_pose": True,
         "estimated_steps": 3500,
         "sensor": "camera"
@@ -110,6 +112,7 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "f1_montreal.launch",
         "gaz_pos": montreal_gazebo_positions,
+        "start_pose": [montreal_gazebo_positions[0][1], montreal_gazebo_positions[0][2]],
         "alternate_pose": False,
         "sensor": "camera"
     },
@@ -133,13 +136,16 @@ envs_params = {
         "circuit_name": "montreal",
         "env": "GazeboF1ManualCameraEnv-v0",
         "launch": "f1_montreal.launch",
-        "gaz_pos": montreal_gazebo_positions[1],
+        "gaz_pos": simple_gazebo_positions,
+        "start_pose": simple_gazebo_positions[0],
         "alternate_pose": True,
         "estimated_steps": 3000,
         "sensor": "camera"
     },
 }
 
+
+max_distance = 0.5
 
 # === CAMERA ===
 # Images size
