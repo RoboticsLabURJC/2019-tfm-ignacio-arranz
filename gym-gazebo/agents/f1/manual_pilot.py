@@ -34,7 +34,7 @@ if __name__ == '__main__':
     previous = datetime.datetime.now()
 
     checkpoints = []  # "ID" - x, y - time
-    time.sleep(7)
+    time.sleep(10)
 
     start_time = datetime.datetime.now()
     for episode in range(total_episodes):
@@ -45,7 +45,7 @@ if __name__ == '__main__':
             x, y = env.get_position()
             checkpoints.append([len(checkpoints), (x, y), datetime.datetime.now().strftime('%M:%S.%f')[-4]])
 
-        if datetime.datetime.now() - datetime.timedelta(minutes=4, seconds=32) > start_time:
+        if datetime.datetime.now() - datetime.timedelta(minutes=8, seconds=41) > start_time:
             print("Finish. Saving parameters . . .")
             save_times(checkpoints)
             env.close()

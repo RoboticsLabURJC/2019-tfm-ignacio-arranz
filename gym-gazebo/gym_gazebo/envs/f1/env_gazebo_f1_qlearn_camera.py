@@ -41,7 +41,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        self.circuit = envs_params["simple"]
+        self.circuit = envs_params["nurburgring"]
         gazebo_env.GazeboEnv.__init__(self, self.circuit["launch"])
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
@@ -255,7 +255,6 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
                 reward = 1
         else:
             reward = -100
-
 
         if telemetry:
             print("center: {} - actions: {} - reward: {}".format(center, action, reward))
