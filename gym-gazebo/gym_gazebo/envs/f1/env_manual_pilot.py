@@ -215,14 +215,14 @@ class GazeboF1ManualCameraEnv(gazebo_env.GazeboEnv):
         global v_mult
         global v
         global w
-        red_upper = (179, 255, 255)
-        red_lower = (0, 255, 171)
+        red_upper = (0, 255, 255)
+        red_lower = (0, 30, 30)  # default: (0, 255, 171)
         kernel = np.ones((8, 8), np.uint8)
         image = self.get_image()
         image_cropped = image[230:, :, :]
         image_blur = cv2.GaussianBlur(image_cropped, (27, 27), 0)
-        image_hsv = cv2.cvtColor(image_blur, cv2.COLOR_RGB2HSV)
-        image_mask = cv2.inRange(image_hsv, red_lower, red_upper)
+        image_hsv = cv2.cvtColor(image_blur, cv2.COLOR_BGR2HSV)
+        image_mask = cv2.inRange(image_hsv,  red_lower, red_upper)
         image_eroded = cv2.erode(image_mask, kernel, iterations=3)
 
         rows, cols = image_mask.shape
@@ -282,17 +282,21 @@ class GazeboF1ManualCameraEnv(gazebo_env.GazeboEnv):
         vel_cmd.angular.z = w
         self.vel_pub.publish(vel_cmd)
 
-        image_mask = cv2.cvtColor(image_mask, cv2.COLOR_GRAY2RGB)
-        cv2.circle(image_mask, points[0], 6, GREEN, -1)
-        cv2.circle(image_mask, points[1], 6, GREEN, -1)  # punto central rows/2
-        cv2.circle(image_mask, points[2], 6, GREEN, -1)
-        cv2.circle(image_mask, points[3], 6, GREEN, -1)
-        cv2.putText(image_mask, 'w: {:+.2f} v: {}'.format(w, v), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, MAGENTA, 2,
-                    cv2.LINE_AA)
-        cv2.putText(image_mask, 'collinearU: {} collinearD: {}'.format(l, l2), (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                    MAGENTA, 2, cv2.LINE_AA)
-        cv2.putText(image_mask, 'actual: {}'.format(current), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, MAGENTA, 2,
-                    cv2.LINE_AA)
+        # image_mask = cv2.cvtColor(image_mask, cv2.COLOR_GRAY2RGB)
+        # cv2.circle(image_mask, points[0], 6, GREEN, -1)
+        # cv2.circle(image_mask, points[1], 6, GREEN, -1)  # punto central rows/2
+        # cv2.circle(image_mask, points[2], 6, GREEN, -1)
+        # cv2.circle(image_mask, points[3], 6, GREEN, -1)
+        # cv2.putText(image_mask, 'w: {:+.2f} v: {}'.format(w, v), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, MAGENTA, 2,
+        #             cv2.LINE_AA)
+        # cv2.putText(image_mask, 'collinearU: {} collinearD: {}'.format(l, l2), (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1,
+        #             MAGENTA, 2, cv2.LINE_AA)
+        # cv2.putText(image_mask, 'actual: {}'.format(current), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, MAGENTA, 2,
+        #             cv2.LINE_AA)
+
+        # cv2.imshow("Image window", image_mask)
+        # cv2.waitKey(3)
+
 
     def render(self, mode='human'):
         pass
