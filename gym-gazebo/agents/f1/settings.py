@@ -21,6 +21,8 @@ poi = 1
 
 if poi == 1:
     x_row = [60]
+elif poi == 2:
+    x_row = [60, 110]
 elif poi == 3:
     x_row = [10, 60, 110]  # The first and last element is not used. Just for metrics
 elif poi == 5:
@@ -30,7 +32,7 @@ elif poi == 5:
 algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.05, "highest_reward": 4000}
 
 # === ACTIONS SET ===
-actions_set = "hard"  # test, simple, medium, hard
+actions_set = "simple"  # test, simple, medium, hard
 
 # action: (lineal, angular)
 if actions_set == "simple":
@@ -60,8 +62,6 @@ elif actions_set == "hard":
 elif actions_set == "test":
     actions = {
         0: (0, 0),
-        1: (0, 0),
-        2: (0, 0),
     }
 
 
@@ -114,6 +114,7 @@ envs_params = {
         "gaz_pos": montreal_gazebo_positions,
         "start_pose": [montreal_gazebo_positions[0][1], montreal_gazebo_positions[0][2]],
         "alternate_pose": False,
+        "estimated_steps": 8000,
         "sensor": "camera"
     },
     "curves": {
@@ -125,10 +126,11 @@ envs_params = {
         "sensor": "camera"
     },
     "simple_laser": {
-        "circuit_name": "simple_laser",
+        "circuit_name": "montreal",
         "env": "GazeboF1QlearnLaserEnv-v0",
-        "launch": "F1Lasercircuit_v0.launch",
+        "launch": "f1_montreal.launch",
         "gaz_pos": "",
+        "start_pose": "",
         "alternate_pose": False,
         "sensor": "laser"
     },
@@ -136,9 +138,9 @@ envs_params = {
         "circuit_name": "montreal",
         "env": "GazeboF1ManualCameraEnv-v0",
         "launch": "f1_montreal.launch",
-        "gaz_pos": simple_gazebo_positions,
-        "start_pose": simple_gazebo_positions[0],
-        "alternate_pose": True,
+        "gaz_pos": "",
+        "start_pose": "",
+        "alternate_pose": False,
         "estimated_steps": 3000,
         "sensor": "camera"
     },
