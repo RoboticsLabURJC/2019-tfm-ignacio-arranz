@@ -12,14 +12,16 @@ from qlearn import QLearn
 import agents.f1.settings as settings
 
 
-def save_poses(checkpoints, completed, output_dir, experiment, circuit, number, start_time):
+def save_poses(checkpoints, completed, output_dir, experiment, circuit, number, start_time, tested_on):
     lap_time = str(datetime.datetime.now() - start_time)
     if completed:
-        file_name = "5_checkpoints_" + experiment + "_" + number + "_time_" + lap_time + '.pkl'
+        file_name = "5_checkpoints_" + experiment + "_" + number + '_tested_on_' + tested_on + "_time_" + lap_time + '.pkl'
     else:
-        file_name = "5_NO_COMPLETED_" + experiment + "_" + number + "_time_" + lap_time + '.pkl'
-    file_dump = open(os.path.join(output_dir, circuit, experiment, number) + "/" + file_name, 'wb')
+        file_name = "5_NO_COMPLETED_" + experiment + "_" + number + '_tested_on_' + tested_on + "_time_" + lap_time + '.pkl'
+
+    file_dump = open(os.path.join(output_dir, tested_on, experiment, number) + "/" + file_name, 'wb')
     pickle.dump(checkpoints, file_dump)
+    print("Saved in: {}".format(os.path.join(output_dir, tested_on, experiment, number) + "/" + file_name))
 
 
 def load_model(actions, input_dir, circuit, experiment, number):
@@ -33,7 +35,7 @@ def load_model(actions, input_dir, circuit, experiment, number):
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.05)
     qlearn.q = model
 
-    print("\n\n-----------------------\nMODEL LOADED: {}\n-----------------------\n\n".format(path))
+    print("\n\n-----------------------\nMODEL LOADED: {}\n-----------------------\n\n".format(qlearn_file))
 
     return qlearn
 
@@ -46,13 +48,14 @@ if __name__ == '__main__':
     print(settings.description)
     print("    - Start hour: {}".format(datetime.datetime.now()))
 
-    environment = settings.envs_params["simple"]
+    environment = settings.envs_params["montreal"]
     env = gym.make(environment["env"])
 
     input_dir = './logs/qlearn_models/qlearn_camera_solved'
     circuit = 'nurburgring'
-    experiment = 'points_1_actions_simple'
-    number = '1'
+    experiment = '3_point__actions_set__hard'
+    number = '3'
+    tested_on = 'montreal'
 
     actions = range(env.action_space.n)
 
@@ -67,8 +70,6 @@ if __name__ == '__main__':
     qlearn = load_model(actions, input_dir, circuit, experiment, number)
 
     telemetry_start_time = time.time()
-    start_time = datetime.datetime.now()
-    start_time_format = start_time.strftime("%Y%m%d_%H%M")
 
     completed = False
     checkpoints = []
@@ -76,6 +77,7 @@ if __name__ == '__main__':
     print(settings.lets_go)
 
     for episode in range(total_episodes):
+        start_time = datetime.datetime.now()
         counter = 0
         done = False
         lap_completed = False
@@ -118,11 +120,9 @@ if __name__ == '__main__':
             if env.finish_line() and datetime.datetime.now() - datetime.timedelta(seconds=10) > start_time:
                 completed = True
                 print(settings.race_completed)
-                save_poses(checkpoints, completed, input_dir, experiment, circuit, number, start_time)
-                print("    - N epoch:     {}".format(episode))
-                print("    - Model size:  {}".format(len(qlearn.q)))
+                save_poses(checkpoints, completed, input_dir, experiment, circuit, number, start_time, tested_on)
+                print("    - N epoch:     {}".format(episode + 1))
                 print("    - Action set:  {}".format(settings.actions_set))
-                print("    - Epsilon:     {}".format(round(qlearn.epsilon, 2)))
                 print("    - Cum. reward: {}".format(cumulated_reward))
                 print("    - Time:        {}".format(datetime.datetime.now() - start_time))
 
@@ -131,7 +131,7 @@ if __name__ == '__main__':
 
     print("TOO MANY ATTEMPTS. NO SUCCESS")
 
-    save_poses(checkpoints, completed, input_dir, experiment, circuit, number, start_time)
+    save_poses(checkpoints, completed, input_dir, experiment, circuit, number, start_time, tested_on)
 
     env.close()
     exit(0)
