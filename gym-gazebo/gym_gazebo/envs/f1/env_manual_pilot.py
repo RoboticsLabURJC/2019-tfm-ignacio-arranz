@@ -48,6 +48,8 @@ V = 4
 V_MULT = 2
 v_mult = V_MULT
 
+max_distance = 0.5
+
 
 class ImageF1:
     def __init__(self):
@@ -68,7 +70,7 @@ class GazeboF1ManualCameraEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        self.circuit = envs_params["montreal"]
+        self.circuit = envs_params["simple"]
         gazebo_env.GazeboEnv.__init__(self, self.circuit["launch"])
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
@@ -78,6 +80,7 @@ class GazeboF1ManualCameraEnv(gazebo_env.GazeboEnv):
         self.reward_range = (-np.inf, np.inf)
         self.model_coordinates = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
         self.position = None
+        self.start_pose = np.array(self.circuit["start_pose"])
         self._seed()
 
     def get_position(self):
@@ -197,7 +200,7 @@ class GazeboF1ManualCameraEnv(gazebo_env.GazeboEnv):
         image_data = None
         f1_image_camera = None
         while image_data is None:
-            image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=5)
+            image_data = rospy.wait_for_message('/F1ROS/cameraL/image_raw', Image, timeout=10)
             # Transform the image data from ROS to CVMat
             cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             f1_image_camera = self.image_msg_to_image(image_data, cv_image)
@@ -219,7 +222,7 @@ class GazeboF1ManualCameraEnv(gazebo_env.GazeboEnv):
         red_lower = (0, 30, 30)  # default: (0, 255, 171)
         kernel = np.ones((8, 8), np.uint8)
         image = self.get_image()
-        image_cropped = image[230:, :, :]
+        image_cropped = image[300:, :, :]
         image_blur = cv2.GaussianBlur(image_cropped, (27, 27), 0)
         image_hsv = cv2.cvtColor(image_blur, cv2.COLOR_BGR2HSV)
         image_mask = cv2.inRange(image_hsv,  red_lower, red_upper)
@@ -297,6 +300,17 @@ class GazeboF1ManualCameraEnv(gazebo_env.GazeboEnv):
         # cv2.imshow("Image window", image_mask)
         # cv2.waitKey(3)
 
+    def finish_line(self):
+        x, y = self.get_position()
+        current_point = np.array([x, y])
+
+        dist = (self.start_pose - current_point) ** 2
+        dist = np.sum(dist, axis=0)
+        dist = np.sqrt(dist)
+        # print(dist)
+        if dist < max_distance:
+            return True
+        return False
 
     def render(self, mode='human'):
         pass
