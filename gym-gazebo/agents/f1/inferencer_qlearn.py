@@ -19,9 +19,9 @@ def save_poses(checkpoints, completed, output_dir, experiment, circuit, number, 
     else:
         file_name = "5_NO_COMPLETED_" + experiment + "_" + number + '_tested_on_' + tested_on + "_time_" + lap_time + '.pkl'
 
-    file_dump = open(os.path.join(output_dir, tested_on, experiment, number) + "/" + file_name, 'wb')
+    file_dump = open(os.path.join(output_dir, circuit, experiment, number) + "/" + file_name, 'wb')
     pickle.dump(checkpoints, file_dump)
-    print("Saved in: {}".format(os.path.join(output_dir, tested_on, experiment, number) + "/" + file_name))
+    print("Saved in: {}".format(os.path.join(output_dir, circuit, experiment, number) + "/" + file_name))
 
 
 def load_model(actions, input_dir, circuit, experiment, number):
@@ -48,14 +48,14 @@ if __name__ == '__main__':
     print(settings.description)
     print("    - Start hour: {}".format(datetime.datetime.now()))
 
-    environment = settings.envs_params["montreal"]
+    environment = settings.envs_params["simple"]
     env = gym.make(environment["env"])
 
     input_dir = './logs/qlearn_models/qlearn_camera_solved'
     circuit = 'nurburgring'
     experiment = '3_point__actions_set__hard'
-    number = '3'
-    tested_on = 'montreal'
+    number = '1'
+    tested_on = 'simple_circuit'
 
     actions = range(env.action_space.n)
 
@@ -78,6 +78,8 @@ if __name__ == '__main__':
 
     for episode in range(total_episodes):
         start_time = datetime.datetime.now()
+        previous = datetime.datetime.now()
+
         counter = 0
         done = False
         lap_completed = False
@@ -89,6 +91,7 @@ if __name__ == '__main__':
 
         for step in range(500000):
 
+            now = datetime.datetime.now()
             counter += 1
 
             # Pick an action based on the current state
@@ -105,17 +108,18 @@ if __name__ == '__main__':
             # qlearn.learn(state, action, reward, nextState)
             # env._flush(force=True)
 
-            now = datetime.datetime.now()
             if not done:
                 state = nextState
-
-                previous = datetime.datetime.now()
                 x, y = env.get_position()
-                checkpoints.append([len(checkpoints), (x, y), datetime.datetime.now().strftime('%M:%S.%f')[-4]])
             else:
                 print("\n ---> Try: {}/{}\n".format(episode+1, total_episodes))
                 last_time_steps = np.append(last_time_steps, [int(step + 1)])
                 break
+
+            if now - datetime.timedelta(seconds=3) > previous:
+                previous = datetime.datetime.now()
+                x, y = env.get_position()
+                checkpoints.append([len(checkpoints), (x, y), datetime.datetime.now().strftime('%M:%S.%f')[-4]])
 
             if env.finish_line() and datetime.datetime.now() - datetime.timedelta(seconds=10) > start_time:
                 completed = True

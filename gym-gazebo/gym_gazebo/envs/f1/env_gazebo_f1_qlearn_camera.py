@@ -41,7 +41,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
         # Launch the simulation with the given launchfile name
-        self.circuit = envs_params["nurburgring"]
+        self.circuit = envs_params["simple"]
         gazebo_env.GazeboEnv.__init__(self, self.circuit["launch"])
         self.vel_pub = rospy.Publisher('/F1ROS/cmd_vel', Twist, queue_size=5)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
@@ -307,7 +307,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         points = self.processed_image(f1_image_camera.data)
         state = self.calculate_observation(points)
 
-        center = float(center_image - points[0]) / (float(width) // 2)
+        center = float(center_image - points[1]) / (float(width) // 2)
 
         done = False
         center = abs(center)
@@ -325,6 +325,7 @@ class GazeboF1QlearnCameraEnv(gazebo_env.GazeboEnv):
         dist = (self.start_pose - current_point) ** 2
         dist = np.sum(dist, axis=0)
         dist = np.sqrt(dist)
+        # print(dist)
         if dist < max_distance:
             return True
         return False

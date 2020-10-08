@@ -25,17 +25,15 @@ def save_times(checkpoints):
 if __name__ == '__main__':
 
     print(title)
-
     print("    - Start hour: {}".format(datetime.datetime.now()))
 
     environment = settings.envs_params["manual"]
     env = gym.make(environment["env"])
 
-    previous = datetime.datetime.now()
-
     checkpoints = []  # "ID" - x, y - time
-    time.sleep(10)
+    time.sleep(5)
 
+    previous = datetime.datetime.now()
     start_time = datetime.datetime.now()
     for episode in range(total_episodes):
 
@@ -45,11 +43,17 @@ if __name__ == '__main__':
             x, y = env.get_position()
             checkpoints.append([len(checkpoints), (x, y), datetime.datetime.now().strftime('%M:%S.%f')[-4]])
 
-        if datetime.datetime.now() - datetime.timedelta(minutes=8, seconds=41) > start_time:
+        if datetime.datetime.now() - datetime.timedelta(minutes=2, seconds=35) > start_time:
             print("Finish. Saving parameters . . .")
             save_times(checkpoints)
             env.close()
             exit(0)
+        #
+        # if env.finish_line() and datetime.datetime.now() - datetime.timedelta(seconds=10) > start_time:
+        #     print(settings.race_completed)
+        #     save_times(checkpoints)
+        #     env.close()
+        #     exit(0)
 
         env.execute()
 
