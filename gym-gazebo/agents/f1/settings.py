@@ -17,7 +17,10 @@ output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
 
 # ==== Points of intereset (POI) =====
 # The original pixel row is: 250, 300, 350, 400 and 450 but we work only with the half of the image
-poi = 1
+poi = 2
+# === ACTIONS SET ===
+actions_set = "simple"  # test, simple, medium, hard
+
 
 if poi == 1:
     x_row = [60]
@@ -31,8 +34,9 @@ elif poi == 5:
 # === PARAMS ===
 algorithm_params = {"alpha": 0.2, "gamma": 0.9, "epsilon": 0.05, "highest_reward": 4000}
 
-# === ACTIONS SET ===
-actions_set = "simple"  # test, simple, medium, hard
+
+
+
 
 # action: (lineal, angular)
 if actions_set == "simple":
@@ -76,7 +80,8 @@ nurburgring_gazebo_positions = [(0, -32.3188,  12.2921, 0, 0.0014,  0.0049, -0.2
                                 (1, -30.6566, -21.4929, 0, 0.0014,  0.0049, -0.4727,  0.8720),
                                 (2,  28.0352, -17.7923, 0, 0.0001,  0.0051, -0.028,   1),
                                 (3,  88.7408, -31.7120, 0, 0.0030,  0.0041, -0.1683,  0.98),
-                                (4, -73.2172,  11.8508, 0, 0.0043, -0.0027,  0.8517,  0.5173)]
+                                (4, -73.2172,  11.8508, 0, 0.0043, -0.0027,  0.8517,  0.5173),
+                                (5, -73.6672,  37.4308, 0, 0.0043, -0.0027,  0.8517,  0.5173)]
 
 montreal_gazebo_positions = [(0, -201.88,  -91.02,   0, 0.00,    0.001,   0.98, -0.15),
                              (1, -278.71,  -95.50,   0, 0.00,    0.001,   1,     0.03),
@@ -102,7 +107,7 @@ envs_params = {
         "env": "GazeboF1QlearnCameraEnv-v0",
         "launch": "f1_1_nurburgrinlineROS.launch",
         "gaz_pos": nurburgring_gazebo_positions,
-        "start_pose": [nurburgring_gazebo_positions[0][1], nurburgring_gazebo_positions[0][2]],
+        "start_pose": [nurburgring_gazebo_positions[5][1], nurburgring_gazebo_positions[5][2]],
         "alternate_pose": True,
         "estimated_steps": 3500,
         "sensor": "camera"
@@ -135,11 +140,11 @@ envs_params = {
         "sensor": "laser"
     },
     "manual": {
-        "circuit_name": "montreal",
+        "circuit_name": "simple",
         "env": "GazeboF1ManualCameraEnv-v0",
         "launch": "f1_montreal.launch",
         "gaz_pos": "",
-        "start_pose": "",
+        "start_pose": [nurburgring_gazebo_positions[5][1], nurburgring_gazebo_positions[5][2]],
         "alternate_pose": False,
         "estimated_steps": 3000,
         "sensor": "camera"
