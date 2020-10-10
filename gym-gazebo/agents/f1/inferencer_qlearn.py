@@ -35,7 +35,7 @@ def load_model(actions, input_dir, circuit, experiment, number):
     qlearn = QLearn(actions=actions, alpha=0.2, gamma=0.9, epsilon=0.05)
     qlearn.q = model
 
-    print("\n\n-----------------------\nMODEL LOADED: {}\n-----------------------\n\n".format(qlearn_file))
+    print("\n\n---------------- MODEL LOADED ----------------\n {}\n-----------------------\n\n".format(qlearn_file))
 
     return qlearn
 
@@ -48,14 +48,14 @@ if __name__ == '__main__':
     print(settings.description)
     print("    - Start hour: {}".format(datetime.datetime.now()))
 
-    environment = settings.envs_params["simple"]
+    environment = settings.envs_params["montreal"]
     env = gym.make(environment["env"])
 
     input_dir = './logs/qlearn_models/qlearn_camera_solved'
-    circuit = 'nurburgring'
     experiment = '3_point__actions_set__hard'
-    number = '1'
-    tested_on = 'simple_circuit'
+    circuit = 'simple_circuit'
+    number = '2'
+    tested_on = 'montreal'
 
     actions = range(env.action_space.n)
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     epsilon_discount = 0.98  # Default 0.9986
     stimate_step_per_lap = 4000
     lap_completed = False
-    total_episodes = 5
+    total_episodes = 3
 
     qlearn = load_model(actions, input_dir, circuit, experiment, number)
 

@@ -17,9 +17,9 @@ output_dir = "./logs/qlearn_models/qlearn_camera_solved/"
 
 # ==== Points of intereset (POI) =====
 # The original pixel row is: 250, 300, 350, 400 and 450 but we work only with the half of the image
-poi = 2
+poi = 3
 # === ACTIONS SET ===
-actions_set = "simple"  # test, simple, medium, hard
+actions_set = "hard"  # test, simple, medium, hard
 
 
 if poi == 1:
@@ -108,7 +108,7 @@ envs_params = {
         "launch": "f1_1_nurburgrinlineROS.launch",
         "gaz_pos": nurburgring_gazebo_positions,
         "start_pose": [nurburgring_gazebo_positions[5][1], nurburgring_gazebo_positions[5][2]],
-        "alternate_pose": True,
+        "alternate_pose": False,
         "estimated_steps": 3500,
         "sensor": "camera"
     },
