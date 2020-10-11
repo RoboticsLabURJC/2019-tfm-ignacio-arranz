@@ -39,6 +39,40 @@ def load_model(actions, input_dir, circuit, experiment, number):
 
     return qlearn
 
+
+def load_manual_model(path):
+    qlearn_file = open(os.path.join(path))
+    model = pickle.load(qlearn_file)
+
+    return model
+
+def calculate_percentage(checkpoints, manual_checkpoints):
+    result = []
+    manual_points = np.array(manual_checkpoints)
+    manual_points_counter = np.copy(manual_points)
+
+    rl_points = np.array([list(pos[1]) for pos in checkpoints])
+
+    for idx, rl_point in enumerate(rl_points):
+        dist = (manual_points_counter - rl_point) ** 2
+        dist = np.sum(dist, axis=1)
+        dist = np.sqrt(dist)
+
+        if len(dist) == 0:
+            continue
+
+        if min(dist) < settings.max_distance and not len(result) >= len(manual_points):
+            result.append([min(dist), checkpoints[idx][1]])
+            manual_points_counter = np.delete(manual_points_counter, 0, axis=0)
+
+    print(" points matched -->  {}".format(len(result)))
+    print(" total points ---->  {}".format(len(manual_points)))
+
+    if len(result) == len(manual_points):
+        print("LAP COMPLETED. 100%")
+    else:
+        percentage_lap_completed = len(result) / len(manual_points) * 100
+        print("The car has complete the {} % of the circuit".format(round(percentage_lap_completed, 2)))
 ####################################################################################################################
 # MAIN PROGRAM
 ####################################################################################################################
@@ -48,14 +82,14 @@ if __name__ == '__main__':
     print(settings.description)
     print("    - Start hour: {}".format(datetime.datetime.now()))
 
-    environment = settings.envs_params["montreal"]
+    environment = settings.envs_params["simple"]
     env = gym.make(environment["env"])
 
     input_dir = './logs/qlearn_models/qlearn_camera_solved'
-    experiment = '3_point__actions_set__hard'
+    experiment = '1_point__actions_set__hard'
     circuit = 'simple_circuit'
-    number = '2'
-    tested_on = 'montreal'
+    number = '3'
+    tested_on = 'simple_circuit'
 
     actions = range(env.action_space.n)
 
@@ -70,6 +104,9 @@ if __name__ == '__main__':
     qlearn = load_model(actions, input_dir, circuit, experiment, number)
 
     telemetry_start_time = time.time()
+
+    manual_points_path = "./logs/" + tested_on + "_manual_checkpoints.pkl"
+    manual_model = load_manual_model(manual_points_path)
 
     completed = False
     checkpoints = []
@@ -134,6 +171,8 @@ if __name__ == '__main__':
                 exit(0)
 
     print("TOO MANY ATTEMPTS. NO SUCCESS")
+
+
 
     save_poses(checkpoints, completed, input_dir, experiment, circuit, number, start_time, tested_on)
 
