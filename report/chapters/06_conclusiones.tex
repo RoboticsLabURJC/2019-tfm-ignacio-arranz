@@ -1,0 +1,50 @@
+\chapter{Conclusiones}
+
+En los capı́tulos anteriores se ha descrito el problema y se ha presentado una solución justificando la elección de cada tipo de tecnologı́a usada además de las pruebas realizadas. En este capı́tulo se analizarán las conclusiones finales a raı́z del proyecto presentado ası́ como posibles lı́neas futuras de desarrollo.
+
+\section{Evaluación}
+
+Tras analizar el trabajo realizado se puede verificar que se ha cumplido con el objetivo principal. Se ha creado una solución de control reactivo utilizando visión basada en aprendizaje por refuerzo para completar una vuelta a diferentes circuitos propuestos.
+
+% OBJETIVOS
+% - Programar un entorno de aprendizaje por refuerzo con visión y robots.\\
+% - Entrenar un controlador visual para conducción autónoma siguiendo una línea.\\
+% - Validación experimental y análisis de las posibilidades del aprendizaje por refuerzo.\\
+%\end{enumerate}
+
+Se han satisfecho todos los objetivos enmarcados en el capítulo \ref{objetivos} y que se desglosan a continuación:\\
+
+\begin{itemize}
+    \item Se ha modificado y actualizado un entorno para el entrenamiento de algoritmos de aprendizaje por refuerzo utilizando visión y robots. Se creado un nuevo ejercicio que contiene todo lo necesario para llevar a cabo los entrenamientos y evaluaciones de un Fórmula-1 a través de diferentes circuitos y utilizando la cámara como sensor. En función de los valores obtenidos por el procesamiento de la imagen se comanda a los motores del robot los valores de velocidad lineal y angular correspondientes.\\
+    
+    \item Se han entrenado diferentes modelos de solución al problema de conducción autónoma siguiendo una línea configurando distintos parámetros de percepción simplificada de la cámara, número de acciones y circuitos de entrenamiento.\\
+    
+    \item Las mejores configuraciones de parámetros con las que se entrenan los modelos de aprendizaje por refuerzo dan como resultado la solución al problema completando la vuelta al circuito en tiempos razonablemente buenos comparados con una solución basada en un modelado implícito de la conducción.\\
+\end{itemize}
+
+
+% REQUISITOS
+% - Uso del sistema operativo robótico (\textit{Robot Operating System}, ROS) como interfaz para la comunicación con el robot.
+% - Uso del simulador Gazebo para realizar las pruebas en diferentes circuitos.
+% - Emplear aprendizaje por refuerzo como herramienta de entrenamiento del robot a través del entorno Gym-Gazebo.
+
+También han sido satisfechos los requisitos especificados en la sección \ref{objetivos} y se pasan a listar a continuación:\\
+
+\begin{itemize}
+    \item Para las comunicaciones entre el programa y el robot se ha empleado el sistema operativo robótico ROS. Un estándar actual del software libre robótico que facilita la comunicación entre los diferentes componentes de este TFM. El uso de las diferentes librerías de este software permite conocer la posición del coche en el mundo, traducir la imagen captada por la cámara en tipos de datos compatibles con las liberías de visión, como OpenCV y facilidad en el cálculo de las operaciones sobre las imágenes con la librería científica Numpy.\\
+    
+    \item Como entorno de simulación donde se realizan los entrenamientos y evaluaciones se ha utilizado el simulador en 3D Gazebo, que acompaña a ROS como referente robótico en cuanto a software de simulación de robots. Cuenta con físicas realistas, posibilidad de modificar la iluminación de la escena, modificar el modelo del robot, etc, y un elemento importante desde el punto de vista del rendimiento que es poder lanzar únicamente el simulador como servidor, liberando carga al ordenador durante los entrenamientos
+\end{itemize}
+
+\section{Trabajos futuros}
+
+\begin{itemize}
+    \item Aprender la $v$ para acelerar
+    \item PID en el controlador. ¿LSTM?
+    \item Entrenamiento por tiempo
+    \item Extensión del número de ejercicios entrenados con aprendizaje por refuerzo.
+    \item DQN
+    
+    
+    
+\end{itemize}
