@@ -19,35 +19,39 @@ Para todos los entrenamientos se fijan los parámetros globales que definen el a
 
 Los entrenamientos se realizan en dos de los tres circuitos creados: en el circuito Simple y en el circuito de Nürburgring, dejando el circuito de Montreal únicamente para las evaluaciones. En ambos circuitos se realizan los entrenamientos con todas las combinaciones posibles entre los diferentes niveles de percepciones y varios conjuntos de acciones repitiéndose el experimento 3 veces para cada combinación con el objetivo de obtener una media más fiable que hace más representativo el resultado.\\
 
+Tanto los entrenamientos como las posteriores evaluaciones ha sido realizadas con un ordenador portátil MSI gs63 con un procesador Intel i7 de 7ª generación, 16 Gb de memoria RAM y un disco duro SSD M.2 de 256 Gb.\\
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Análisis de entrenamientos}
+\section{Análisis de entrenamientos}\label{analisis_entrenamientos}
 
 En cada entrenamiento se han almacenado diferentes valores que permiten luego extraer conclusiones de cada configuración de parámetros. Estos valores cuentan el número de veces que se repite un estado concreto, conocer por cada episodio cuánta recompensa acumula el agente y saber por cada episodio el número de pasos que se consiguen dar. Estos valores se han volcado en un conjunto de gráficas para una mejor comprensión. Cada grupo de gráficas representa un grupo de entrenamiento que contiene 3 ensayos para cada combinación de número de percepciones y de actuaciones posibles.\\
 
 La Figura \ref{fig:entrenamiento-1} tiene un ejemplo de esta secuencia de gráficas. Corresponden a un entrenamiento realizado en el <<Circuito Simple>>, con el conjunto de acciones simple (3 acciones) y un único punto de percepción simplificada.\\
 
-\begin{sidewaysfigure}
+Puede verse en la Figura \ref{fig:entrenamiento-contador-1} que el estado más frecuente es el $0$ (centro de la línea) seguido de estados como el $2$ o el $1$. Dado que el circuito simple tiene un mayor número de curvas a derechas que a izquierdas, como se vio en las tablas de la sección \ref{escenarios}, así como una curva muy larga a derechas, estos valores destacan más que el resto, que apenas ocurren en este circuito.\\
+
+\begin{figure}[!ht]
+    \centering \includegraphics[width=0.6\columnwidth]{./figures/chapter_5/simple_circuit_simple_1.png}
+    \caption{Análisis del número de estados de un entrenamiento en el <<Circuito Simple>>, con un nivel de percepción y un conjunto simple de acciones.}\label{fig:entrenamiento-contador-1}
+\end{figure}
+
+Dado que todos los entrenamientos tienen la misma duración, (2 horas), en el eje de abscisas puede verse en la Figura \ref{fig:entrenamiento-recompensa-1} que 2 de los 3 ensayos convergen muy rápidamente (gráficas verde y amarilla), en apenas $10$ épocas y acumulando mucha recompensa, esto es, pasa más tiempo en regiones donde la recompensa retorna los valores más altos (el centro de la línea). El último de ellos (gráfica azul) no consigue una secuencia que le permita converger tan rápidamente.\\
+
+Se contabiliza una vuelta completa al <<Circuito Simple>> cuando se superan un número de pasos consecutivos sin reiniciar el entorno. Para el caso del <<Circuito Simple>> este valor es de $4000$ y está marcado en la gráfica de la Figura \ref{fig:entrenamiento-pasos-1} con una línea horizontal roja.\\
+
+\begin{figure}[ht!]
     \begin{center}
-        \subfloat[Contador de estados.]{\label{fig:entrenamiento-contador-1}\includegraphics[width=.30\linewidth]{figures/chapter_5/simple_circuit_simple_1.png}}
+        \subfloat[Recompensa acumulada por episodio.]{\label{fig:entrenamiento-recompensa-1}\includegraphics[width=.49\linewidth]{figures/chapter_5/simple_circuit_simple_2.png}}
         \hspace{0.1cm}
-        \subfloat[Recompensa acumulada por episodio.]{\label{fig:entrenamiento-recompensa-1}\includegraphics[width=.30\linewidth]{figures/chapter_5/simple_circuit_simple_2.png}}
-        \hspace{0.1cm}
-        \subfloat[Pasos por episodio.]{\label{fig:entrenamiento-pasos-1}\includegraphics[width=.30\linewidth]{figures/chapter_5/simple_circuit_simple_3.png}}
+        \subfloat[Pasos por episodio.]{\label{fig:entrenamiento-pasos-1}\includegraphics[width=.49\linewidth]{figures/chapter_5/simple_circuit_simple_3.png}}
     \end{center}
   \centering
   \captionsetup{justification=centering,margin=2cm}
   \caption{Análisis de un entrenamiento en el circuito simple, con un único nivel de percepción y un conjunto simple de acciones.}
   \label{fig:entrenamiento-1}
-\end{sidewaysfigure}
+\end{figure}
 
-
-Puede verse en la Figura \ref{fig:entrenamiento-contador-1} que el estado más frecuente es el $0$ (centro de la línea) seguido de estados como el $2$ o el $1$. Dado que el circuito simple tiene un mayor número de curvas a derechas que a izquierdas, como se vio en las tablas de la sección \ref{escenarios}, así como una curva muy larga a derechas, estos valores destacan más que el resto, que apenas ocurren en este circuito.\\
-
-Dado que todos los entrenamientos tienen la misma duración, (2 horas), en el eje de abscisas puede verse en la Figura \ref{fig:entrenamiento-recompensa-1} que 2 de los 3 ensayos convergen muy rápidamente (gráficas verde y amarilla), en apenas $10$ épocas y acumulando mucha recompensa, esto es, pasa más tiempo en regiones donde la recompensa retorna los valores más altos (el centro de la línea). El último de ellos (gráfica azul) no consigue una secuencia que le permita converger tan rápidamente.\\
-
-Se contabiliza una vuelta completa al <<Circuito Simple>> cuando se superan un número de pasos consecutivos sin reiniciar el entorno. Para el caso del <<Circuito Simple>> este valor es de $4000$ y está marcado en la gráfica de la Figura \ref{fig:entrenamiento-pasos-1} con una línea horizontal roja. La representación de estas mismas gráficas en valores numéricos puede verse en la Tabla \ref{tab:tabla-entrenamiento-1}.
-
-\newpage
+La representación de estas mismas gráficas en valores numéricos puede verse en la Tabla \ref{tab:tabla-entrenamiento-1}.
 
 \begin{table}[ht!]
 \centering
@@ -68,14 +72,29 @@ Se contabiliza una vuelta completa al <<Circuito Simple>> cuando se superan un n
 \label{tab:tabla-entrenamiento-1}
 \end{table}
 
-
-
-
+\newpage
 Un ejemplo con otra configuración de parámetros puede verse en las Figuras \ref{fig:entrenamiento-2} y \ref{fig:entrenamiento-2-2}. En este ejemplo el circuito de entrenamiento es Nürburgring con un conjunto de acciones medio (5 acciones) y 2 puntos de percepción simplificada.\\
 
 Puede verse que el conjunto de estados para este ensayo (figura \ref{fig:entrenamiento-2}) es más variado comparado con el anterior. Se distribuyen los valores entre más estados enriqueciendo la Tabla-Q. El estado más frecuente es el $(-2, -4)$ con un total de $33065$ veces.\\
 
-En cuanto a la recompensa acumulada durante el entrenamiento (figura \ref{fig:entrenamiento-recompensa-2}) pueden verse 3 modas que se replican en el número de pasos donde, con un valor aproximado a $4000$ pasos se considera una vuelta al circuito (marcado con una línea horizontal roja en la figura \ref{fig:entrenamiento-pasos-2}). Las tres modas superan este valor por lo que se concluye que hubo convergencia en el entrenamiento para esta configuración.\\
+\begin{figure}[!ht]
+    \centering \includegraphics[width=1\columnwidth]{./figures/chapter_5/nurburgring_medium_1.png}
+    \caption{Análisis del número de estados de un entrenamiento en el circuito de Nürburgring, con dos niveles de percepción y un conjunto medio de acciones.}\label{fig:entrenamiento-2}
+\end{figure}
+
+En cuanto a la recompensa acumulada durante el entrenamiento (figura \ref{fig:entrenamiento-recompensa-2}) pueden verse 3 modas que se replican en el número de pasos donde, con un valor aproximado a $4000$ pasos se considera una vuelta al circuito (marcado con una línea horizontal roja en la figura \ref{fig:entrenamiento-pasos-2}). Las tres modas superan este valor por lo que se concluye que hubo convergencia en el entrenamiento para esta configuración.
+
+\begin{figure}[ht!]
+    \begin{center}
+        \subfloat[Recompensa acumulada por episodio.]{\label{fig:entrenamiento-recompensa-2}\includegraphics[width=.49\linewidth]{figures/chapter_5/nurburgring_medium_2.png}}
+        \hspace{0.1cm}
+        \subfloat[Pasos por episodio.]{\label{fig:entrenamiento-pasos-2}\includegraphics[width=.49\linewidth]{figures/chapter_5/nurburgring_medium_3.png}}
+    \end{center}
+  \centering
+  \captionsetup{justification=centering,margin=2cm}
+  \caption{Gráficas del estado de la recompensa y pasos dados por cada episodio.}
+  \label{fig:entrenamiento-2-2}
+\end{figure}
 
 Los valores numéricos correspondientes a las gráficas pueden verse en la Tabla \ref{tab:tabla-entrenamiento-2} para cada uno de los entrenamientos.
 
@@ -97,33 +116,7 @@ Los valores numéricos correspondientes a las gráficas pueden verse en la Tabla
 \label{tab:tabla-entrenamiento-2}
 \end{table}
 
-
-\begin{sidewaysfigure}
-    \begin{center}
-        {\label{fig:entrenamiento-contador-2}\includegraphics[width=1\linewidth]{figures/chapter_5/nurburgring_medium_1.png}}
-    \end{center}
-  \centering
-  \captionsetup{justification=centering,margin=2cm}
-  \caption{Análisis del número de estados de un entrenamiento en el circuito de Nürburgring, con dos niveles de percepción y un conjunto medio de acciones.}
-  \label{fig:entrenamiento-2}
-\end{sidewaysfigure}
-
-
-\begin{sidewaysfigure}
-    \begin{center}
-        \subfloat[Recompensa acumulada por episodio.]{\label{fig:entrenamiento-recompensa-2}\includegraphics[width=.30\linewidth]{figures/chapter_5/nurburgring_medium_2.png}}
-        \hspace{0.1cm}
-        \subfloat[Pasos por episodio.]{\label{fig:entrenamiento-pasos-2}\includegraphics[width=.30\linewidth]{figures/chapter_5/nurburgring_medium_3.png}}
-    \end{center}
-  \centering
-  \captionsetup{justification=centering,margin=2cm}
-  \caption{Gráficas del estado de la recompensa y pasos dados por cada episodio.}
-  \label{fig:entrenamiento-2-2}
-\end{sidewaysfigure}
-
-        
-
-
+\newpage
 Pueden verse las gráficas y tablas con todas las configuraciones probadas en el Anexo \ref{anexos}, sección \ref{anexo-resultados-entrenamientos}.
 
 
@@ -165,7 +158,7 @@ def finish_line(self):
 
 Si se cumple esta condición, el programa termina cerrando la sesión del entorno de Gym-Gazebo.\\
 
-En el caso de que el cerebro entrenado no consiga completar el circuito se toman los puntos de control generados con el piloto manual y tomados cada 3 segundos para compararlos a nivel de distancia euclídea con los generados por el piloto con aprendizaje por refuerzo. Puede verse en la figura \ref{fig:punto_control} un ejemplo en el <<Circuito Simple>> de los puntos de control generados por el piloto manual.
+En el caso de que el cerebro entrenado no consiga completar el circuito se toman los puntos de referencia distribuidos regularmente por el circuito para verificar cuántos de ellos ha alcanzado el piloto con aprendizaje por refuerzo. Si ha pasado cerca de un punto se considera que lo ha conseguido. De este modo se tiene una aproximación al porcentaje del circuito que ha logrado completar el piloto con aprendizaje por refuerzo.Puede verse en la figura \ref{fig:punto_control} un ejemplo en el <<Circuito Simple>> de los puntos de control generados por el piloto manual.
 
 \begin{figure}[ht!]
     \centering \includegraphics[width=0.5\columnwidth]{./figures/chapter_5/balizas_simple.png}
@@ -175,6 +168,7 @@ En el caso de que el cerebro entrenado no consiga completar el circuito se toman
 Estableciendo un radio máximo de distancia de 5 metros entre el punto de referencia y el alcanzado por el entrenado se calcula el porcentaje de puntos de control que atraviesa el piloto de RL. El número de puntos generados para el <<Circuito Simple>> es de 52 y para Nürburgring de 65.
 
 
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimentos y ejecución típica}
 
@@ -185,8 +179,6 @@ A nivel individual se han evaluado cómo el conjunto de acciones y los niveles d
 Las celdas marcadas en verde indican que el circuito se completó con éxito y las marcadas en naranja que solo se completó una parte y por tanto no es contabilizado el resultado como una solución válida.\\
 
 La Tabla \ref{tab:entrenamiento-nurbur-evaluacion-simple} muestra los resultados del entrenamiento en el circuito de Nürburgring y la evaluación en el <<Circuito Simple>>.\\
-
-\newpage
 
 \begin{table}[ht!]
 \centering
@@ -223,6 +215,9 @@ La Tabla \ref{tab:entrenamiento-nurbur-evaluacion-simple} muestra los resultados
 
 
 La Tabla \ref{tab:entrenamiento-nurbur-evaluacion-montreal} muestra los resultados del entrenamiento en el circuito de Nürburgring y la evaluación en el Montreal.
+
+\newpage
+
 
 \begin{table}[ht!]
 \centering
@@ -263,8 +258,6 @@ La Tabla \ref{tab:entrenamiento-nurbur-evaluacion-montreal} muestra los resultad
 
 
 La Tabla \ref{tab:entrenamiento-simple-evaluacion-nurbur} muestra los resultados del entrenamiento en el <<Circuito Simple>> y la evaluación en el Nürburgring.
-
-\newpage
 
 
 \begin{table}[ht!]
@@ -308,6 +301,8 @@ La Tabla \ref{tab:entrenamiento-simple-evaluacion-nurbur} muestra los resultados
 
 
 La Tabla \ref{tab:entrenamiento-simple-evaluacion-montreal} muestra los resultados del entrenamiento en el <<Circuito Simple>> y la evaluación en el Montreal.
+
+\newpage
 
 \begin{table}[ht!]
 \centering
@@ -368,7 +363,7 @@ Teniendo como referencia los tiempos por vuelta en cada circuito de un Fórmula-
 
 Para todos los resultados de la tabla la configuración de parámetros que mejor ha resuelto el circuito ha sido la misma: conjunto de acciones simple y 1 punto de percepción simplificada.\\
 
-En la Figura \ref{fig:circuitos-frame} puede verse una captura tomada mientras los algoritmos entrenados por aprendizaje por refuerzo ejecutan en los diferentes circuitos.
+En la Figura \ref{fig:circuitos-frame} puede verse una captura tomada mientras los algoritmos entrenados por aprendizaje por refuerzo ejecutan en los diferentes circuitos. Está disponible también un vídeo \footnote{\url{https://youtu.be/3jdxZTjPCss}} con la secuencia de entrenamiento y evaluación del cerebro con aprendizaje por refuerzo.
 
 \begin{figure}[ht!]
   \begin{center}
@@ -386,14 +381,21 @@ En la Figura \ref{fig:circuitos-frame} puede verse una captura tomada mientras l
 
 El circuito de Montreal es el único en el que se prueban los entrenamientos realizados en los otros dos circuitos restantes por lo que tiene el doble de pruebas de evaluación que el resto de circuitos. El mejor tiempo por vuelta en Montreal ha sido conseguido por un modelo entrenado en Nürburgring con una diferencia de 1 minuto en promedio con respecto al mismo modelo pero entrenado en el <<Circuito Simple>>.\\
 
-La diferencia principal de tiempos por vuelta entre el piloto manual y el aprendido por aprendizaje por refuerzo radica en la discretización de las velocidades angulares del Fórmula-1. El piloto manual cuenta en su código con un mecanismo de control por realimentación proporcional, integral y derivativo (PID) que le permite corregir pequeñas desviaciones sobre la línea. Esto se consigue porque el sistema PID puede relacionar el error actual con el error en el pasado para así ajustar más suavemente la corrección y volver a la posición central. En la figura \ref{fig:pid_control} puede verse la corrección del piloto manual ante un instante de error y como se realiza la corrección de manera suave hasta la estabilización.\\
+La diferencia principal de tiempos por vuelta entre el piloto manual y el aprendido por aprendizaje por refuerzo radica en dos factores:\\
+
+\begin{itemize}
+    \item En la discretización de las velocidades angulares del Fórmula-1,
+    \item y en su naturaleza reactiva pura, solo tiene en cuenta información instantánea, no tiene memoria ninguna.\\
+\end{itemize}
+
+El piloto manual cuenta en su código con un mecanismo de control por realimentación proporcional, integral y derivativo (PID) que le permite corregir pequeñas desviaciones sobre la línea e incorporar en su decisión información reciente (memoria). Por ejemplo puede suavizar las respuestas si el error está reduciéndose o aumentar la respuesta si el error está creciendo. Esto se consigue porque el sistema PID puede relacionar el error actual con el error en el pasado para así ajustar más suavemente la corrección y volver a la posición central. En la figura \ref{fig:pid_control} puede verse la corrección del piloto manual ante un instante de error y como se realiza la corrección de manera suave hasta la estabilización.\\
 
 \begin{figure}[ht!]
     \centering \includegraphics[width=0.5\columnwidth]{./figures/chapter_5/pid_control.jpg}
     \caption{Control proporcional, integral y derivativo del piloto manual.}\label{fig:pid_control}
 \end{figure}
 
-Por otro lado el agente de aprendizaje por refuerzo no cuenta con este mecanismo de control en velocidad angular, por lo que cada corrección se realiza teniendo como referencia únicamente el estado presente. Un cambio en la posición que requiera una modificación usará la acción correspondiente de su repertorio de acciones (un valor numérico de velocidad angular fijo) que pueda corregir la desviación.\\
+Por el contrario el sistema aprendido con RL es reactivo puro, rellena una tabla en la que guarda cada estado y le asocia la mejor actuación posible a la luz "únicamente" del estado actual. Sin embargo, como muestran las componentes derivativa e integral de los controladores PID, la mejor actuación posible puede depender también del estado anterior e incluso de estados previos. El sistema de RL, tal y como está construido, no lo puede tener en cuenta.\\
 
 El comportamiento resultante del agente será más parecido a un control basado en una corrección proporcional. Puede verse en la Figura \ref{fig:p_control} un ejemplo de una secuencia de estados donde el agente de aprendizaje por refuerzo intentar corregir con las acciones de su repertorio el desvío con respecto al centro de la línea del circuito (línea roja central).\\
 
@@ -402,7 +404,7 @@ El comportamiento resultante del agente será más parecido a un control basado 
     \caption{Control proporcional en el piloto de RL.}\label{fig:p_control}
 \end{figure}
 
-El resultado de esto son \textit{zig-zags} sobre la línea roja hasta que consigue estabilizar la dirección, en lugar de un movimiento más suave y paulatino como en el caso del PID. El tiempo de corrección hasta estabilizar el Fórmula-1 en el centro de la línea para un sistema PID es menor.\\
+El resultado de esto son \textit{zig-zags} sobre la línea roja hasta que consigue estabilizar la dirección, en lugar de un movimiento más suave y paulatino como en el caso del PID. El tiempo de corrección hasta estabilizar el Fórmula-1 en el centro de la línea para un sistema PID es menor al conseguido con aprendizaje por refuerzo con el esquema utilizado.\\
 
 A nivel de tiempos por vuelta se traduce en que el Fórmula-1 gobernado por un algoritmo de aprendizaje por refuerzo recorre más distancia sobre el circuito, que se traduce en mayor tiempo por vuelta.
 
@@ -527,6 +529,6 @@ En la tabla \ref{tab:tiempos-circuitos} se muestra el mejor tiempo para el circu
 \label{tab:tiempos-circuitos}
 \end{table}
 
-Puede concluirse que entrenamientos en circuitos con más variedad de curvas (estados) repercute en un repertorio más robusto para afrontar cualquier circuito de evaluación. El \textit{mejor circuito} de los dos \textit{de entrenamiento} que devuelve mejores tiempos de vuelta \textit{es Nürburgring}.
+Puede concluirse que entrenamientos en circuitos con más variedad de curvas (estados) repercute en un repertorio más robusto para afrontar cualquier circuito de evaluación. El \textit{mejor circuito} de los dos \textit{de entrenamiento} que devuelve mejores tiempos de vuelta \textit{es Nürburgring}.\\
 
 Además, esta vista general refuerza la conclusión de que los entrenamientos en circuitos con más variedad de situaciones como Nürburgring, resuelven mejor los circuitos de evaluación. Cruzando la información entre la tabla \ref{tab:entrenamiento-simple-evaluacion-nurbur} y \ref{tab:entrenamiento-nurbur-evaluacion-simple} vemos que el segundo resuelve más casos que el primero.\\

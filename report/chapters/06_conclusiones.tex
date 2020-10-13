@@ -1,10 +1,11 @@
-\chapter{Conclusiones}
+\chapter{Conclusiones y trabajos futuros}
 
-En los capı́tulos anteriores se ha descrito el problema y se ha presentado una solución justificando la elección de cada tipo de tecnologı́a usada además de las pruebas realizadas. En este capı́tulo se analizarán las conclusiones finales a raı́z del proyecto presentado ası́ como posibles lı́neas futuras de desarrollo.
+En los capítulos anteriores se ha enmarcado este TFM dentro de su contexto, descrito el problema y se ha presentado una solución justificando la elección de cada tipo de tecnología usada, además de las pruebas realizadas. En este último capítulo se presentan las conclusiones finales de este Trabajo de Fin de Máster así como las posibles líneas futuras de desarrollo.
 
-\section{Evaluación}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusiones}
 
-Tras analizar el trabajo realizado se puede verificar que se ha cumplido con el objetivo principal. Se ha creado una solución de control reactivo utilizando visión basada en aprendizaje por refuerzo para completar una vuelta a diferentes circuitos propuestos.
+Tras analizar el trabajo realizado se puede verificar que se ha cumplido con el objetivo principal. Se ha creado una solución de control reactivo utilizando visión, basada en aprendizaje por refuerzo, para la conducción autónoma. El sistema aprendido es capaz de completar una vuelta a diferentes circuitos propuestos.
 
 % OBJETIVOS
 % - Programar un entorno de aprendizaje por refuerzo con visión y robots.\\
@@ -12,14 +13,14 @@ Tras analizar el trabajo realizado se puede verificar que se ha cumplido con el 
 % - Validación experimental y análisis de las posibilidades del aprendizaje por refuerzo.\\
 %\end{enumerate}
 
-Se han satisfecho todos los objetivos enmarcados en el capítulo \ref{objetivos} y que se desglosan a continuación:\\
+Se han satisfecho todos los objetivos enmarcados en el capítulo \ref{objetivos} y que se repasan a continuación:\\
 
 \begin{itemize}
-    \item Se ha modificado y actualizado un entorno para el entrenamiento de algoritmos de aprendizaje por refuerzo utilizando visión y robots. Se creado un nuevo ejercicio que contiene todo lo necesario para llevar a cabo los entrenamientos y evaluaciones de un Fórmula-1 a través de diferentes circuitos y utilizando la cámara como sensor. En función de los valores obtenidos por el procesamiento de la imagen se comanda a los motores del robot los valores de velocidad lineal y angular correspondientes.\\
+    \item Se ha modificado y actualizado un entorno para el entrenamiento de algoritmos de aprendizaje por refuerzo utilizando visión y robots partiendo de OpenAI-Gym y Gym-Gazebo. Se ha creado un nuevo ejercicio en Gym-Gazebo que contiene todo lo necesario para llevar a cabo los entrenamientos y evaluaciones de un Fórmula-1 a través de diferentes circuitos y utilizando la cámara como sensor. En función de los valores obtenidos por el procesamiento de la imagen se comandan a los motores del robot los valores de velocidad lineal y angular correspondientes para completar el circuito.\\
     
-    \item Se han entrenado diferentes modelos de solución al problema de conducción autónoma siguiendo una línea configurando distintos parámetros de percepción simplificada de la cámara, número de acciones y circuitos de entrenamiento.\\
+    \item Se han entrenado diferentes combinaciones que solucionan el problema de conducción autónoma siguiendo una línea configurando distintos parámetros de percepción simplificada de la cámara, número de acciones posibles y el impacto de entrenar en uno u otro circuito, por sus características para el aprendizaje.\\
     
-    \item Las mejores configuraciones de parámetros con las que se entrenan los modelos de aprendizaje por refuerzo dan como resultado la solución al problema completando la vuelta al circuito en tiempos razonablemente buenos comparados con una solución basada en un modelado implícito de la conducción.\\
+    \item Las mejores configuraciones de parámetros con las que se entrenan los modelos de aprendizaje por refuerzo dan como resultado una solución satisfactoria al problema, completando la vuelta al circuito en tiempos razonablemente buenos comparados con una solución a la conducción programada explícitamente.\\
 \end{itemize}
 
 
@@ -28,23 +29,33 @@ Se han satisfecho todos los objetivos enmarcados en el capítulo \ref{objetivos}
 % - Uso del simulador Gazebo para realizar las pruebas en diferentes circuitos.
 % - Emplear aprendizaje por refuerzo como herramienta de entrenamiento del robot a través del entorno Gym-Gazebo.
 
-También han sido satisfechos los requisitos especificados en la sección \ref{objetivos} y se pasan a listar a continuación:\\
+También han sido satisfechos los requisitos especificados en la sección \ref{objetivos}:\\
 
 \begin{itemize}
-    \item Para las comunicaciones entre el programa y el robot se ha empleado el sistema operativo robótico ROS. Un estándar actual del software libre robótico que facilita la comunicación entre los diferentes componentes de este TFM. El uso de las diferentes librerías de este software permite conocer la posición del coche en el mundo, traducir la imagen captada por la cámara en tipos de datos compatibles con las liberías de visión, como OpenCV y facilidad en el cálculo de las operaciones sobre las imágenes con la librería científica Numpy.\\
+    \item Para las comunicaciones entre el programa y el robot se ha usado el sistema operativo robótico ROS. El uso de las diferentes librerías de este software permite conocer la posición del coche en el mundo, traducir la imagen captada por la cámara en tipos de datos compatibles con las librerías de visión, como OpenCV y facilidad en el cálculo de las operaciones sobre las imágenes con la librería científica Numpy.\\
     
-    \item Como entorno de simulación donde se realizan los entrenamientos y evaluaciones se ha utilizado el simulador en 3D Gazebo, que acompaña a ROS como referente robótico en cuanto a software de simulación de robots. Cuenta con físicas realistas, posibilidad de modificar la iluminación de la escena, modificar el modelo del robot, etc, y un elemento importante desde el punto de vista del rendimiento que es poder lanzar únicamente el simulador como servidor, liberando carga al ordenador durante los entrenamientos
+    \item Como entorno de simulación donde se realizan los entrenamientos y evaluaciones se ha utilizado el simulador en 3D Gazebo, que acompaña a ROS. Un elemento importante desde el punto de vista del rendimiento ha sido poder lanzar únicamente la parte servidora del simulador, liberando carga al ordenador durante los entrenamientos.\\
+    
+    \item Se ha mejorado y ampliado la librería Gym-Gazebo para la creación de un nuevo entorno que permite entrenar algoritmos de aprendizaje por refuerzo que solucionen el problema del ejercicio Sigue-Líneas planteado en el TFM. El repositorio donde se encuentra el código modificado permite replicar el ejercicio con facilidad así como modificar las configuraciones de parámetros para un nuevo entrenamiento de manera ágil cambiando o añadiendo circuitos, acciones, niveles de percepción, número de estados, etc.\\
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Trabajos futuros}
 
+Durante el desarrollo han ido surgiendo ideas de posible extensión del trabajo. Las principales son:\\
+
 \begin{itemize}
-    \item Aprender la $v$ para acelerar
-    \item PID en el controlador. ¿LSTM?
-    \item Entrenamiento por tiempo
-    \item Extensión del número de ejercicios entrenados con aprendizaje por refuerzo.
-    \item DQN
+    \item \textbf{Entrenamiento de parámetros $v$ y $w$}: El número de acciones presentadas en este TFM eran limitadas y no permitían una conducción muy suave. La discretización de los valores de velocidad lineal y angular no dan posibilidad a que el vehículo acelere gradualmente en las curvas o gire menos si el error es pequeño. Una posible línea por donde se podría extender este trabajo sería incluir un rango continuo de valores que le permita al vehículo aprender y aplicar el mejor valor para cada estado. Dado que el espacio de estados y acciones puede ser muy complejo, limitar la capacidad a un subconjunto acota esa dificultad. Esto mejorará el tiempo por vuelta dado que el Fórmula-1 circularía por encima de la línea constantemente.\\
     
+    \item \textbf{Extensión del número de problemas robóticos entrenados con aprendizaje por refuerzo}: Incluir en la librería entornos simulados que permitan ejecutar otro tipo de robots como por ejemplo, drones o tareas con brazos mecánicos. Comportamientos como el <<Sigue persona>> usando drones, atravesar un entorno de pruebas esquivando obstáculos usando visión con drones o clasificación de objetivos usando un brazo mecánico entrenado con algoritmos de aprendizaje por refuerzo son ejemplos simples donde poder aplicar este tipo de técnicas de RL a la robótica.\\
     
+    \item \textbf{Aprendizaje por refuerzo profundo, DQN}: El siguiente salto lógico en la resolución de problemas de aprendizaje por refuerzo es incluir todas las mejoras recientes en técnicas de aprendizaje profundo (\textit{Deep Learning}). Concretamente, el algoritmo Q-Learning utilizado en este TFM tiene su equivalente usando técnicas de aprendizaje profundo con el algoritmo DQN. Esta mejora no necesitaría un procesamiento manual de la imagen para extraer de la línea valores como el centro sino que es a través de la imagen de entrada donde se extraen las características aprendidas que desembocan en acciones y recompensas útiles para el robot.\\
     
 \end{itemize}
+
+
+Hubo dos grandes hitos alcanzados durante la realización este trabajo: el ensamblaje de todas las piezas para tener el nuevo entorno disponible en el que realizar los entrenamientos con las distintas configuraciones de parámetros; y la creación del ejercicio en sí, que ha necesitado en bastantes ocasiones el análisis de los resultados y la interpretación del comportamiento del robot para entender las necesidades para completar su entrenamiento. Esta labor <<didáctica>> aporta mucho valor a los algoritmos de aprendizaje por refuerzo que consiguen, en algunas ocasiones, resultados sorprendentes.\\
+
+A nivel personal este Trabajo de Fin de Máster ha supuesto un reto en varios sentidos. El campo de la robótica siempre había sido una asignatura pendiente y este trabajo me ha ayudado a finalmente dar el paso y asomarme a su inmensidad. La gran cantidad de piezas que componen ROS y Gazebo, así como las librerías de Python que permiten la comunicación con los componentes, genera impresión en un primer momento pero la focalización en un problema en concreto hace que paulatinamente vayan cobrando sentido. Por otro lado, siempre he sentido curiosidad por las técnicas del aprendizaje por refuerzo, por su comportamiento más <<humano>> y sus resultados sorprendentes y, a veces, impredecibles.\\
+
+Juntar ambos mundos en este trabajo ha supuesto un enriquecimiento personal que ha aportado valor, experiencia y otro punto de vista para conocer nuevas tecnologías, ver su relación entre sí y su aplicación (en pequeña escala) a la vida real como es el coche autónomo.
