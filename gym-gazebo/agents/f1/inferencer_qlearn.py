@@ -82,14 +82,14 @@ if __name__ == '__main__':
     print(settings.description)
     print("    - Start hour: {}".format(datetime.datetime.now()))
 
-    environment = settings.envs_params["simple"]
+    environment = settings.envs_params["montreal"]
     env = gym.make(environment["env"])
 
     input_dir = './logs/qlearn_models/qlearn_camera_solved'
-    experiment = '1_point__actions_set__hard'
-    circuit = 'simple_circuit'
-    number = '3'
-    tested_on = 'simple_circuit'
+    experiment = '1_point__actions_set__simple'
+    circuit = 'nurburgring'
+    number = '1'
+    tested_on = 'montreal'
 
     actions = range(env.action_space.n)
 
