@@ -47,7 +47,7 @@ Trying different configurations, a surprise occurred, in a state not contemplate
 This is the result of "strange" behavior.
 
 <video width="640" height="480" controls="controls">
-  <source src="{ site.url }/assets/images/logbook/summer_advances/strange_behavior.mp4">
+  <source src="/assets/images/logbook/summer_advances/strange_behavior.mp4">
 </video>
 
 I was now beginning a study of that behaviour.
