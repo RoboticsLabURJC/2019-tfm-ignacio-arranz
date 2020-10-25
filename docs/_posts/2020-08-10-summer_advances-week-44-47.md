@@ -1,5 +1,5 @@
 ---
-title: "Summer advance. Training using qlearn with the camera"
+title: "Weeks 44-47. Summer advance. Training using qlearn with the camera"
 excerpt: "Advances with the formula 1 training using the camera with the qlearn algorithm."
 
 
