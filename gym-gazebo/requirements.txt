@@ -8,7 +8,7 @@ netifaces
 numpy
 gym
 keras==2.3.1
-tensorflow==2.5.3
+tensorflow==2.6.4
 requests>=2.0
 six
 pyglet>=1.2.0
